@@ -74,13 +74,13 @@ export function NewClientWizard() {
         return formData.email.includes("@") && formData.phone.length > 5
       case 3:
         if (formData.type === "INDIVIDUAL") {
-          // Must have at least one primary ID and date of birth
-          return (
-            formData.primaryIdNumber.length > 3 &&
-            formData.dateOfBirth.length > 0 &&
-            // At least one government ID (TIN, NIS, or other) - more flexible
-            (formData.tin.length > 3 || formData.nis.length > 3 || formData.primaryIdType !== "")
-          )
+          // Must have primary ID, ID number, and date of birth
+          const hasPrimaryId = formData.primaryIdType && formData.primaryIdNumber.length > 3
+          const hasDateOfBirth = formData.dateOfBirth.length > 0
+          const hasOptionalGovId = formData.tin.length > 3 || formData.nis.length > 3
+
+          // Primary ID + DOB is sufficient, government IDs are optional
+          return hasPrimaryId && hasDateOfBirth
         }
         // For companies - at least one of TIN or business reg (more flexible for new businesses)
         return formData.tin.length > 3 || formData.regNumber.length > 3
@@ -471,7 +471,7 @@ export function NewClientWizard() {
               <div className="border-t pt-4">
                 <h5 className="font-medium mb-3 text-sm flex items-center gap-2">
                   <Info className="h-4 w-4 text-blue-600" />
-                  Government Registration Numbers (At least one required)
+                  Government Registration Numbers (Optional)
                 </h5>
                 <div className="grid gap-4">
                   <div className="grid grid-cols-2 gap-4">
@@ -537,10 +537,10 @@ export function NewClientWizard() {
                     )}
                   </div>
 
-                  <div className="rounded-md bg-amber-50 p-3 border border-amber-200">
-                    <p className="text-xs text-amber-700">
-                      <strong>Note:</strong> If you don't have some of these numbers yet (new business, pending registration, etc.),
-                      you can add them later in the client profile. At least one form of identification is required to proceed.
+                  <div className="rounded-md bg-blue-50 p-3 border border-blue-200">
+                    <p className="text-xs text-blue-700">
+                      <strong>Required:</strong> Primary ID and Date of Birth are sufficient to proceed.
+                      TIN/NIS numbers are optional and can be added later in the client profile.
                     </p>
                   </div>
                 </div>

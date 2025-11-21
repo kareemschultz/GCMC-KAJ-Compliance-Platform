@@ -1,0 +1,379 @@
+# Page snapshot
+
+```yaml
+- generic:
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - list:
+              - listitem:
+                - generic:
+                  - generic:
+                    - generic:
+                      - img
+                    - generic:
+                      - generic: GCMC & KAJ
+                      - generic: Compliance Suite
+                  - generic:
+                    - button: KAJ (Financial)
+                    - button: GCMC (Consult)
+                  - combobox:
+                    - generic:
+                      - img
+                      - generic: All Clients
+                    - img
+          - generic:
+            - generic:
+              - generic: Financial Services
+              - list:
+                - listitem:
+                  - link:
+                    - /url: /
+                    - img
+                    - generic: Dashboard
+                - listitem:
+                  - link:
+                    - /url: /accounting
+                    - img
+                    - generic: Accounting & Reports
+                - listitem:
+                  - link:
+                    - /url: /clients
+                    - img
+                    - generic: Clients
+                - listitem:
+                  - link:
+                    - /url: /documents
+                    - img
+                    - generic: Documents
+                - listitem:
+                  - link:
+                    - /url: /filings
+                    - img
+                    - generic: Filings
+                - listitem:
+                  - link:
+                    - /url: /nis
+                    - img
+                    - generic: NIS & Payroll
+                - listitem:
+                  - link:
+                    - /url: /tasks
+                    - img
+                    - generic: Tasks
+                - listitem:
+                  - link:
+                    - /url: /analytics
+                    - img
+                    - generic: Analytics
+                - listitem:
+                  - link:
+                    - /url: /billing
+                    - img
+                    - generic: Billing
+                - listitem:
+                  - link:
+                    - /url: /knowledge-base
+                    - img
+                    - generic: Knowledge Base
+            - generic:
+              - generic: System
+              - list:
+                - listitem:
+                  - link:
+                    - /url: /users
+                    - img
+                    - generic: User Management
+                - listitem:
+                  - link:
+                    - /url: /audit-logs
+                    - img
+                    - generic: Audit Logs
+                - listitem:
+                  - link:
+                    - /url: /settings
+                    - img
+                    - generic: Settings
+          - generic:
+            - list:
+              - listitem:
+                - button:
+                  - generic:
+                    - generic: JD
+                  - generic:
+                    - generic: John Doe
+                    - generic: john@gcmc.gy
+              - listitem:
+                - link:
+                  - /url: /login
+                  - img
+                  - generic: Log Out
+          - button
+    - main:
+      - generic:
+        - generic:
+          - button:
+            - img
+            - generic: Toggle Sidebar
+          - generic:
+            - button:
+              - generic: Search platform...
+              - generic:
+                - generic: ⌘
+                - text: K
+            - generic:
+              - heading [level=2]: Command Palette
+              - paragraph: Search for a command to run...
+        - generic:
+          - button:
+            - img
+            - generic: Notifications
+      - main:
+        - generic:
+          - generic:
+            - generic:
+              - heading [level=1]: Clients
+              - generic: "156"
+            - button [expanded]:
+              - img
+              - text: Add New Client
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - img
+                    - textbox:
+                      - /placeholder: Search clients by name, email, or TIN...
+                  - combobox:
+                    - generic:
+                      - generic: Client Type
+                    - generic:
+                      - img
+                  - combobox:
+                    - generic:
+                      - generic: Status
+                    - generic:
+                      - img
+                  - button:
+                    - img
+                    - text: More
+            - generic:
+              - generic:
+                - table:
+                  - rowgroup:
+                    - row:
+                      - cell:
+                        - checkbox
+                      - cell:
+                        - button:
+                          - text: Client Name
+                          - img
+                      - cell: Type
+                      - cell: TIN Number
+                      - cell: Compliance
+                      - cell: Documents
+                      - cell: Last Activity
+                      - cell: Status
+                      - cell: Actions
+                  - rowgroup:
+                    - row:
+                      - cell:
+                        - checkbox
+                      - cell:
+                        - generic:
+                          - generic:
+                            - img
+                          - generic:
+                            - link:
+                              - /url: /clients/1
+                              - text: ABC Corporation Ltd
+                            - generic: 123-456-789
+                      - cell:
+                        - generic: Company
+                      - cell: 123-456-789
+                      - cell:
+                        - generic:
+                          - progressbar
+                          - generic: 85%
+                      - cell:
+                        - generic:
+                          - img
+                          - generic: "24"
+                      - cell: 2 hours ago
+                      - cell:
+                        - generic: Active
+                      - cell:
+                        - button:
+                          - generic: Open menu
+                          - img
+                    - row:
+                      - cell:
+                        - checkbox
+                      - cell:
+                        - generic:
+                          - generic:
+                            - img
+                          - generic:
+                            - link:
+                              - /url: /clients/2
+                              - text: John Smith Trading
+                            - generic: 987-654-321
+                      - cell:
+                        - generic: Sole Trader
+                      - cell: 987-654-321
+                      - cell:
+                        - generic:
+                          - progressbar
+                          - generic: 92%
+                      - cell:
+                        - generic:
+                          - img
+                          - generic: "12"
+                      - cell: 1 day ago
+                      - cell:
+                        - generic: Active
+                      - cell:
+                        - button:
+                          - generic: Open menu
+                          - img
+                    - row:
+                      - cell:
+                        - checkbox
+                      - cell:
+                        - generic:
+                          - generic:
+                            - img
+                          - generic:
+                            - link:
+                              - /url: /clients/3
+                              - text: Guyana Tech Solutions
+                            - generic: 456-789-123
+                      - cell:
+                        - generic: Company
+                      - cell: 456-789-123
+                      - cell:
+                        - generic:
+                          - progressbar
+                          - generic: 65%
+                      - cell:
+                        - generic:
+                          - img
+                          - generic: "18"
+                      - cell: 3 days ago
+                      - cell:
+                        - generic: Pending
+                      - cell:
+                        - button:
+                          - generic: Open menu
+                          - img
+                    - row:
+                      - cell:
+                        - checkbox
+                      - cell:
+                        - generic:
+                          - generic:
+                            - img
+                          - generic:
+                            - link:
+                              - /url: /clients/4
+                              - text: Sarah Jones
+                            - generic: 789-123-456
+                      - cell:
+                        - generic: Individual
+                      - cell: 789-123-456
+                      - cell:
+                        - generic:
+                          - progressbar
+                          - generic: 45%
+                      - cell:
+                        - generic:
+                          - img
+                          - generic: "5"
+                      - cell: 1 week ago
+                      - cell:
+                        - generic: Inactive
+                      - cell:
+                        - button:
+                          - generic: Open menu
+                          - img
+                    - row:
+                      - cell:
+                        - checkbox
+                      - cell:
+                        - generic:
+                          - generic:
+                            - img
+                          - generic:
+                            - link:
+                              - /url: /clients/5
+                              - text: Georgetown Retailers
+                            - generic: 321-654-987
+                      - cell:
+                        - generic: Partnership
+                      - cell: 321-654-987
+                      - cell:
+                        - generic:
+                          - progressbar
+                          - generic: 78%
+                      - cell:
+                        - generic:
+                          - img
+                          - generic: "32"
+                      - cell: 5 hours ago
+                      - cell:
+                        - generic: Active
+                      - cell:
+                        - button:
+                          - generic: Open menu
+                          - img
+              - generic:
+                - generic: Showing 1-5 of 156 clients
+                - generic:
+                  - button [disabled]: Previous
+                  - button: Next
+  - list
+  - generic [ref=e5] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e6]:
+      - img [ref=e7]
+    - generic [ref=e10]:
+      - button "Open issues overlay" [ref=e11]:
+        - generic [ref=e12]:
+          - generic [ref=e13]: "1"
+          - generic [ref=e14]: "2"
+        - generic [ref=e15]:
+          - text: Issue
+          - generic [ref=e16]: s
+      - button "Collapse issues badge" [ref=e17]:
+        - img [ref=e18]
+  - alert
+  - dialog "New Client Onboarding" [ref=e21]:
+    - generic [ref=e22]:
+      - heading "New Client Onboarding" [level=2] [ref=e23]
+      - paragraph [ref=e24]: "Step 1 of 5: Basic Information"
+    - generic [ref=e32]:
+      - generic [ref=e33]:
+        - generic [ref=e34]: Client Type
+        - combobox [active] [ref=e35]:
+          - generic [ref=e37]: Company
+          - generic [ref=e38]:
+            - button [ref=e39]:
+              - img
+            - img
+      - generic [ref=e40]:
+        - generic [ref=e41]: Business Name
+        - textbox "Business Name" [ref=e42]:
+          - /placeholder: ABC Corp Ltd
+    - generic [ref=e43]:
+      - button "Back" [disabled]:
+        - img
+        - text: Back
+      - button "Next" [ref=e44]:
+        - text: Next
+        - img
+    - button "Close" [ref=e45]:
+      - img
+      - generic [ref=e46]: Close
+```
