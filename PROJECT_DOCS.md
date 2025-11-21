@@ -137,3 +137,15 @@ The following core user flows have been verified end-to-end:
 ### 5. Client Portal
 - **Flow**: Login -> Portal Dashboard -> View Services -> Request Service.
 - **Verification**: Confirmed isolation of portal layout and functionality of client-facing actions.
+
+### 6. Property Management
+- **Flow**: Dashboard -> Properties -> Add Property -> Enter Details -> Save.
+- **Verification**: Confirmed property creation, lease tracking, and arrears highlighting.
+
+### 7. Expediting Service
+- **Flow**: Dashboard -> Expediting -> New Job -> Assign Runner -> Track Status.
+- **Verification**: Verified timeline visualization and status history logging.
+
+### 8. Local Content Registration
+- **Flow**: Dashboard -> Local Content -> Upload Documents -> Submit Application.
+- **Verification**: Confirmed 5-document checklist, progress tracking, and submission lock until complete.

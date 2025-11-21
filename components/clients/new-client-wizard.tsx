@@ -51,6 +51,7 @@ export function NewClientWizard() {
     passportExpiry: "",
     idIssueDate: "",
     isLocalContentQualified: false,
+    isLocalAccount: false,
     selectedServices: [] as string[],
     uploadedFiles: {} as Record<string, File>,
   })
@@ -133,6 +134,7 @@ export function NewClientWizard() {
         passportExpiry: "",
         idIssueDate: "",
         isLocalContentQualified: false,
+        isLocalAccount: false,
         selectedServices: [],
         uploadedFiles: {},
       })
@@ -324,6 +326,22 @@ export function NewClientWizard() {
                   placeholder="contact@example.com"
                 />
               </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="localAccount"
+                  checked={formData.isLocalAccount}
+                  onCheckedChange={(checked) => setFormData({ ...formData, isLocalAccount: checked as boolean })}
+                />
+                <div className="grid gap-1.5 leading-none">
+                  <Label htmlFor="localAccount" className="font-medium">
+                    Create as Local Account
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Do not send an email invitation. The account will be managed internally.
+                  </p>
+                </div>
+              </div>
+
               <div className="grid gap-2">
                 <Label htmlFor="phone">Phone Number</Label>
                 <Input
@@ -499,6 +517,12 @@ export function NewClientWizard() {
                   <div>
                     <span className="text-muted-foreground block text-xs">TIN</span>
                     <span className="font-medium">{formData.tin}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground block text-xs">Account Type</span>
+                    <span className="font-medium">
+                      {formData.isLocalAccount ? "Local (No Invite)" : "Standard (Invite Sent)"}
+                    </span>
                   </div>
                 </div>
               </div>

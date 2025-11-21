@@ -125,3 +125,5 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Cleaned up custom utilities to prevent conflicts */

@@ -26,9 +26,9 @@ The platform is designed around two core business pillars, unified by a global *
 *Focus: Regulatory adherence, Tax, Accounting, and Financial Health.*
 
 *   📊 **Accounting & Reports**: Financial statements (P&L, Cash Flow), Audit workflows, and Banking services.
-*   💸 **NIS & Payroll**: Automated payroll calculations, NIS schedule generation, and employee registry.
+*   💸 **NIS & Payroll**: Automated payroll calculations, NIS schedule generation, employee registry, and 7B Tax Calculator.
 *   📝 **Tax Filings**: Automated VAT, PAYE, and CIT filing management with GRA integration logic.
-*   📅 **Compliance Calendar**: Automated tracking of statutory deadlines.
+*   📅 **Compliance Calendar**: Automated tracking of statutory deadlines with Traffic Light system.
 
 ### 2. GCMC (Consultancy & Management)
 *Focus: Growth, Human Capital, and Legal Operations.*
@@ -37,6 +37,9 @@ The platform is designed around two core business pillars, unified by a global *
 *   ✈️ **Immigration Pipeline**: Kanban-style management for Visas, Work Permits, and Citizenship.
 *   ⚖️ **Paralegal Services**: Automated generation of legal agreements and affidavits.
 *   🤝 **Partner Network**: Directory of verified strategic partners for client referrals.
+*   🏢 **Property Management**: Track rental properties, tenant details, lease schedules, and management fees.
+*   📋 **Expediting Service**: Visual timeline tracker for documents moving through government agencies.
+*   🔍 **Local Content Registration**: Ministry of Natural Resources compliance checklist with 5 mandatory documents.
 
 ---
 
@@ -95,8 +98,10 @@ To run the application in a containerized environment:
 *   **Client Context System**: Global state management allows acting "on behalf of" specific clients across all modules.
 *   **Dynamic Brand Context**: Seamlessly switches UI/UX between KAJ and GCMC modes.
 *   **Mock API Layer**: Fully functional `lib/api.ts` for rapid prototyping and testing without a backend.
+*   **PostgreSQL Database**: Prisma ORM schema covering all entities (Clients, Tax, Immigration, Properties, Employees).
 *   **Zod Validation**: Strict schema validation for all forms (Tax, Immigration, User Data).
-*   **Responsive Design**: Mobile-first architecture using Tailwind CSS v4.
+*   **Responsive Design**: Mobile-first architecture using Tailwind CSS v4 with enhanced animations and transitions.
+*   **Traffic Light Compliance**: Visual system for tracking document expiry (Green/Amber/Red).
 
 ---
 

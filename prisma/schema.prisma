@@ -37,6 +37,7 @@ model Client {
   email         String
   phone         String
   address       String
+  createdAt     DateTime  @default(now())
   
   // KAJ Relations (Financial)
   taxReturns    TaxReturn[]
@@ -50,6 +51,10 @@ model Client {
   financialStatements FinancialStatement[]
   auditCases        AuditCase[]
   bankServices      BankService[]
+  
+  employees     Employee[]
+  properties    Property[]
+  expediteJobs  ExpediteJob[]
   
   users         User[]
 }
@@ -177,4 +182,68 @@ model BankService {
   status        String    // "PENDING" | "APPROVED" | "REJECTED" | "IN_PROGRESS"
   submittedDate DateTime  @default(now())
   lastUpdate    DateTime  @updatedAt
+}
+
+// --- NEW MODELS ---
+model Employee {
+  id            String    @id @default(uuid())
+  firstName     String
+  lastName      String
+  nisNumber     String    @unique
+  tinNumber     String?
+  position      String
+  department    String
+  salary        Decimal
+  hireDate      DateTime
+  status        String    // "ACTIVE" | "INACTIVE" | "TERMINATED"
+  
+  clientId      String
+  client        Client    @relation(fields: [clientId], references: [id])
+  createdAt     DateTime  @default(now())
+}
+
+model Property {
+  id                      String    @id @default(uuid())
+  address                 String
+  type                    String    // "Commercial" | "Residential"
+  ownerId                 String
+  status                  String    // "Occupied" | "Vacant"
+  managementFeePercentage Decimal
+  
+  // Tenant information
+  tenantId                String?
+  tenantName              String?
+  tenantEmail             String?
+  tenantPhone             String?
+  
+  // Lease information
+  leaseStartDate          DateTime?
+  leaseEndDate            DateTime?
+  monthlyRentGyd          Decimal?
+  paymentDueDay           Int?
+  securityDepositGyd      Decimal?
+  leaseDocUrl             String?
+  
+  // Financials
+  totalRevenueYtdGyd      Decimal   @default(0)
+  arrearsGyd              Decimal   @default(0)
+  
+  client        Client    @relation(fields: [ownerId], references: [id])
+  createdAt     DateTime  @default(now())
+}
+
+model ExpediteJob {
+  id                  String    @id @default(uuid())
+  clientId            String
+  clientName          String
+  documentType        String
+  agencyName          String
+  referenceNumber     String
+  assignedRunner      String
+  expectedCompletion  DateTime
+  status              String    // "PICKED_UP", "AT_AGENCY", "PROCESSING", "READY_FOR_COLLECTION", "OUT_FOR_DELIVERY", "COMPLETED"
+  statusHistoryJson   Json      // Stores status history as JSON
+  
+  client        Client    @relation(fields: [clientId], references: [id])
+  createdAt     DateTime  @default(now())
 }

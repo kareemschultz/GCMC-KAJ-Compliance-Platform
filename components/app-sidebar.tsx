@@ -104,6 +104,11 @@ const gcmcNavItems = [
     icon: LayoutDashboard,
   },
   {
+    title: "Local Content",
+    url: "/local-content",
+    icon: FileText,
+  },
+  {
     title: "Property Management",
     url: "/properties",
     icon: Home,

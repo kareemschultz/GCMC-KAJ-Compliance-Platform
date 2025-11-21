@@ -12,6 +12,7 @@ import type {
   BankService,
   Property,
   ExpediteJob,
+  Employee,
 } from "@/types"
 import {
   mockClients,
@@ -169,7 +170,7 @@ export const api = {
       return mockTrainingSessions
     },
     create: async (data: any): Promise<TrainingSession> => {
-      await delay(800)
+      await delay(1000)
       console.log("[API] Created Training Session:", data)
       return {
         id: Math.random().toString(36).substr(2, 9),
@@ -299,6 +300,59 @@ export const api = {
             notes: "Initial pickup",
           },
         ],
+      }
+    },
+  },
+  employees: {
+    list: async (): Promise<Employee[]> => {
+      await delay(800)
+      return [
+        {
+          id: "emp-1",
+          firstName: "Michael",
+          lastName: "Johnson",
+          nisNumber: "NIS-123456",
+          tinNumber: "TIN-789012",
+          position: "Operations Manager",
+          department: "Operations",
+          salary: 180000,
+          hireDate: "2023-01-15",
+          status: "ACTIVE",
+        },
+        {
+          id: "emp-2",
+          firstName: "Sarah",
+          lastName: "Williams",
+          nisNumber: "NIS-234567",
+          tinNumber: "TIN-890123",
+          position: "Accountant",
+          department: "Finance",
+          salary: 150000,
+          hireDate: "2023-03-20",
+          status: "ACTIVE",
+        },
+      ]
+    },
+    create: async (data: any): Promise<Employee> => {
+      await delay(1000)
+      console.log("[API] Created Employee:", data)
+      return {
+        id: Math.random().toString(36).substr(2, 9),
+        ...data,
+        status: "ACTIVE",
+        hireDate: new Date().toISOString(),
+      }
+    },
+  },
+  auditCases: {
+    create: async (data: any): Promise<AuditCase> => {
+      await delay(1000)
+      console.log("[API] Created Audit Case:", data)
+      return {
+        id: Math.random().toString(36).substr(2, 9),
+        ...data,
+        status: "OPEN",
+        progress: 0,
       }
     },
   },

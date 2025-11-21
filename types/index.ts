@@ -248,3 +248,16 @@ export interface ExpediteJob {
     notes?: string
   }[]
 }
+
+export interface Employee {
+  id: string
+  firstName: string
+  lastName: string
+  nisNumber: string
+  tinNumber?: string
+  position: string
+  department: string
+  salary: number
+  hireDate: string
+  status: "ACTIVE" | "INACTIVE" | "TERMINATED"
+}
