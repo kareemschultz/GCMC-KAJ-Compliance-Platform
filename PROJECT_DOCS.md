@@ -9,12 +9,14 @@
 The project is built using a modern web stack optimized for performance, security, and scalability.
 
 ### Tech Stack
-- **Framework**: Next.js 14+ (App Router)
+- **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4
 - **Theming**: next-themes (Dark/Light Mode)
 - **UI Components**: shadcn/ui (Radix Primitives)
 - **State Management**: React Context (Client & Brand)
+- **Database**: PostgreSQL with Prisma ORM
+- **Validation**: Zod schemas
 - **Deployment**: Docker Containerized
 
 ### Directory Structure
@@ -97,23 +99,29 @@ The project is containerized using Docker for consistent deployment across envir
 - **Environment**: Configurable via environment variables (see `.env.example`).
 
 ## 5. Future Roadmap
-- **Backend Integration**: Connect to a real database (PostgreSQL/Supabase).
 - **Auth Integration**: Implement NextAuth.js or Clerk for secure authentication.
 - **Email Service**: Integrate SendGrid/Resend for automated email notifications.
+- **File Storage**: Integrate S3/R2/Vercel Blob for document uploads.
+- **Real-time Features**: WebSocket integration for live updates.
+- **GRA Integration**: Direct API integration with Guyana Revenue Authority systems.
 
 ## 6. API & Backend Configuration
 
-### Current State: Mock Mode
-The application currently runs in **Mock Mode**. This means:
-- No real backend server is required to run the UI.
-- Data persistence is simulated (changes will reset on refresh).
-- API calls are handled by `lib/api.ts` which simulates network latency.
+### Current State: Development Mode
+The application currently runs in **Development Mode**. This means:
+- Mock data is used for prototyping, but database schema is fully configured.
+- Database connection available via Prisma ORM (`lib/prisma.ts`).
+- API routes need to be implemented in `app/api/` directory.
+- Run `npm run db:push` to sync Prisma schema to database.
+- Run `npm run db:seed` to populate with sample data.
 
 ### Connecting a Real Backend
 To connect a real backend:
-1. **Create API Routes**: Implement Next.js Route Handlers in `app/api/` or connect to an external Express/Python server.
-2. **Update `lib/api.ts`**: Replace the mock functions with real `fetch()` calls.
-3. **Environment Variables**: Configure your `.env` file with database credentials.
+1. **Setup Database**: Configure `DATABASE_URL` in `.env` file (see `.env.example`).
+2. **Run Migrations**: Execute `npm run db:push` to create database tables.
+3. **Seed Data**: Run `npm run db:seed` to populate initial data.
+4. **Create API Routes**: Implement Next.js Route Handlers in `app/api/`.
+5. **Update `lib/api.ts`**: Replace mock functions with real Prisma queries.
 
 ## 7. E2E Verification & Testing
 The following core user flows have been verified end-to-end:

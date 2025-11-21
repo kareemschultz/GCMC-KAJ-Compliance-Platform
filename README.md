@@ -1,8 +1,8 @@
 # GK Enterprise Suite
 
 ![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)
-![Status](https://img.shields.io/badge/status-production--ready-green.svg)
-![Tech](https://img.shields.io/badge/stack-Next.js_14_|_Tailwind_|_TypeScript-black.svg)
+![Status](https://img.shields.io/badge/status-in--development-yellow.svg)
+![Tech](https://img.shields.io/badge/stack-Next.js_16_|_Tailwind_v4_|_TypeScript-black.svg)
 
 **The Unified Enterprise Operating System for Guyana Compliance & Management.**
 
@@ -48,14 +48,15 @@ The platform is designed around two core business pillars, unified by a global *
 ### Prerequisites
 *   **Node.js** (v18 or higher)
 *   **npm** or **yarn**
+*   **PostgreSQL** (v14 or higher) or use Docker Compose
 *   **Git**
 
 ### Installation
 
 1.  **Clone the repository**
     \`\`\`bash
-    git clone https://github.com/your-org/gk-enterprise-suite.git
-    cd gk-enterprise-suite
+    git clone https://github.com/your-org/GCMC-KAJ-Compliance-Platform.git
+    cd GCMC-KAJ-Compliance-Platform
     \`\`\`
 
 2.  **Install dependencies**
@@ -65,30 +66,47 @@ The platform is designed around two core business pillars, unified by a global *
     yarn install
     \`\`\`
 
-3.  **Run the development server**
+3.  **Setup Database**
+    
+    Copy the example environment file and configure your database:
+    \`\`\`bash
+    cp .env.example .env
+    # Edit .env and add your DATABASE_URL
+    \`\`\`
+    
+    Push the schema and seed data:
+    \`\`\`bash
+    npm run db:push
+    npm run db:seed
+    \`\`\`
+
+4.  **Run the development server**
     \`\`\`bash
     npm run dev
     # or
     yarn dev
     \`\`\`
 
-4.  **Access the Application**
+5.  **Access the Application**
     *   **Admin Dashboard**: Open [http://localhost:3000](http://localhost:3000)
     *   **Client Portal**: Open [http://localhost:3000/portal](http://localhost:3000/portal)
     *   **Booking Page**: Open [http://localhost:3000/book](http://localhost:3000/book)
 
 ### 🐳 Docker Setup
 
-To run the application in a containerized environment:
+To run the application with database in containers:
 
-1.  **Build the image**
+1.  **Start all services**
     \`\`\`bash
-    docker build -t gk-suite .
+    docker-compose up -d
     \`\`\`
 
-2.  **Run the container**
+2.  **Access the application**
+    Open [http://localhost:3000](http://localhost:3000)
+
+3.  **Stop services**
     \`\`\`bash
-    docker run -p 3000:3000 gk-suite
+    docker-compose down
     \`\`\`
 
 ---
@@ -98,10 +116,33 @@ To run the application in a containerized environment:
 *   **Client Context System**: Global state management allows acting "on behalf of" specific clients across all modules.
 *   **Dynamic Brand Context**: Seamlessly switches UI/UX between KAJ and GCMC modes.
 *   **Mock API Layer**: Fully functional `lib/api.ts` for rapid prototyping and testing without a backend.
-*   **PostgreSQL Database**: Prisma ORM schema covering all entities (Clients, Tax, Immigration, Properties, Employees).
-*   **Zod Validation**: Strict schema validation for all forms (Tax, Immigration, User Data).
+*   **Prisma ORM**: Type-safe database access with auto-generated TypeScript types.
+*   **Zod Validation**: Comprehensive form validation with Guyana-specific calculators (NIS, PAYE, VAT).
+*   **Production Ready**: Docker configuration, TypeScript strict mode, ESLint, and proper error handling.
 *   **Responsive Design**: Mobile-first architecture using Tailwind CSS v4 with enhanced animations and transitions.
 *   **Traffic Light Compliance**: Visual system for tracking document expiry (Green/Amber/Red).
+
+---
+
+## 🔐 Environment Variables
+
+Required environment variables (see `.env.example` for complete list):
+
+*   `DATABASE_URL`: PostgreSQL connection string
+*   `NODE_ENV`: Environment mode (development/production)
+*   `NEXTAUTH_SECRET`: Secret for authentication (when implemented)
+*   `NEXTAUTH_URL`: Application URL for callbacks
+
+## 📦 Scripts
+
+*   `npm run dev`: Start development server
+*   `npm run build`: Build for production
+*   `npm run start`: Start production server
+*   `npm run lint`: Run ESLint
+*   `npm run type-check`: Check TypeScript types
+*   `npm run db:push`: Sync Prisma schema to database
+*   `npm run db:seed`: Populate database with sample data
+*   `npm run db:studio`: Open Prisma Studio to view data
 
 ---
 
