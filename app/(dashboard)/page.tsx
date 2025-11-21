@@ -9,6 +9,7 @@ import { TaxCalendarWidget } from "@/components/dashboard/tax-calendar"
 import { NewClientWizard } from "@/components/clients/new-client-wizard"
 import { DocumentUploadModal } from "@/components/documents/document-upload-modal"
 import { NewFilingDropdown } from "@/components/filings/new-filing-dropdown"
+import { ExchangeRateWidget } from "@/components/dashboard/exchange-rates"
 
 export default function DashboardPage() {
   return (
@@ -53,7 +54,7 @@ export default function DashboardPage() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
         <TaxCalendarWidget />
-        {/* ExchangeRateWidget is no longer imported, so it's removed */}
+        <ExchangeRateWidget />
       </div>
     </div>
   )
