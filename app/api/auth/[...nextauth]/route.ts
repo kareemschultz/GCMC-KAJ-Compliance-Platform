@@ -39,7 +39,7 @@ const handler = NextAuth({
           return {
             id: user.id,
             email: user.email,
-            name: user.name,
+            name: user.fullName,
             role: user.role
           }
         } catch (error) {
@@ -61,7 +61,7 @@ const handler = NextAuth({
       return token
     },
     async session({ session, token }) {
-      if (token) {
+      if (token && token.sub) {
         session.user.id = token.sub
         session.user.role = token.role as string
       }
