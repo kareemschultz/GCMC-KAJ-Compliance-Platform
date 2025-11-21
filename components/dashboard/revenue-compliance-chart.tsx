@@ -29,7 +29,7 @@ export function RevenueComplianceChart() {
       </CardHeader>
       <CardContent>
         <div className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" minHeight={300}>
             <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis type="number" dataKey="score" name="Compliance Score" unit="%" domain={[0, 100]} />

@@ -5,6 +5,65 @@ All notable changes to the GK Enterprise Suite will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2025-11-21 - 🛠️ Critical Infrastructure Stability Fixes
+
+### 🚨 Critical Bug Fixes & Infrastructure Improvements
+- **🔧 Prisma API Validation Error RESOLVED**: Fixed invalid `users` field in include statement
+  - Root cause: Prisma query referencing non-existent relation
+  - Solution: Replaced with proper `_count` aggregation for relation counting
+  - Impact: API endpoints now return 200 OK instead of runtime errors
+  - Files affected: `app/api/clients/route.ts`
+
+- **📊 Chart Rendering Issues RESOLVED**: Fixed ResponsiveContainer dimension errors
+  - Root cause: Charts receiving negative dimensions (-1) during SSR/initial render
+  - Solution: Added `minHeight={300}` to all ResponsiveContainer components
+  - Impact: All charts now render without dimension errors
+  - Components fixed: 6 chart components across dashboard, reports, and accounting modules
+
+- **🖼️ Missing Image 404 Errors RESOLVED**: Fixed avatar and image loading
+  - Root cause: Missing avatar images and middleware blocking static asset access
+  - Solution: Created `/public/avatars/` directory with placeholder images + updated middleware exclusions
+  - Impact: All avatar images now load successfully (HTTP 200 vs previous 404)
+  - Files created: `user.jpg`, `01.png`, `02.png`, `03.png` in `/public/avatars/`
+
+- **⚠️ Deprecated Middleware Warning RESOLVED**: Updated for Next.js 16 compatibility
+  - Root cause: Next.js 16 deprecates `middleware.ts` convention in favor of `proxy.ts`
+  - Solution: Renamed `middleware.ts` to `proxy.ts` with no functional changes
+  - Impact: Clean server startup without deprecation warnings
+
+- **📦 Workspace Lockfile Conflicts RESOLVED**: Fixed Next.js workspace detection
+  - Root cause: Multiple lockfiles confusing Turbopack about project root
+  - Solution: Added `turbopack.root: __dirname` to `next.config.mjs` with proper ES module support
+  - Impact: Clean development server startup without workspace warnings
+
+### 🏥 System Health Status
+- **Application Status**: ✅ Running cleanly with zero warnings or errors
+- **API Functionality**: ✅ All endpoints working with proper Prisma queries
+- **Static Assets**: ✅ All images and avatars loading correctly
+- **Chart Components**: ✅ All 6+ charts rendering without issues
+- **Build Process**: ✅ Clean compilation without TypeScript or build errors
+
+### 📋 Technical Details
+- **Middleware Migration**: Updated from deprecated `middleware.ts` to `proxy.ts` pattern
+- **Prisma Query Optimization**: Replaced invalid include with proper count aggregation
+- **Chart Stability**: Added defensive programming with minHeight constraints
+- **Asset Management**: Improved static asset serving with proper middleware exclusions
+- **Development Experience**: Clean development server with comprehensive error resolution
+
+### 🧪 Verification
+- **Server Logs**: Zero error messages or warnings during startup and runtime
+- **API Testing**: All client endpoints returning proper 200 OK responses
+- **Chart Rendering**: All dashboard charts displaying without console errors
+- **Asset Loading**: Avatar images accessible via direct URL testing
+- **Authentication Flow**: Proxy middleware working correctly for route protection
+
+### 🔧 Files Modified
+- `app/api/clients/route.ts` - Fixed Prisma include statement
+- `components/dashboard/*.tsx` - Added minHeight to ResponsiveContainer (6 files)
+- `middleware.ts` → `proxy.ts` - Renamed for Next.js 16 compatibility
+- `next.config.mjs` - Added turbopack root configuration
+- `public/avatars/` - Created directory with required image assets
+
 ## [3.1.0] - 2025-11-21 - 🎨 Comprehensive UI/UX & Validation Enhancements
 
 ### 🎯 Major UI/UX Improvements

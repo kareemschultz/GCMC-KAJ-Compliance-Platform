@@ -42,7 +42,7 @@ const data = [
 
 export function CashFlowChart() {
   return (
-    <ResponsiveContainer width="100%" height={350}>
+    <ResponsiveContainer width="100%" height={350} minHeight={300}>
       <LineChart data={data}>
         <XAxis dataKey="month" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
         <YAxis

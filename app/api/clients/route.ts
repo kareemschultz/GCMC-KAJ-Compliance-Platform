@@ -99,8 +99,14 @@ export async function GET(request: NextRequest) {
         take: limit,
         orderBy: { createdAt: "desc" },
         include: {
-          users: {
-            select: { id: true, email: true, fullName: true, role: true }
+          _count: {
+            select: {
+              properties: true,
+              employees: true,
+              auditCases: true,
+              bankServices: true,
+              expediteJobs: true
+            }
           }
         }
       }),
@@ -174,8 +180,14 @@ export async function POST(request: NextRequest) {
     const client = await prisma.client.create({
       data: clientData,
       include: {
-        users: {
-          select: { id: true, email: true, fullName: true, role: true }
+        _count: {
+          select: {
+            properties: true,
+            employees: true,
+            auditCases: true,
+            bankServices: true,
+            expediteJobs: true
+          }
         }
       }
     })

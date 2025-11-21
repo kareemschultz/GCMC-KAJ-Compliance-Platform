@@ -49,6 +49,7 @@ function getInitials(name: string): string {
 }
 
 function getStatusColor(status: string): "default" | "secondary" | "destructive" | "outline" {
+  if (!status) return 'outline'
   switch (status.toLowerCase()) {
     case 'active':
       return 'default'

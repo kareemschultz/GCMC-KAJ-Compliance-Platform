@@ -18,7 +18,7 @@ export function ComplianceChart() {
       </CardHeader>
       <CardContent>
         <div className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" minHeight={300}>
             <PieChart>
               <Pie
                 data={data}
