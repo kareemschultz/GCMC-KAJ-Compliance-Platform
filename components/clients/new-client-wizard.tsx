@@ -390,6 +390,40 @@ export function NewClientWizard() {
                 </p>
               </div>
 
+              {/* Validation Status Indicator */}
+              {formData.type === "INDIVIDUAL" && (
+                <div className="rounded-md border p-3 bg-gray-50">
+                  <h5 className="font-medium mb-2 text-sm">Required Information Status:</h5>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex items-center gap-2">
+                      {formData.dateOfBirth ? (
+                        <CheckCircle className="h-3 w-3 text-green-600" />
+                      ) : (
+                        <AlertCircle className="h-3 w-3 text-amber-600" />
+                      )}
+                      <span className={formData.dateOfBirth ? "text-green-700" : "text-amber-700"}>
+                        Date of Birth {formData.dateOfBirth ? "(✓ provided in Step 1)" : "(⚠ missing from Step 1)"}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {formData.primaryIdType && formData.primaryIdNumber.length > 3 ? (
+                        <CheckCircle className="h-3 w-3 text-green-600" />
+                      ) : (
+                        <AlertCircle className="h-3 w-3 text-amber-600" />
+                      )}
+                      <span className={formData.primaryIdType && formData.primaryIdNumber.length > 3 ? "text-green-700" : "text-amber-700"}>
+                        Primary ID {formData.primaryIdType && formData.primaryIdNumber.length > 3 ? `(✓ ${formData.primaryIdType})` : "(⚠ select type and enter number)"}
+                      </span>
+                    </div>
+                    {!formData.dateOfBirth && (
+                      <p className="text-xs text-amber-700 mt-2 bg-amber-50 p-2 rounded">
+                        <strong>Tip:</strong> Please go back to Step 1 and fill in the Date of Birth field to continue.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {formData.type === "INDIVIDUAL" ? (
                 <div className="grid gap-4">
                   <div className="grid grid-cols-2 gap-4">

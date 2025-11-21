@@ -165,14 +165,20 @@ export function SearchableSelect({
                         />
                       )}
                       {option.label}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-3 w-3 p-0 hover:bg-transparent"
+                      <div
+                        className="h-3 w-3 p-0 hover:bg-muted rounded-sm cursor-pointer flex items-center justify-center"
                         onClick={(e) => handleRemoveSelection(val, e)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault()
+                            handleRemoveSelection(val, e as any)
+                          }
+                        }}
                       >
                         <X className="h-2 w-2" />
-                      </Button>
+                      </div>
                     </Badge>
                   ) : null
                 })}
@@ -194,14 +200,20 @@ export function SearchableSelect({
 
           <div className="flex items-center gap-1">
             {clearable && selectedValues.length > 0 && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-4 w-4 p-0 hover:bg-transparent"
+              <div
+                className="h-4 w-4 p-0 hover:bg-muted rounded-sm cursor-pointer flex items-center justify-center"
                 onClick={handleClear}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    handleClear(e as any)
+                  }
+                }}
               >
                 <X className="h-3 w-3" />
-              </Button>
+              </div>
             )}
             <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
           </div>
