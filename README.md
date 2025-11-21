@@ -17,6 +17,7 @@ This platform merges the financial rigor of **KAJ** with the strategic consultan
 *   **[Project Documentation](PROJECT_DOCS.md)**: Detailed breakdown of modules, features, and business logic.
 *   **[System Architecture](ARCHITECTURE.md)**: Technical diagrams, data flow, and system design.
 *   **[API Reference](API.md)**: Complete API documentation with endpoints and examples.
+*   **[UI/UX Enhancements](IMPROVEMENTS_DOCUMENTATION.md)**: Comprehensive guide to recent validation and UI improvements.
 *   **[Testing Guide](TESTING.md)**: Comprehensive E2E testing with Playwright (65 tests).
 *   **[Deployment Guide](DEPLOYMENT.md)**: Production deployment instructions and best practices.
 *   **[Security Documentation](SECURITY.md)**: Security architecture and best practices.
@@ -143,6 +144,7 @@ To run the application with database in containers:
 *   **Tailwind CSS v4**: Modern styling with enhanced animations and responsive design
 *   **TypeScript Strict Mode**: Complete type safety across the application
 *   **Component Library**: shadcn/ui components with consistent design system
+*   **Enhanced UI/UX**: Flexible validation system, searchable dropdowns, and Guyana-specific input formatting
 
 ### 🧪 **Comprehensive Testing**
 *   **65 E2E Tests**: Complete workflow validation with Playwright
