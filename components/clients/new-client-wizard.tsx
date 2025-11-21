@@ -14,6 +14,9 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { SearchableSelect } from "@/components/ui/searchable-select"
+import { DROPDOWN_DATA } from "@/lib/dropdown-data"
+import { formatPhoneNumber, formatNationalId, validateFormat } from "@/lib/input-formatters"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { SERVICE_CATALOG, COMMON_REQUIREMENTS, SERVICE_REQUIREMENTS } from "@/lib/constants"
@@ -39,8 +42,10 @@ export function NewClientWizard() {
     nis: "",
     vat: "",
     regNumber: "",
-    idType: "National ID",
-    idNumber: "",
+    primaryIdType: "National ID",
+    primaryIdNumber: "",
+    secondaryIdType: "",
+    secondaryIdNumber: "",
     firstName: "",
     middleName: "",
     surname: "",
@@ -69,13 +74,16 @@ export function NewClientWizard() {
         return formData.email.includes("@") && formData.phone.length > 5
       case 3:
         if (formData.type === "INDIVIDUAL") {
+          // Must have at least one primary ID and date of birth
           return (
-            formData.idNumber.length > 3 &&
+            formData.primaryIdNumber.length > 3 &&
             formData.dateOfBirth.length > 0 &&
-            (formData.tin.length > 5 || formData.nis.length > 5)
+            // At least one government ID (TIN, NIS, or other) - more flexible
+            (formData.tin.length > 3 || formData.nis.length > 3 || formData.primaryIdType !== "")
           )
         }
-        return formData.tin.length > 5
+        // For companies - at least one of TIN or business reg (more flexible for new businesses)
+        return formData.tin.length > 3 || formData.regNumber.length > 3
       default:
         return true
     }
@@ -122,8 +130,10 @@ export function NewClientWizard() {
         nis: "",
         vat: "",
         regNumber: "",
-        idType: "National ID",
-        idNumber: "",
+        primaryIdType: "National ID",
+        primaryIdNumber: "",
+        secondaryIdType: "",
+        secondaryIdNumber: "",
         firstName: "",
         middleName: "",
         surname: "",
@@ -210,15 +220,14 @@ export function NewClientWizard() {
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
                 <Label htmlFor="type">Client Type</Label>
-                <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value })}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select client type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="COMPANY">Company</SelectItem>
-                    <SelectItem value="INDIVIDUAL">Individual</SelectItem>
-                  </SelectContent>
-                </Select>
+                <SearchableSelect
+                  options={DROPDOWN_DATA.clientTypes}
+                  value={formData.type}
+                  onValueChange={(value) => setFormData({ ...formData, type: value })}
+                  placeholder="Select client type"
+                  showDescriptions={true}
+                  className="w-full"
+                />
               </div>
 
               {formData.type === "INDIVIDUAL" ? (
@@ -264,18 +273,18 @@ export function NewClientWizard() {
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="gender">Gender</Label>
-                      <Select
+                      <SearchableSelect
+                        options={[
+                          { value: "Male", label: "Male" },
+                          { value: "Female", label: "Female" },
+                          { value: "Other", label: "Other" },
+                          { value: "Prefer not to say", label: "Prefer not to say" }
+                        ]}
                         value={formData.gender}
                         onValueChange={(value) => setFormData({ ...formData, gender: value })}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select Gender" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Male">Male</SelectItem>
-                          <SelectItem value="Female">Female</SelectItem>
-                        </SelectContent>
-                      </Select>
+                        placeholder="Select Gender"
+                        className="w-full"
+                      />
                     </div>
                   </div>
                   <div className="grid gap-2">
@@ -347,9 +356,15 @@ export function NewClientWizard() {
                 <Input
                   id="phone"
                   value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder="+592 ..."
+                  onChange={(e) => {
+                    const formatted = formatPhoneNumber(e.target.value)
+                    setFormData({ ...formData, phone: formatted.formatted })
+                  }}
+                  placeholder="+592-123-4567"
                 />
+                <p className="text-xs text-muted-foreground">
+                  Enter Guyanese phone number (will auto-format)
+                </p>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="address">Address</Label>
@@ -365,98 +380,170 @@ export function NewClientWizard() {
 
           {step === 3 && (
             <div className="grid gap-4 py-4">
+              <div className="rounded-md border p-4 bg-blue-50/50">
+                <h4 className="font-semibold mb-2 flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-blue-600" />
+                  Flexible Identification Requirements
+                </h4>
+                <p className="text-sm text-blue-700">
+                  Provide at least one primary form of identification. Additional documents can be added later.
+                </p>
+              </div>
+
               {formData.type === "INDIVIDUAL" ? (
                 <div className="grid gap-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-2">
-                      <Label htmlFor="idNumber">National ID Card #</Label>
-                      <Input
-                        id="idNumber"
-                        value={formData.idNumber}
-                        onChange={(e) => setFormData({ ...formData, idNumber: e.target.value })}
-                        placeholder="144xxxxxx"
+                      <Label htmlFor="primaryIdType">Primary ID Type *</Label>
+                      <SearchableSelect
+                        options={DROPDOWN_DATA.idTypes}
+                        value={formData.primaryIdType}
+                        onValueChange={(value) => setFormData({ ...formData, primaryIdType: value })}
+                        placeholder="Select ID type"
+                        showDescriptions={true}
+                        className="w-full"
                       />
                     </div>
                     <div className="grid gap-2">
-                      <Label htmlFor="idIssue">Date of Issue</Label>
+                      <Label htmlFor="primaryIdNumber">Primary ID Number *</Label>
                       <Input
-                        id="idIssue"
-                        type="date"
-                        value={formData.idIssueDate}
-                        onChange={(e) => setFormData({ ...formData, idIssueDate: e.target.value })}
+                        id="primaryIdNumber"
+                        value={formData.primaryIdNumber}
+                        onChange={(e) => {
+                          const formatted = formData.primaryIdType === "National ID"
+                            ? formatNationalId(e.target.value)
+                            : { formatted: e.target.value, isValid: true }
+                          setFormData({ ...formData, primaryIdNumber: formatted.formatted })
+                        }}
+                        placeholder={formData.primaryIdType === "National ID" ? "144123456" :
+                                   formData.primaryIdType === "Passport" ? "R0712345" :
+                                   formData.primaryIdType === "Driver's License" ? "DL123456" :
+                                   "ID Number"}
+                      />
+                      {formData.primaryIdType && (
+                        <p className="text-xs text-muted-foreground">
+                          Format will be validated based on selected ID type
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="secondaryIdType">Secondary ID Type (Optional)</Label>
+                      <SearchableSelect
+                        options={[
+                          { value: "", label: "None", description: "No additional ID required" },
+                          ...DROPDOWN_DATA.idTypes
+                        ]}
+                        value={formData.secondaryIdType}
+                        onValueChange={(value) => setFormData({ ...formData, secondaryIdType: value })}
+                        placeholder="Select additional ID"
+                        showDescriptions={true}
+                        className="w-full"
+                        clearable={true}
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="secondaryIdNumber">Secondary ID Number</Label>
+                      <Input
+                        id="secondaryIdNumber"
+                        value={formData.secondaryIdNumber}
+                        onChange={(e) => setFormData({ ...formData, secondaryIdNumber: e.target.value })}
+                        placeholder="Optional"
+                        disabled={!formData.secondaryIdType}
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="passport">Passport Number</Label>
-                      <Input
-                        id="passport"
-                        value={formData.passportNumber}
-                        onChange={(e) => setFormData({ ...formData, passportNumber: e.target.value })}
-                        placeholder="R07xxxxx"
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="passportExpiry">Passport Expiry</Label>
-                      <Input
-                        id="passportExpiry"
-                        type="date"
-                        value={formData.passportExpiry}
-                        onChange={(e) => setFormData({ ...formData, passportExpiry: e.target.value })}
-                      />
-                    </div>
+
+                  <div className="grid gap-2">
+                    <Label htmlFor="idIssue">ID Issue Date (Optional)</Label>
+                    <Input
+                      id="idIssue"
+                      type="date"
+                      value={formData.idIssueDate}
+                      onChange={(e) => setFormData({ ...formData, idIssueDate: e.target.value })}
+                    />
                   </div>
                 </div>
               ) : null}
 
-              <div className="grid grid-cols-2 gap-4">
-                {formData.type === "COMPANY" && (
-                  <div className="grid gap-2">
-                    <Label htmlFor="tin">TIN (Taxpayer ID)</Label>
-                    <Input
-                      id="tin"
-                      value={formData.tin}
-                      onChange={(e) => setFormData({ ...formData, tin: e.target.value })}
-                      placeholder="123-456-789"
-                    />
-                  </div>
-                )}
+              <div className="border-t pt-4">
+                <h5 className="font-medium mb-3 text-sm flex items-center gap-2">
+                  <Info className="h-4 w-4 text-blue-600" />
+                  Government Registration Numbers (At least one required)
+                </h5>
+                <div className="grid gap-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    {formData.type === "COMPANY" ? (
+                      <div className="grid gap-2">
+                        <Label htmlFor="tin">TIN (Taxpayer ID)</Label>
+                        <Input
+                          id="tin"
+                          value={formData.tin}
+                          onChange={(e) => setFormData({ ...formData, tin: e.target.value })}
+                          placeholder="123-456-789 (if available)"
+                        />
+                        <p className="text-xs text-muted-foreground">Required for tax filings</p>
+                      </div>
+                    ) : (
+                      <div className="grid gap-2">
+                        <Label htmlFor="tin">TIN (Optional for individuals)</Label>
+                        <Input
+                          id="tin"
+                          value={formData.tin}
+                          onChange={(e) => setFormData({ ...formData, tin: e.target.value })}
+                          placeholder="123-456-789"
+                        />
+                      </div>
+                    )}
 
-                {formData.type === "INDIVIDUAL" && (
-                  <div className="grid gap-2">
-                    <Label htmlFor="nis">NIS Number</Label>
-                    <Input
-                      id="nis"
-                      value={formData.nis}
-                      onChange={(e) => setFormData({ ...formData, nis: e.target.value })}
-                      placeholder="A-123456"
-                    />
+                    <div className="grid gap-2">
+                      <Label htmlFor="nis">NIS Number</Label>
+                      <Input
+                        id="nis"
+                        value={formData.nis}
+                        onChange={(e) => setFormData({ ...formData, nis: e.target.value })}
+                        placeholder="A-123456 (if available)"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        {formData.type === "INDIVIDUAL" ? "For employment/benefits" : "For company NIS"}
+                      </p>
+                    </div>
                   </div>
-                )}
-              </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="vat">VAT Number (Optional)</Label>
-                  <Input
-                    id="vat"
-                    value={formData.vat}
-                    onChange={(e) => setFormData({ ...formData, vat: e.target.value })}
-                    placeholder="V-123456"
-                  />
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="vat">VAT Number (Optional)</Label>
+                      <Input
+                        id="vat"
+                        value={formData.vat}
+                        onChange={(e) => setFormData({ ...formData, vat: e.target.value })}
+                        placeholder="V-123456"
+                      />
+                      <p className="text-xs text-muted-foreground">Only if VAT registered</p>
+                    </div>
+                    {formData.type !== "INDIVIDUAL" && (
+                      <div className="grid gap-2">
+                        <Label htmlFor="reg">Business Registration (DCRA)</Label>
+                        <Input
+                          id="reg"
+                          value={formData.regNumber}
+                          onChange={(e) => setFormData({ ...formData, regNumber: e.target.value })}
+                          placeholder="C-12345 (if incorporated)"
+                        />
+                        <p className="text-xs text-muted-foreground">For incorporated companies</p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="rounded-md bg-amber-50 p-3 border border-amber-200">
+                    <p className="text-xs text-amber-700">
+                      <strong>Note:</strong> If you don't have some of these numbers yet (new business, pending registration, etc.),
+                      you can add them later in the client profile. At least one form of identification is required to proceed.
+                    </p>
+                  </div>
                 </div>
-                {formData.type !== "INDIVIDUAL" && (
-                  <div className="grid gap-2">
-                    <Label htmlFor="reg">Business Reg. No. (DCRA)</Label>
-                    <Input
-                      id="reg"
-                      value={formData.regNumber}
-                      onChange={(e) => setFormData({ ...formData, regNumber: e.target.value })}
-                      placeholder="C-12345"
-                    />
-                  </div>
-                )}
               </div>
             </div>
           )}

@@ -36,11 +36,39 @@ export default function CreateFilingPage() {
   const serviceName = TYPE_MAPPING[type] || "General Filing"
 
   const [client, setClient] = useState("")
+  const [clients, setClients] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [requirements, setRequirements] = useState<any[]>([])
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, string>>({})
+  const [period, setPeriod] = useState("")
+  const [notes, setNotes] = useState("")
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({})
 
+  // Load clients when component mounts
+  useEffect(() => {
+    const loadClients = async () => {
+      try {
+        setIsLoading(true)
+        const response = await fetch("/api/clients?limit=50")
+        if (response.ok) {
+          const data = await response.json()
+          setClients(data.clients || [])
+        } else {
+          toast.error("Failed to load clients")
+        }
+      } catch (error) {
+        console.error("Error loading clients:", error)
+        toast.error("Failed to load clients")
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadClients()
+  }, [])
+
+  // Set requirements based on service type
   useEffect(() => {
     if (serviceName && SERVICE_REQUIREMENTS[serviceName]) {
       setRequirements(SERVICE_REQUIREMENTS[serviceName])
@@ -84,28 +112,51 @@ export default function CreateFilingPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Improved validation
     if (!client) {
-      toast.error("Please select a client")
+      toast.error("Please select a client to proceed")
+      return
+    }
+
+    if (!period.trim()) {
+      toast.error("Please specify the tax period (e.g., 'Q1 2025' or 'Jan 2025')")
       return
     }
 
     const missingReqs = requirements.filter((req) => req.required && !uploadedFiles[req.id])
     if (missingReqs.length > 0) {
-      toast.error(`Please upload all required documents: ${missingReqs.map((r) => r.name).join(", ")}`)
+      toast.error(`Missing required documents: ${missingReqs.map((r) => r.name).join(", ")}`)
       return
     }
 
     setIsSubmitting(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      // TODO: Replace with actual API call to create filing
+      const filingData = {
+        clientId: client,
+        type: serviceName,
+        period: period.trim(),
+        notes: notes.trim(),
+        uploadedFiles: Object.keys(uploadedFiles),
+        status: "DRAFT"
+      }
 
-    toast.success(`${serviceName} submitted successfully`, {
-      description: "The filing record and documents have been processed.",
-    })
+      // Simulate API call for now
+      await new Promise((resolve) => setTimeout(resolve, 1500))
 
-    setIsSubmitting(false)
-    router.push("/filings")
+      const selectedClient = clients.find(c => c.id === client)
+      toast.success(`${serviceName} submitted successfully`, {
+        description: `Filing created for ${selectedClient?.name || 'client'} - ${period}`,
+      })
+
+      router.push("/filings")
+    } catch (error) {
+      toast.error("Failed to create filing. Please try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -130,29 +181,70 @@ export default function CreateFilingPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="client">Client</Label>
-              <Select value={client} onValueChange={setClient}>
+              <Label htmlFor="client">Client *</Label>
+              <Select value={client} onValueChange={setClient} disabled={isLoading}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a client" />
+                  <SelectValue placeholder={isLoading ? "Loading clients..." : "Select a client"} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="c1">ABC Corporation Ltd</SelectItem>
-                  <SelectItem value="c2">Guyana Tech Solutions</SelectItem>
-                  <SelectItem value="c3">Georgetown Retailers</SelectItem>
-                  <SelectItem value="c4">John Smith Trading</SelectItem>
+                  {clients.map((clientItem) => (
+                    <SelectItem key={clientItem.id} value={clientItem.id}>
+                      <div className="flex flex-col">
+                        <span className="font-medium">{clientItem.name}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {clientItem.type} • {clientItem.email}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                  {clients.length === 0 && !isLoading && (
+                    <SelectItem value="" disabled>
+                      No clients available
+                    </SelectItem>
+                  )}
                 </SelectContent>
               </Select>
+              {client && (
+                <p className="text-xs text-muted-foreground">
+                  Selected: {clients.find(c => c.id === client)?.name}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="period">Tax Period</Label>
-              <Input id="period" placeholder="e.g., Q1 2025 or Jan 2025" />
+              <Label htmlFor="period">Tax Period *</Label>
+              <Input
+                id="period"
+                value={period}
+                onChange={(e) => setPeriod(e.target.value)}
+                placeholder="e.g., Q1 2025, Jan 2025, FY 2024"
+              />
+              <p className="text-xs text-muted-foreground">
+                Specify the reporting period for this filing
+              </p>
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="notes">Internal Notes</Label>
-              <Input id="notes" placeholder="Any special instructions..." />
+              <Input
+                id="notes"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Any special instructions, deadlines, or notes..."
+              />
             </div>
+
+            {/* Add validation summary */}
+            {(!client || !period.trim()) && (
+              <div className="rounded-md bg-amber-50 p-3 border border-amber-200">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-amber-600" />
+                  <p className="text-sm text-amber-700">
+                    <strong>Required:</strong> Please select a client and specify the tax period to continue.
+                  </p>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -237,9 +329,18 @@ export default function CreateFilingPage() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button className="w-full" onClick={handleSubmit} disabled={isSubmitting}>
-              {isSubmitting ? "Submitting Filing..." : "Submit Filing & Documents"}
+            <Button
+              className="w-full"
+              onClick={handleSubmit}
+              disabled={isSubmitting || !client || !period.trim() || isLoading}
+            >
+              {isSubmitting ? "Creating Filing..." : "Create Filing & Upload Documents"}
             </Button>
+            {(!client || !period.trim()) && (
+              <p className="text-xs text-center text-muted-foreground mt-2">
+                Complete required fields above to enable submission
+              </p>
+            )}
           </CardFooter>
         </Card>
       </div>

@@ -4,12 +4,32 @@ import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 
 const createFilingSchema = z.object({
-  filingType: z.enum(["VAT", "PAYE", "INCOME_TAX", "CORP_TAX"]),
+  // More flexible filing types to match the constants
+  type: z.string().min(1, "Filing type is required"),
+  filingType: z.enum(["VAT", "PAYE", "INCOME_TAX", "CORP_TAX"]).optional(),
   period: z.string().min(1, "Period is required"),
-  amountDue: z.number().min(0, "Amount must be positive"),
+  amountDue: z.number().min(0, "Amount must be positive").optional(),
   clientId: z.string().min(1, "Client ID is required"),
   filingDate: z.string().optional().transform((val) => val ? new Date(val) : undefined),
+  notes: z.string().optional(),
+  status: z.enum(["DRAFT", "PENDING", "APPROVED", "REJECTED", "COMPLETED"]).optional(),
+  uploadedFiles: z.array(z.string()).optional(),
+  requirements: z.array(z.any()).optional(),
 })
+
+// Helper function to map service types to filing types
+function mapServiceTypeToFilingType(serviceType: string) {
+  const mappings: Record<string, string> = {
+    "Income Tax Returns": "INCOME_TAX",
+    "Corporation Tax Returns": "CORP_TAX",
+    "PAYE Returns": "PAYE",
+    "VAT Returns": "VAT",
+    "Property Tax Returns": "INCOME_TAX",
+    "Capital Gains Tax": "INCOME_TAX",
+    "Excise Tax Returns": "VAT",
+  }
+  return mappings[serviceType] || "INCOME_TAX"
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -94,11 +114,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
+    // Prepare filing data with proper field mapping
+    const filingData = {
+      filingType: validatedData.filingType || mapServiceTypeToFilingType(validatedData.type),
+      period: validatedData.period,
+      clientId: validatedData.clientId,
+      amountDue: validatedData.amountDue || 0,
+      filingDate: validatedData.filingDate,
+      status: validatedData.status || "DRAFT",
+      notes: validatedData.notes,
+      // Store additional metadata
+      serviceName: validatedData.type,
+      uploadedDocuments: validatedData.uploadedFiles?.join(", ") || "",
+    }
+
     const filing = await prisma.taxReturn.create({
-      data: {
-        ...validatedData,
-        status: "PENDING"
-      },
+      data: filingData,
       include: {
         client: {
           select: { id: true, name: true, email: true }
