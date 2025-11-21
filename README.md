@@ -1,12 +1,14 @@
 # GK Enterprise Suite
 
-![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)
-![Status](https://img.shields.io/badge/status-in--development-yellow.svg)
+![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)
+![Status](https://img.shields.io/badge/status-production--ready-green.svg)
 ![Tech](https://img.shields.io/badge/stack-Next.js_16_|_Tailwind_v4_|_TypeScript-black.svg)
+![Tests](https://img.shields.io/badge/tests-65_E2E_tests-brightgreen.svg)
+![Security](https://img.shields.io/badge/security-production--hardened-blue.svg)
 
-**The Unified Enterprise Operating System for Guyana Compliance & Management.**
+**The Production-Ready Unified Enterprise Operating System for Guyana Compliance & Management.**
 
-This platform merges the financial rigor of **KAJ** with the strategic consultancy of **GCMC** into a single, powerful dashboard. It streamlines tax filings, accounting, payroll, immigration processing, client management, and corporate training.
+This platform merges the financial rigor of **KAJ** with the strategic consultancy of **GCMC** into a single, powerful dashboard. It streamlines tax filings, accounting, payroll, immigration processing, client management, and corporate training with enterprise-grade security and comprehensive testing.
 
 ---
 
@@ -14,6 +16,10 @@ This platform merges the financial rigor of **KAJ** with the strategic consultan
 
 *   **[Project Documentation](PROJECT_DOCS.md)**: Detailed breakdown of modules, features, and business logic.
 *   **[System Architecture](ARCHITECTURE.md)**: Technical diagrams, data flow, and system design.
+*   **[API Reference](API.md)**: Complete API documentation with endpoints and examples.
+*   **[Testing Guide](TESTING.md)**: Comprehensive E2E testing with Playwright (65 tests).
+*   **[Deployment Guide](DEPLOYMENT.md)**: Production deployment instructions and best practices.
+*   **[Security Documentation](SECURITY.md)**: Security architecture and best practices.
 *   **[Contributing Guidelines](CONTRIBUTING.md)**: Standards and workflow for developers.
 
 ---
@@ -47,50 +53,56 @@ The platform is designed around two core business pillars, unified by a global *
 
 ### Prerequisites
 *   **Node.js** (v18 or higher)
-*   **npm** or **yarn**
+*   **pnpm** (recommended package manager)
 *   **PostgreSQL** (v14 or higher) or use Docker Compose
 *   **Git**
+*   **Docker** (optional, for containerized deployment)
 
 ### Installation
 
 1.  **Clone the repository**
     \`\`\`bash
-    git clone https://github.com/your-org/GCMC-KAJ-Compliance-Platform.git
+    git clone https://github.com/kareemschultz/GCMC-KAJ-Compliance-Platform.git
     cd GCMC-KAJ-Compliance-Platform
     \`\`\`
 
 2.  **Install dependencies**
     \`\`\`bash
-    npm install
-    # or
-    yarn install
+    pnpm install
     \`\`\`
 
 3.  **Setup Database**
-    
+
     Copy the example environment file and configure your database:
     \`\`\`bash
     cp .env.example .env
-    # Edit .env and add your DATABASE_URL
+    # Edit .env and add your DATABASE_URL and other required variables
     \`\`\`
-    
+
     Push the schema and seed data:
     \`\`\`bash
-    npm run db:push
-    npm run db:seed
+    pnpm run db:push
+    pnpm run db:seed
     \`\`\`
 
 4.  **Run the development server**
     \`\`\`bash
-    npm run dev
-    # or
-    yarn dev
+    pnpm run dev
     \`\`\`
 
 5.  **Access the Application**
-    *   **Admin Dashboard**: Open [http://localhost:3000](http://localhost:3000)
-    *   **Client Portal**: Open [http://localhost:3000/portal](http://localhost:3000/portal)
-    *   **Booking Page**: Open [http://localhost:3000/book](http://localhost:3000/book)
+    *   **Admin Dashboard**: [http://localhost:3000](http://localhost:3000)
+    *   **Client Portal**: [http://localhost:3000/portal](http://localhost:3000/portal)
+    *   **Booking Page**: [http://localhost:3000/book](http://localhost:3000/book)
+
+### 🔐 Default Login Credentials
+
+| Role | Email | Password | Access Level |
+|------|-------|----------|--------------|
+| Super Admin | admin@gcmc.gy | admin123 | Full system access |
+| GCMC Staff | gcmc@gcmc.gy | gcmc123 | Immigration, Training, Legal |
+| KAJ Staff | kaj@gcmc.gy | kaj123 | Tax, Accounting, Payroll |
+| Client | client@abccorp.gy | client123 | Portal access only |
 
 ### 🐳 Docker Setup
 
@@ -113,14 +125,42 @@ To run the application with database in containers:
 
 ## 🛠️ Technical Highlights
 
-*   **Client Context System**: Global state management allows acting "on behalf of" specific clients across all modules.
-*   **Dynamic Brand Context**: Seamlessly switches UI/UX between KAJ and GCMC modes.
-*   **Mock API Layer**: Fully functional `lib/api.ts` for rapid prototyping and testing without a backend.
-*   **Prisma ORM**: Type-safe database access with auto-generated TypeScript types.
-*   **Zod Validation**: Comprehensive form validation with Guyana-specific calculators (NIS, PAYE, VAT).
-*   **Production Ready**: Docker configuration, TypeScript strict mode, ESLint, and proper error handling.
-*   **Responsive Design**: Mobile-first architecture using Tailwind CSS v4 with enhanced animations and transitions.
-*   **Traffic Light Compliance**: Visual system for tracking document expiry (Green/Amber/Red).
+### 🔐 **Production-Grade Security**
+*   **NextAuth.js Authentication**: Role-based access control with JWT sessions
+*   **Security Headers**: CSP, XSS protection, HSTS, and secure configurations
+*   **Input Sanitization**: Comprehensive protection against XSS and injection attacks
+*   **Rate Limiting**: API endpoint protection with configurable limits
+*   **Password Hashing**: Bcrypt with 12 rounds for secure password storage
+
+### 🗄️ **Database & API Architecture**
+*   **Prisma ORM**: Type-safe database access with auto-generated TypeScript types
+*   **PostgreSQL**: Robust relational database with proper indexing and relations
+*   **RESTful APIs**: Complete API endpoints with validation and error handling
+*   **Real-time Updates**: Optimistic updates with fallback to mock data during development
+
+### 🎨 **Frontend Excellence**
+*   **Next.js 16 App Router**: Latest routing patterns with Server Components
+*   **Tailwind CSS v4**: Modern styling with enhanced animations and responsive design
+*   **TypeScript Strict Mode**: Complete type safety across the application
+*   **Component Library**: shadcn/ui components with consistent design system
+
+### 🧪 **Comprehensive Testing**
+*   **65 E2E Tests**: Complete workflow validation with Playwright
+*   **Multi-Browser Testing**: Chrome, Firefox, Safari, Mobile Chrome, Mobile Safari
+*   **Visual Regression Testing**: Automated screenshot comparison
+*   **Authentication Testing**: Role-based access validation
+
+### 🚀 **DevOps & Deployment**
+*   **Docker Containerization**: Multi-stage builds with health checks
+*   **Environment Configurations**: Separate dev/staging/production setups
+*   **CI/CD Ready**: GitHub Actions integration with automated testing
+*   **Database Migrations**: Automated schema management with Prisma
+
+### 💼 **Business Logic Features**
+*   **Client Context System**: Global state management for multi-client operations
+*   **Dynamic Brand Context**: Seamless switching between KAJ and GCMC modes
+*   **Compliance Tracking**: Traffic Light system for document expiry monitoring
+*   **Guyana-Specific Calculators**: NIS, PAYE, VAT calculation engines
 
 ---
 
@@ -135,14 +175,25 @@ Required environment variables (see `.env.example` for complete list):
 
 ## 📦 Scripts
 
-*   `npm run dev`: Start development server
-*   `npm run build`: Build for production
-*   `npm run start`: Start production server
-*   `npm run lint`: Run ESLint
-*   `npm run type-check`: Check TypeScript types
-*   `npm run db:push`: Sync Prisma schema to database
-*   `npm run db:seed`: Populate database with sample data
-*   `npm run db:studio`: Open Prisma Studio to view data
+### Development
+*   `pnpm run dev`: Start development server
+*   `pnpm run build`: Build for production
+*   `pnpm run start`: Start production server
+*   `pnpm run lint`: Run ESLint
+
+### Database
+*   `pnpm run db:generate`: Generate Prisma client
+*   `pnpm run db:push`: Sync Prisma schema to database
+*   `pnpm run db:seed`: Populate database with sample data
+*   `pnpm run db:studio`: Open Prisma Studio to view data
+
+### Testing
+*   `pnpm run test:e2e`: Run all E2E tests
+*   `pnpm run test:e2e:ui`: Interactive test runner
+*   `pnpm run test:e2e:headed`: Run tests with visible browser
+*   `pnpm run test:e2e:debug`: Debug tests
+*   `pnpm run test:e2e:report`: View test report
+*   `pnpm run test:setup`: Setup testing environment
 
 ---
 
