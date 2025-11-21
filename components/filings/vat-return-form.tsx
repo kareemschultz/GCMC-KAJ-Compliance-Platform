@@ -6,10 +6,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import { Calculator, Printer } from "lucide-react"
+import { Calculator, Printer, Send } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 export function VATReturnForm() {
+  const router = useRouter()
   const [standardSales, setStandardSales] = useState<string>("")
   const [zeroRateSales, setZeroRateSales] = useState<string>("")
   const [exemptSales, setExemptSales] = useState<string>("")
@@ -22,6 +25,7 @@ export function VATReturnForm() {
   const [totalSales, setTotalSales] = useState<number>(0)
   const [netVAT, setNetVAT] = useState<number>(0)
   const [totalDue, setTotalDue] = useState<number>(0)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Auto-calculate on input change
   useEffect(() => {
@@ -65,6 +69,18 @@ export function VATReturnForm() {
     window.print()
   }
 
+  const handleSubmit = async () => {
+    setIsSubmitting(true)
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+
+    toast.success("VAT Return Submitted Successfully", {
+      description: `Return for period Q4 2024 has been filed. Total: ${formatCurrency(totalDue)}`,
+    })
+    setIsSubmitting(false)
+    router.push("/filings")
+  }
+
   return (
     <div className="grid gap-6 print:block print:space-y-6">
       <style jsx global>{`
@@ -90,9 +106,15 @@ export function VATReturnForm() {
             <CardTitle>Section 1: Taxpayer Information</CardTitle>
             <CardDescription>Client and filing period details</CardDescription>
           </div>
-          <Button variant="outline" onClick={handlePrint} className="no-print bg-transparent">
-            <Printer className="mr-2 h-4 w-4" /> Print Return
-          </Button>
+          <div className="flex gap-2 no-print">
+            <Button variant="outline" onClick={handlePrint} className="bg-transparent">
+              <Printer className="mr-2 h-4 w-4" /> Print Return
+            </Button>
+            <Button onClick={handleSubmit} disabled={isSubmitting}>
+              <Send className="mr-2 h-4 w-4" />
+              {isSubmitting ? "Submitting..." : "Submit Return"}
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-2">
           <div className="space-y-2">

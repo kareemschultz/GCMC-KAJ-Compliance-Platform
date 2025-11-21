@@ -67,6 +67,18 @@ export function NewFilingDropdown({
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
+          <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">Legal Documents</DropdownMenuLabel>
+          <DropdownMenuItem asChild>
+            <Link href="/documents?tab=wizard">Create Legal Document</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/documents?tab=templates">Browse Templates</Link>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+
+        <DropdownMenuSeparator />
+
+        <DropdownMenuGroup>
           <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">GRA - Compliance</DropdownMenuLabel>
           <DropdownMenuItem asChild>
             <Link href="/filings/create?type=compliance-tender">Tender Compliance</Link>

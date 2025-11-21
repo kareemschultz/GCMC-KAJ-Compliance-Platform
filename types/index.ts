@@ -261,3 +261,17 @@ export interface Employee {
   hireDate: string
   status: "ACTIVE" | "INACTIVE" | "TERMINATED"
 }
+
+export interface ServiceRequest {
+  id: string
+  clientId: string
+  clientName: string
+  serviceId: string
+  serviceName: string
+  category: ServiceCategory
+  status: "Pending" | "In Progress" | "Completed" | "Cancelled"
+  requestDate: string
+  completionDate?: string
+  notes?: string
+  assignedTo?: string
+}

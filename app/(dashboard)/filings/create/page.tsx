@@ -3,14 +3,14 @@
 import type React from "react"
 
 import { useSearchParams, useRouter } from "next/navigation"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
-import { ArrowLeft, FileText, AlertCircle } from "lucide-react"
+import { ArrowLeft, FileText, AlertCircle, Upload, CheckCircle2, Download } from "lucide-react"
 import Link from "next/link"
 import { SERVICE_REQUIREMENTS } from "@/lib/constants"
 
@@ -38,6 +38,8 @@ export default function CreateFilingPage() {
   const [client, setClient] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [requirements, setRequirements] = useState<any[]>([])
+  const [uploadedFiles, setUploadedFiles] = useState<Record<string, string>>({})
+  const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({})
 
   useEffect(() => {
     if (serviceName && SERVICE_REQUIREMENTS[serviceName]) {
@@ -51,10 +53,45 @@ export default function CreateFilingPage() {
     }
   }, [serviceName])
 
+  const handleFileUpload = (reqId: string, file: File) => {
+    setUploadedFiles((prev) => ({
+      ...prev,
+      [reqId]: file.name,
+    }))
+    toast.success(`File "${file.name}" uploaded successfully`)
+  }
+
+  const triggerFileInput = (reqId: string) => {
+    fileInputRefs.current[reqId]?.click()
+  }
+
+  const handleDownloadTemplate = (reqName: string) => {
+    // Generate a simple template file
+    const templateContent = `${reqName}\n\nThis is a template for: ${reqName}\n\nPlease fill out the required information below:\n\n- Field 1: _______________\n- Field 2: _______________\n- Field 3: _______________\n\nSignature: _______________\nDate: _______________`
+
+    const blob = new Blob([templateContent], { type: "text/plain" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `${reqName.toLowerCase().replace(/\s+/g, "-")}-template.txt`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+
+    toast.success(`Template for "${reqName}" downloaded`)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!client) {
       toast.error("Please select a client")
+      return
+    }
+
+    const missingReqs = requirements.filter((req) => req.required && !uploadedFiles[req.id])
+    if (missingReqs.length > 0) {
+      toast.error(`Please upload all required documents: ${missingReqs.map((r) => r.name).join(", ")}`)
       return
     }
 
@@ -63,8 +100,8 @@ export default function CreateFilingPage() {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1500))
 
-    toast.success(`${serviceName} created successfully`, {
-      description: "The filing record has been initialized.",
+    toast.success(`${serviceName} submitted successfully`, {
+      description: "The filing record and documents have been processed.",
     })
 
     setIsSubmitting(false)
@@ -122,27 +159,78 @@ export default function CreateFilingPage() {
         <Card>
           <CardHeader>
             <CardTitle>Requirements Checklist</CardTitle>
-            <CardDescription>Ensure these documents are ready.</CardDescription>
+            <CardDescription>Upload the required documents to proceed.</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {requirements.map((req, index) => (
-                <div key={index} className="flex items-start space-x-3 p-3 border rounded-md bg-muted/50">
-                  {req.required ? (
-                    <AlertCircle className="h-5 w-5 text-amber-500 mt-0.5" />
-                  ) : (
-                    <FileText className="h-5 w-5 text-blue-500 mt-0.5" />
-                  )}
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium leading-none">
-                      {req.name}
-                      {req.required && (
-                        <span className="ml-2 text-xs text-amber-600 font-semibold bg-amber-100 px-1.5 py-0.5 rounded-full">
-                          Required
-                        </span>
+                <div
+                  key={index}
+                  className="flex items-start justify-between space-x-3 p-3 border rounded-md bg-muted/50"
+                >
+                  <div className="flex items-start space-x-3">
+                    {uploadedFiles[req.id] ? (
+                      <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
+                    ) : req.required ? (
+                      <AlertCircle className="h-5 w-5 text-amber-500 mt-0.5" />
+                    ) : (
+                      <FileText className="h-5 w-5 text-blue-500 mt-0.5" />
+                    )}
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {req.name}
+                        {req.required && (
+                          <span className="ml-2 text-xs text-amber-600 font-semibold bg-amber-100 px-1.5 py-0.5 rounded-full">
+                            Required
+                          </span>
+                        )}
+                      </p>
+                      <p className="text-xs text-muted-foreground">Type: {req.type}</p>
+                      {uploadedFiles[req.id] && (
+                        <p className="text-xs text-green-600 font-medium">Uploaded: {uploadedFiles[req.id]}</p>
                       )}
-                    </p>
-                    <p className="text-xs text-muted-foreground">Type: {req.type}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    {!uploadedFiles[req.id] && (
+                      <>
+                        <input
+                          type="file"
+                          ref={(el) => {
+                            fileInputRefs.current[req.id] = el
+                          }}
+                          className="hidden"
+                          accept=".pdf,.doc,.docx,.txt"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0]
+                            if (file) {
+                              handleFileUpload(req.id, file)
+                            }
+                          }}
+                        />
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-8 bg-transparent"
+                          onClick={() => triggerFileInput(req.id)}
+                        >
+                          <Upload className="h-3 w-3 mr-2" />
+                          Upload
+                        </Button>
+                      </>
+                    )}
+                    {req.type === "Form" && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 text-xs"
+                        onClick={() => handleDownloadTemplate(req.name)}
+                      >
+                        <Download className="h-3 w-3 mr-2" />
+                        Template
+                      </Button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -150,7 +238,7 @@ export default function CreateFilingPage() {
           </CardContent>
           <CardFooter>
             <Button className="w-full" onClick={handleSubmit} disabled={isSubmitting}>
-              {isSubmitting ? "Creating Record..." : "Initialize Filing Record"}
+              {isSubmitting ? "Submitting Filing..." : "Submit Filing & Documents"}
             </Button>
           </CardFooter>
         </Card>

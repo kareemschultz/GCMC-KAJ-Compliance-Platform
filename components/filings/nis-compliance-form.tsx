@@ -7,15 +7,30 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Printer, Save } from "lucide-react"
+import { Printer, Save, Send } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 export function NISComplianceForm() {
+  const router = useRouter()
   const [employerType, setEmployerType] = useState("employer")
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handlePrint = () => {
     window.print()
+  }
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true)
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+
+    toast.success("NIS Compliance Application Submitted", {
+      description: "Your application has been sent to the NIS department.",
+    })
+    setIsSubmitting(false)
+    router.push("/filings")
   }
 
   return (
@@ -43,8 +58,12 @@ export function NISComplianceForm() {
             <Button variant="outline" onClick={handlePrint}>
               <Printer className="mr-2 h-4 w-4" /> Print
             </Button>
-            <Button>
+            <Button variant="outline">
               <Save className="mr-2 h-4 w-4" /> Save Draft
+            </Button>
+            <Button onClick={handleSubmit} disabled={isSubmitting}>
+              <Send className="mr-2 h-4 w-4" />
+              {isSubmitting ? "Submitting..." : "Submit Application"}
             </Button>
           </div>
         </CardHeader>

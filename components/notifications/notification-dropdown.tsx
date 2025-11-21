@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import { Bell, Check, Clock, AlertTriangle, FileText, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -10,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
+import { toast } from "sonner"
 
 interface Notification {
   id: string
@@ -20,12 +24,19 @@ interface Notification {
   read: boolean
 }
 
-const notifications: Notification[] = [
+const getRelativeTime = (hoursAgo: number) => {
+  if (hoursAgo < 1) return "Just now"
+  if (hoursAgo < 24) return `${Math.floor(hoursAgo)} hours ago`
+  const daysAgo = Math.floor(hoursAgo / 24)
+  return `${daysAgo} day${daysAgo > 1 ? "s" : ""} ago`
+}
+
+const initialNotifications: Notification[] = [
   {
     id: "1",
     title: "VAT Return Overdue",
     description: "VAT Return for Tech Solutions Ltd is overdue",
-    time: "2 hours ago",
+    time: getRelativeTime(2),
     type: "overdue",
     read: false,
   },
@@ -33,7 +44,7 @@ const notifications: Notification[] = [
     id: "2",
     title: "TIN Certificate Expiring",
     description: "TIN Certificate for Green Grocers Inc expires in 7 days",
-    time: "5 hours ago",
+    time: getRelativeTime(5),
     type: "expiring",
     read: false,
   },
@@ -41,7 +52,7 @@ const notifications: Notification[] = [
     id: "3",
     title: "New Task Assigned",
     description: "You have been assigned to 'Client Onboarding'",
-    time: "1 day ago",
+    time: getRelativeTime(24),
     type: "assigned",
     read: true,
   },
@@ -49,7 +60,7 @@ const notifications: Notification[] = [
     id: "4",
     title: "Filing Accepted",
     description: "GRA Filing for Construction Pros was accepted",
-    time: "1 day ago",
+    time: getRelativeTime(24),
     type: "completed",
     read: true,
   },
@@ -73,7 +84,17 @@ const getIcon = (type: Notification["type"]) => {
 }
 
 export function NotificationDropdown() {
+  const [notifications, setNotifications] = useState<Notification[]>(initialNotifications)
   const unreadCount = notifications.filter((n) => !n.read).length
+
+  const handleMarkAllRead = () => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
+    toast.success("All notifications marked as read")
+  }
+
+  const handleNotificationClick = (id: string) => {
+    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)))
+  }
 
   return (
     <DropdownMenu>
@@ -88,7 +109,10 @@ export function NotificationDropdown() {
         <DropdownMenuLabel className="flex items-center justify-between">
           <span>Notifications</span>
           {unreadCount > 0 && (
-            <span className="text-xs font-normal text-muted-foreground cursor-pointer hover:text-primary">
+            <span
+              className="text-xs font-normal text-muted-foreground cursor-pointer hover:text-primary"
+              onClick={handleMarkAllRead}
+            >
               Mark all read
             </span>
           )}
@@ -97,7 +121,11 @@ export function NotificationDropdown() {
         <ScrollArea className="h-[300px]">
           <div className="flex flex-col gap-1 p-1">
             {notifications.map((notification) => (
-              <DropdownMenuItem key={notification.id} className="flex flex-col items-start gap-1 p-3 cursor-pointer">
+              <DropdownMenuItem
+                key={notification.id}
+                className="flex flex-col items-start gap-1 p-3 cursor-pointer"
+                onClick={() => handleNotificationClick(notification.id)}
+              >
                 <div className="flex w-full items-start gap-2">
                   <div
                     className={cn(

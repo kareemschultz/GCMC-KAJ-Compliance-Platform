@@ -1,3 +1,5 @@
+"use client"
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -5,7 +7,76 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { FileText, Download, Search, Filter } from "lucide-react"
 
+const formatDate = (daysAgo: number) => {
+  const date = new Date()
+  date.setDate(date.getDate() - daysAgo)
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+}
+
+const getPeriod = (monthsAgo: number) => {
+  const date = new Date()
+  date.setMonth(date.getMonth() - monthsAgo)
+  return date.toLocaleDateString("en-US", { month: "short", year: "numeric" })
+}
+
 export default function PortalFilingsPage() {
+  const filings = [
+    {
+      name: `VAT Return - ${getPeriod(1)}`,
+      type: "VAT",
+      date: formatDate(6),
+      status: "Submitted",
+      amount: "$45,200",
+    },
+    {
+      name: `NIS Schedule - ${getPeriod(1)}`,
+      type: "NIS",
+      date: formatDate(11),
+      status: "Submitted",
+      amount: "$12,500",
+    },
+    {
+      name: `PAYE Return - ${getPeriod(1)}`,
+      type: "PAYE",
+      date: formatDate(6),
+      status: "Processing",
+      amount: "$8,900",
+    },
+    {
+      name: `VAT Return - ${getPeriod(2)}`,
+      type: "VAT",
+      date: formatDate(37),
+      status: "Approved",
+      amount: "$42,100",
+    },
+    {
+      name: `NIS Schedule - ${getPeriod(2)}`,
+      type: "NIS",
+      date: formatDate(42),
+      status: "Approved",
+      amount: "$12,500",
+    },
+    {
+      name: "Quarterly Tax Estimate",
+      type: "CIT",
+      date: formatDate(52),
+      status: "Approved",
+      amount: "$150,000",
+    },
+  ]
+
+  const handleDownload = (filingName: string) => {
+    const blob = new Blob([`${filingName} - Filing Document`], { type: "application/pdf" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `${filingName.toLowerCase().replace(/\s+/g, "-")}.pdf`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -57,50 +128,7 @@ export default function PortalFilingsPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {[
-              {
-                name: "VAT Return - Oct 2023",
-                type: "VAT",
-                date: "Nov 15, 2023",
-                status: "Submitted",
-                amount: "$45,200",
-              },
-              {
-                name: "NIS Schedule - Oct 2023",
-                type: "NIS",
-                date: "Nov 10, 2023",
-                status: "Submitted",
-                amount: "$12,500",
-              },
-              {
-                name: "PAYE Return - Oct 2023",
-                type: "PAYE",
-                date: "Nov 15, 2023",
-                status: "Processing",
-                amount: "$8,900",
-              },
-              {
-                name: "VAT Return - Sep 2023",
-                type: "VAT",
-                date: "Oct 14, 2023",
-                status: "Approved",
-                amount: "$42,100",
-              },
-              {
-                name: "NIS Schedule - Sep 2023",
-                type: "NIS",
-                date: "Oct 10, 2023",
-                status: "Approved",
-                amount: "$12,500",
-              },
-              {
-                name: "Quarterly Tax Estimate",
-                type: "CIT",
-                date: "Sep 30, 2023",
-                status: "Approved",
-                amount: "$150,000",
-              },
-            ].map((filing, i) => (
+            {filings.map((filing, i) => (
               <div key={i} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
                 <div className="flex items-center gap-4">
                   <div className="h-10 w-10 rounded-lg bg-muted flex items-center justify-center">
@@ -135,7 +163,7 @@ export default function PortalFilingsPage() {
                       {filing.status}
                     </Badge>
                   </div>
-                  <Button variant="ghost" size="icon">
+                  <Button variant="ghost" size="icon" onClick={() => handleDownload(filing.name)}>
                     <Download className="h-4 w-4" />
                   </Button>
                 </div>

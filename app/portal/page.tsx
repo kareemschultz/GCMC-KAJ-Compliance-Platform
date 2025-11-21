@@ -1,10 +1,62 @@
+"use client"
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { FileText, AlertCircle, CheckCircle, Clock, ArrowRight, Briefcase, Download } from "lucide-react"
 import Link from "next/link"
 
+const formatDate = (daysAgo: number) => {
+  const date = new Date()
+  date.setDate(date.getDate() - daysAgo)
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+}
+
+const getCurrentPeriod = (monthsAgo = 1) => {
+  const date = new Date()
+  date.setMonth(date.getMonth() - monthsAgo)
+  return date.toLocaleDateString("en-US", { month: "short", year: "numeric" })
+}
+
 export default function PortalDashboard() {
+  const recentFilings = [
+    {
+      name: `VAT Return (${getCurrentPeriod(1)})`,
+      status: "Submitted",
+      date: formatDate(6),
+      amount: "$45,200",
+    },
+    {
+      name: `NIS Contribution (${getCurrentPeriod(1)})`,
+      status: "Submitted",
+      date: formatDate(11),
+      amount: "$12,500",
+    },
+    {
+      name: `PAYE Return (${getCurrentPeriod(1)})`,
+      status: "Processing",
+      date: formatDate(6),
+      amount: "$8,900",
+    },
+  ]
+
+  const handleContactSupport = () => {
+    window.location.href = "mailto:support@gcmc-kaj.com?subject=Support Request"
+  }
+
+  const handleDownload = (docName: string) => {
+    // In production, this would fetch the actual document
+    const blob = new Blob([`${docName} - Sample Document Content`], { type: "application/pdf" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `${docName.toLowerCase().replace(/\s+/g, "-")}.pdf`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -13,8 +65,12 @@ export default function PortalDashboard() {
           <p className="text-muted-foreground">Here is an overview of your business compliance status.</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline">Contact Support</Button>
-          <Button>Request Service</Button>
+          <Button variant="outline" onClick={handleContactSupport}>
+            Contact Support
+          </Button>
+          <Button asChild>
+            <Link href="/portal/services">Request Service</Link>
+          </Button>
         </div>
       </div>
 
@@ -107,11 +163,7 @@ export default function PortalDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {[
-                  { name: "VAT Return (Oct 2023)", status: "Submitted", date: "Nov 15, 2023", amount: "$45,200" },
-                  { name: "NIS Contribution (Oct 2023)", status: "Submitted", date: "Nov 10, 2023", amount: "$12,500" },
-                  { name: "PAYE Return (Oct 2023)", status: "Processing", date: "Nov 15, 2023", amount: "$8,900" },
-                ].map((filing, i) => (
+                {recentFilings.map((filing, i) => (
                   <div key={i} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
                     <div className="flex items-center gap-3">
                       <div className="h-8 w-8 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center text-green-600">
@@ -150,8 +202,8 @@ export default function PortalDashboard() {
                   <p className="text-xs text-muted-foreground mt-1 mb-3">
                     Your business registration expires in 30 days. Please upload the renewal form.
                   </p>
-                  <Button size="sm" className="w-full">
-                    Upload Document
+                  <Button size="sm" className="w-full" asChild>
+                    <Link href="/portal/documents">Upload Document</Link>
                   </Button>
                 </div>
                 <div className="bg-white dark:bg-background p-4 rounded-lg border shadow-sm">
@@ -159,8 +211,8 @@ export default function PortalDashboard() {
                   <p className="text-xs text-muted-foreground mt-1 mb-3">
                     We need a copy of your TIN certificate for the new tax year.
                   </p>
-                  <Button size="sm" variant="outline" className="w-full bg-transparent">
-                    Upload Document
+                  <Button size="sm" variant="outline" className="w-full bg-transparent" asChild>
+                    <Link href="/portal/documents">Upload Document</Link>
                   </Button>
                 </div>
               </div>
@@ -175,14 +227,17 @@ export default function PortalDashboard() {
             <CardContent>
               <div className="space-y-2">
                 {["Tax Compliance Certificate", "Business Registration", "Last Month VAT Return"].map((doc, i) => (
-                  <Button key={i} variant="ghost" className="w-full justify-between h-auto py-3" asChild>
-                    <a href="#">
-                      <span className="flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm truncate max-w-[180px]">{doc}</span>
-                      </span>
-                      <Download className="h-4 w-4 text-muted-foreground" />
-                    </a>
+                  <Button
+                    key={i}
+                    variant="ghost"
+                    className="w-full justify-between h-auto py-3"
+                    onClick={() => handleDownload(doc)}
+                  >
+                    <span className="flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm truncate max-w-[180px]">{doc}</span>
+                    </span>
+                    <Download className="h-4 w-4 text-muted-foreground" />
                   </Button>
                 ))}
               </div>
