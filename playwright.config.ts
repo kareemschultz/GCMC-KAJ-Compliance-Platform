@@ -73,12 +73,12 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'pnpm run dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000, // 2 minutes
-  },
+  // webServer: {
+  //   command: 'pnpm run dev',
+  //   url: 'http://localhost:3000',
+  //   reuseExistingServer: true, // Always reuse existing server
+  //   timeout: 120 * 1000, // 2 minutes
+  // },
 
   /* Global setup */
   globalSetup: './tests/global-setup.ts',

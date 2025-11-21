@@ -1,0 +1,259 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// --- USER & AUTHENTICATION ---
+enum UserRole {
+  SUPER_ADMIN     // You (Access everything)
+  GCMC_STAFF      // Sees Immigration, Legal, Training
+  KAJ_STAFF       // Sees Tax, Payroll, NIS
+  CLIENT          // External user (Client Portal)
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  fullName      String
+  passwordHash  String
+  role          UserRole  @default(CLIENT)
+  lastLogin     DateTime?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  clientProfile Client?   @relation(fields: [clientId], references: [id])
+  clientId      String?
+}
+
+// --- CORE CLIENT DATA ---
+model Client {
+  id            String    @id @default(uuid())
+  name          String    // Company Name or Individual Name
+  type          String    // "INDIVIDUAL" or "COMPANY"
+  tinNumber     String?   // Taxpayer Identification Number (GRA)
+  nisNumber     String?   // National Insurance Scheme Number
+  email         String
+  phone         String
+  address       String
+  createdAt     DateTime  @default(now())
+  
+  // KAJ Relations (Financial)
+  taxReturns    TaxReturn[]
+  nisSchedules  NISSchedule[]
+  
+  // GCMC Relations (Consultancy)
+  visas         VisaApplication[]
+  legalDocs     LegalDocument[]
+  
+  // Accounting Relations
+  financialStatements FinancialStatement[]
+  auditCases        AuditCase[]
+  bankServices      BankService[]
+  
+  employees     Employee[]
+  properties    Property[]
+  expediteJobs  ExpediteJob[]
+  
+  users         User[]
+}
+
+// --- KAJ MODULE: TAX & COMPLIANCE ---
+model TaxReturn {
+  id            String    @id @default(uuid())
+  filingType    String    // "VAT", "PAYE", "INCOME_TAX", "CORP_TAX"
+  period        String    // e.g., "2025-01"
+  status        String    // "PENDING", "SUBMITTED", "APPROVED"
+  amountDue     Decimal   
+  filingDate    DateTime?
+  
+  client        Client    @relation(fields: [clientId], references: [id])
+  clientId      String
+}
+
+model NISSchedule {
+  id            String    @id @default(uuid())
+  month         String    // e.g., "September 2025"
+  totalWages    Decimal
+  
+  // Automatic Calculation Logic fields
+  employeeDed   Decimal   // 5.6%
+  employerCont  Decimal   // 8.4%
+  totalRemit    Decimal   // 14% Total
+  
+  status        String    // "DRAFT", "FILED"
+  client        Client    @relation(fields: [clientId], references: [id])
+  clientId      String
+}
+
+// --- GCMC MODULE: IMMIGRATION & LEGAL ---
+model VisaApplication {
+  id            String    @id @default(uuid())
+  applicantName String
+  permitType    String    // "WORK_PERMIT", "CITIZENSHIP", "BUSINESS_VISA"
+  expiryDate    DateTime
+  status        String    // "APPLICATION_SUBMITTED", "UNDER_REVIEW", "APPROVED"
+  
+  client        Client    @relation(fields: [clientId], references: [id])
+  clientId      String
+}
+
+model LegalDocument {
+  id            String    @id @default(uuid())
+  docType       String    // "WILL", "AFFIDAVIT", "AGREEMENT_SALE"
+  contentJson   Json      // Stores the form data (e.g. "Beneficiary Name")
+  pdfUrl        String?   // Link to generated PDF
+  createdAt     DateTime  @default(now())
+  
+  client        Client    @relation(fields: [clientId], references: [id])
+  clientId      String
+}
+
+// --- GCMC MODULE: NETWORKING ---
+model Partner {
+  id            String    @id @default(uuid())
+  companyName   String
+  category      String    // "REAL_ESTATE", "IT_TECHNICIAN", "LAW_FIRM"
+  contactPerson String
+  phone         String
+  email         String
+  website       String?
+}
+
+// --- GCMC MODULE: TRAINING ---
+model TrainingSession {
+  id            String    @id @default(uuid())
+  title         String    // e.g., "Customer Relations Workshop"
+  date          DateTime
+  capacity      Int
+  price         Decimal
+  attendees     TrainingAttendee[]
+}
+
+model TrainingAttendee {
+  id            String    @id @default(uuid())
+  name          String
+  email         String
+  status        String    // "REGISTERED", "PAID", "ATTENDED"
+  
+  session       TrainingSession @relation(fields: [sessionId], references: [id])
+  sessionId     String
+}
+
+// --- SHARED: APPOINTMENTS ---
+model Appointment {
+  id            String    @id @default(uuid())
+  serviceType   String    // "GCMC_CONSULT", "KAJ_TAX_PREP"
+  startTime     DateTime
+  endTime       DateTime
+  status        String    // "CONFIRMED", "CANCELLED"
+  clientName    String
+  clientEmail   String
+}
+
+// --- ACCOUNTING MODULE ---
+model FinancialStatement {
+  id            String    @id @default(uuid())
+  type          String    // "INCOME_STATEMENT" | "CASH_FLOW"
+  period        String
+  data          Json
+  createdAt     DateTime  @default(now())
+  
+  client        Client    @relation(fields: [clientId], references: [id])
+  clientId      String
+}
+
+model AuditCase {
+  id            String    @id @default(uuid())
+  entityName    String
+  entityType    String    // "NGO" | "CO_OP"
+  status        String    // "OPEN" | "REVIEW" | "CLOSED"
+  assignedAuditor String?
+  dueDate       DateTime
+  progress      Int       @default(0)
+
+  client        Client    @relation(fields: [clientId], references: [id])
+  clientId      String
+}
+
+model BankService {
+  id            String    @id @default(uuid())
+  clientName    String
+  service       String    // "ACCOUNT_OPENING" | "LOAN_APP"
+  bankName      String
+  status        String    // "PENDING" | "APPROVED" | "REJECTED" | "IN_PROGRESS"
+  submittedDate DateTime  @default(now())
+  lastUpdate    DateTime  @updatedAt
+
+  client        Client    @relation(fields: [clientId], references: [id])
+  clientId      String
+}
+
+// --- NEW MODELS ---
+model Employee {
+  id            String    @id @default(uuid())
+  firstName     String
+  lastName      String
+  nisNumber     String    @unique
+  tinNumber     String?
+  position      String
+  department    String
+  salary        Decimal
+  hireDate      DateTime
+  status        String    // "ACTIVE" | "INACTIVE" | "TERMINATED"
+  
+  clientId      String
+  client        Client    @relation(fields: [clientId], references: [id])
+  createdAt     DateTime  @default(now())
+}
+
+model Property {
+  id                      String    @id @default(uuid())
+  address                 String
+  type                    String    // "Commercial" | "Residential"
+  ownerId                 String
+  status                  String    // "Occupied" | "Vacant"
+  managementFeePercentage Decimal
+  
+  // Tenant information
+  tenantId                String?
+  tenantName              String?
+  tenantEmail             String?
+  tenantPhone             String?
+  
+  // Lease information
+  leaseStartDate          DateTime?
+  leaseEndDate            DateTime?
+  monthlyRentGyd          Decimal?
+  paymentDueDay           Int?
+  securityDepositGyd      Decimal?
+  leaseDocUrl             String?
+  
+  // Financials
+  totalRevenueYtdGyd      Decimal   @default(0)
+  arrearsGyd              Decimal   @default(0)
+  
+  client        Client    @relation(fields: [ownerId], references: [id])
+  createdAt     DateTime  @default(now())
+}
+
+model ExpediteJob {
+  id                  String    @id @default(uuid())
+  clientId            String
+  clientName          String
+  documentType        String
+  agencyName          String
+  referenceNumber     String
+  assignedRunner      String
+  expectedCompletion  DateTime
+  status              String    // "PICKED_UP", "AT_AGENCY", "PROCESSING", "READY_FOR_COLLECTION", "OUT_FOR_DELIVERY", "COMPLETED"
+  statusHistoryJson   Json      // Stores status history as JSON
+  
+  client        Client    @relation(fields: [clientId], references: [id])
+  createdAt     DateTime  @default(now())
+}

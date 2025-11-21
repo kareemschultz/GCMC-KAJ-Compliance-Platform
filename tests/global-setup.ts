@@ -26,8 +26,8 @@ async function globalSetup(config: FullConfig) {
         data: {
           name: 'Test Corporation Ltd',
           type: 'COMPANY',
-          tinNumber: 'TEST-123-456',
-          nisNumber: 'NIS-TEST-789',
+          tin: 'TEST-123-456',
+          nis: 'NIS-TEST-789',
           email: 'test@testcorp.gy',
           phone: '+592-555-TEST',
           address: 'Test Street, Georgetown, Guyana',
@@ -40,7 +40,7 @@ async function globalSetup(config: FullConfig) {
         update: { passwordHash: adminPassword },
         create: {
           email: 'admin@gcmc.gy',
-          fullName: 'Test Admin',
+          name: 'Test Admin',
           passwordHash: adminPassword,
           role: 'SUPER_ADMIN',
         },
@@ -51,7 +51,7 @@ async function globalSetup(config: FullConfig) {
         update: { passwordHash: gcmcPassword },
         create: {
           email: 'gcmc@gcmc.gy',
-          fullName: 'GCMC Test Staff',
+          name: 'GCMC Test Staff',
           passwordHash: gcmcPassword,
           role: 'GCMC_STAFF',
         },
@@ -62,7 +62,7 @@ async function globalSetup(config: FullConfig) {
         update: { passwordHash: kajPassword },
         create: {
           email: 'kaj@gcmc.gy',
-          fullName: 'KAJ Test Staff',
+          name: 'KAJ Test Staff',
           passwordHash: kajPassword,
           role: 'KAJ_STAFF',
         },
@@ -73,10 +73,9 @@ async function globalSetup(config: FullConfig) {
         update: { passwordHash: clientPassword },
         create: {
           email: 'client@testcorp.gy',
-          fullName: 'Test Client User',
+          name: 'Test Client User',
           passwordHash: clientPassword,
           role: 'CLIENT',
-          clientId: testClient.id,
         },
       });
 

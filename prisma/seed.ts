@@ -18,7 +18,7 @@ async function main() {
     update: {},
     create: {
       email: "admin@gcmc.gy",
-      fullName: "System Administrator",
+      name: "System Administrator",
       passwordHash: adminPassword,
       role: "SUPER_ADMIN",
     },
@@ -30,7 +30,7 @@ async function main() {
     update: {},
     create: {
       email: "gcmc@gcmc.gy",
-      fullName: "GCMC Staff Member",
+      name: "GCMC Staff Member",
       passwordHash: gcmcPassword,
       role: "GCMC_STAFF",
     },
@@ -42,7 +42,7 @@ async function main() {
     update: {},
     create: {
       email: "kaj@gcmc.gy",
-      fullName: "KAJ Staff Member",
+      name: "KAJ Staff Member",
       passwordHash: kajPassword,
       role: "KAJ_STAFF",
     },
@@ -56,8 +56,8 @@ async function main() {
       id: "abc-corp-ltd",
       name: "ABC Corporation Ltd",
       type: "COMPANY",
-      tinNumber: "123-456-789",
-      nisNumber: "NIS-987654",
+      tin: "123-456-789",
+      nis: "NIS-987654",
       email: "contact@abccorp.gy",
       phone: "+592-555-0100",
       address: "123 Main Street, Georgetown, Guyana",
@@ -71,8 +71,8 @@ async function main() {
       id: "guyana-tech",
       name: "Guyana Tech Solutions",
       type: "COMPANY",
-      tinNumber: "456-789-123",
-      nisNumber: "NIS-123456",
+      tin: "456-789-123",
+      nis: "NIS-123456",
       email: "info@guyanatech.gy",
       phone: "+592-555-0200",
       address: "456 Tech Park, Georgetown, Guyana",
@@ -85,40 +85,33 @@ async function main() {
     update: {},
     create: {
       email: "client@abccorp.gy",
-      fullName: "ABC Corp Client User",
+      name: "ABC Corp Client User",
       passwordHash: clientPassword,
       role: "CLIENT",
-      clientId: client1.id,
     },
   })
 
   // Create test employees for client1
   await prisma.employee.create({
     data: {
-      firstName: "Michael",
-      lastName: "Johnson",
-      nisNumber: "NIS-111222",
-      tinNumber: "TIN-111222",
+      fullName: "Michael Johnson",
+      nis: "NIS-111222",
+      tin: "TIN-111222",
       position: "Operations Manager",
-      department: "Operations",
       salary: 180000,
-      hireDate: new Date("2023-01-15"),
-      status: "ACTIVE",
+      hiredDate: new Date("2023-01-15"),
       clientId: client1.id,
     },
   })
 
   await prisma.employee.create({
     data: {
-      firstName: "Sarah",
-      lastName: "Williams",
-      nisNumber: "NIS-222333",
-      tinNumber: "TIN-222333",
+      fullName: "Sarah Williams",
+      nis: "NIS-222333",
+      tin: "TIN-222333",
       position: "Accountant",
-      department: "Finance",
       salary: 150000,
-      hireDate: new Date("2023-03-20"),
-      status: "ACTIVE",
+      hiredDate: new Date("2023-03-20"),
       clientId: client1.id,
     },
   })
