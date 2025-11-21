@@ -1,9 +1,16 @@
 import { PrismaClient } from "@prisma/client"
+import bcrypt from "bcryptjs"
 
 const prisma = new PrismaClient()
 
 async function main() {
   console.log("Seeding database...")
+
+  // Hash passwords
+  const adminPassword = await bcrypt.hash("admin123", 12)
+  const gcmcPassword = await bcrypt.hash("gcmc123", 12)
+  const kajPassword = await bcrypt.hash("kaj123", 12)
+  const clientPassword = await bcrypt.hash("client123", 12)
 
   // Create a test user (Super Admin)
   const adminUser = await prisma.user.upsert({
@@ -12,7 +19,32 @@ async function main() {
     create: {
       email: "admin@gcmc.gy",
       fullName: "System Administrator",
+      passwordHash: adminPassword,
       role: "SUPER_ADMIN",
+    },
+  })
+
+  // Create GCMC staff user
+  const gcmcUser = await prisma.user.upsert({
+    where: { email: "gcmc@gcmc.gy" },
+    update: {},
+    create: {
+      email: "gcmc@gcmc.gy",
+      fullName: "GCMC Staff Member",
+      passwordHash: gcmcPassword,
+      role: "GCMC_STAFF",
+    },
+  })
+
+  // Create KAJ staff user
+  const kajUser = await prisma.user.upsert({
+    where: { email: "kaj@gcmc.gy" },
+    update: {},
+    create: {
+      email: "kaj@gcmc.gy",
+      fullName: "KAJ Staff Member",
+      passwordHash: kajPassword,
+      role: "KAJ_STAFF",
     },
   })
 
@@ -44,6 +76,19 @@ async function main() {
       email: "info@guyanatech.gy",
       phone: "+592-555-0200",
       address: "456 Tech Park, Georgetown, Guyana",
+    },
+  })
+
+  // Create client user linked to client1
+  const clientUser = await prisma.user.upsert({
+    where: { email: "client@abccorp.gy" },
+    update: {},
+    create: {
+      email: "client@abccorp.gy",
+      fullName: "ABC Corp Client User",
+      passwordHash: clientPassword,
+      role: "CLIENT",
+      clientId: client1.id,
     },
   })
 

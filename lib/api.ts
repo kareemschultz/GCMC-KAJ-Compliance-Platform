@@ -27,6 +27,10 @@ import {
   mockProperties,
   mockExpediteJobs,
 } from "@/lib/mock-data"
+import { apiClient } from "@/lib/api-client"
+
+// Check if we should use real API (database connected) or mock data
+const USE_REAL_API = process.env.NODE_ENV === "production" || process.env.DATABASE_URL
 
 // Mock API delay to simulate real network requests
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -34,10 +38,36 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 export const api = {
   clients: {
     list: async (): Promise<Client[]> => {
+      if (USE_REAL_API) {
+        try {
+          const response = await apiClient.getClients()
+          return response.clients
+        } catch (error) {
+          console.warn("Failed to fetch from API, falling back to mock data:", error)
+          await delay(800)
+          return mockClients
+        }
+      }
       await delay(800)
       return mockClients
     },
     create: async (data: any): Promise<Client> => {
+      if (USE_REAL_API) {
+        try {
+          return await apiClient.createClient(data)
+        } catch (error) {
+          console.warn("Failed to create via API, simulating:", error)
+          await delay(1000)
+          return {
+            id: Math.random().toString(36).substr(2, 9),
+            ...data,
+            status: "Active",
+            complianceScore: 100,
+            lastActivity: new Date().toISOString(),
+            initials: data.name.substring(0, 2).toUpperCase(),
+          }
+        }
+      }
       await delay(1000)
       console.log("[API] Created client:", data)
       return {

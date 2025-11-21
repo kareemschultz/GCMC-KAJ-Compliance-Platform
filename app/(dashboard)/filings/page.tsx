@@ -20,7 +20,7 @@ const filingsData = [
     period: "Q4 2024",
     dueDate: "Jan 21, 2025",
     amount: 45000,
-    status: "Pending" as const,
+    status: "Draft" as const,
   },
   {
     id: "2",

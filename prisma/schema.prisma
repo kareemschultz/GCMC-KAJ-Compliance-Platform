@@ -19,9 +19,13 @@ model User {
   id            String    @id @default(uuid())
   email         String    @unique
   fullName      String
+  passwordHash  String
   role          UserRole  @default(CLIENT)
+  lastLogin     DateTime?
+  isActive      Boolean   @default(true)
   createdAt     DateTime  @default(now())
-  
+  updatedAt     DateTime  @updatedAt
+
   // Relations
   clientProfile Client?   @relation(fields: [clientId], references: [id])
   clientId      String?
@@ -172,6 +176,9 @@ model AuditCase {
   assignedAuditor String?
   dueDate       DateTime
   progress      Int       @default(0)
+
+  client        Client    @relation(fields: [clientId], references: [id])
+  clientId      String
 }
 
 model BankService {
@@ -182,6 +189,9 @@ model BankService {
   status        String    // "PENDING" | "APPROVED" | "REJECTED" | "IN_PROGRESS"
   submittedDate DateTime  @default(now())
   lastUpdate    DateTime  @updatedAt
+
+  client        Client    @relation(fields: [clientId], references: [id])
+  clientId      String
 }
 
 // --- NEW MODELS ---

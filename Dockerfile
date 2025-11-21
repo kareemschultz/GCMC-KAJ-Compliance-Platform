@@ -25,7 +25,15 @@ COPY . .
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED 1
+
+# Generate Prisma client
+RUN \
+  if [ -f yarn.lock ]; then yarn prisma generate; \
+  elif [ -f package-lock.json ]; then npm run db:generate; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run db:generate; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
 
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \

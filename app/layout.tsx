@@ -7,6 +7,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { BrandProvider } from "@/components/brand-context"
 import { ClientProvider } from "@/components/client-context"
+import { AuthProvider } from "@/components/providers/session-provider"
 
 const geist = Geist({ subsets: ["latin"] })
 const geistMono = Geist_Mono({ subsets: ["latin"] })
@@ -42,15 +43,17 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geist.className} antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <BrandProvider>
-            <ClientProvider>
-              {children}
-              <Analytics />
-              <Toaster />
-            </ClientProvider>
-          </BrandProvider>
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <BrandProvider>
+              <ClientProvider>
+                {children}
+                <Analytics />
+                <Toaster />
+              </ClientProvider>
+            </BrandProvider>
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   )
