@@ -1,0 +1,196 @@
+"use client"
+
+import { MoreHorizontal, FileText, ArrowUpDown } from "lucide-react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Progress } from "@/components/ui/progress"
+import Link from "next/link"
+
+const clients = [
+  {
+    id: "1",
+    name: "ABC Corporation Ltd",
+    initials: "AB",
+    type: "Company",
+    tin: "123-456-789",
+    compliance: 85,
+    documents: 24,
+    lastActivity: "2 hours ago",
+    status: "Active",
+  },
+  {
+    id: "2",
+    name: "John Smith Trading",
+    initials: "JS",
+    type: "Sole Trader",
+    tin: "987-654-321",
+    compliance: 92,
+    documents: 12,
+    lastActivity: "1 day ago",
+    status: "Active",
+  },
+  {
+    id: "3",
+    name: "Guyana Tech Solutions",
+    initials: "GT",
+    type: "Company",
+    tin: "456-789-123",
+    compliance: 65,
+    documents: 18,
+    lastActivity: "3 days ago",
+    status: "Pending",
+  },
+  {
+    id: "4",
+    name: "Sarah Jones",
+    initials: "SJ",
+    type: "Individual",
+    tin: "789-123-456",
+    compliance: 45,
+    documents: 5,
+    lastActivity: "1 week ago",
+    status: "Inactive",
+  },
+  {
+    id: "5",
+    name: "Georgetown Retailers",
+    initials: "GR",
+    type: "Partnership",
+    tin: "321-654-987",
+    compliance: 78,
+    documents: 32,
+    lastActivity: "5 hours ago",
+    status: "Active",
+  },
+]
+
+export function ClientTable() {
+  return (
+    <div className="rounded-md border bg-card">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[40px]">
+              <Checkbox />
+            </TableHead>
+            <TableHead className="w-[250px]">
+              <Button variant="ghost" className="p-0 hover:bg-transparent font-medium">
+                Client Name <ArrowUpDown className="ml-2 h-4 w-4" />
+              </Button>
+            </TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead>TIN Number</TableHead>
+            <TableHead>Compliance</TableHead>
+            <TableHead>Documents</TableHead>
+            <TableHead>Last Activity</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {clients.map((client) => (
+            <TableRow key={client.id}>
+              <TableCell>
+                <Checkbox />
+              </TableCell>
+              <TableCell>
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-9 w-9">
+                    <AvatarImage src={`/placeholder-text.png?text=${client.initials}`} alt={client.name} />
+                    <AvatarFallback>{client.initials}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col">
+                    <Link href={`/clients/${client.id}`} className="font-medium hover:underline">
+                      {client.name}
+                    </Link>
+                    <span className="text-xs text-muted-foreground">{client.tin}</span>
+                  </div>
+                </div>
+              </TableCell>
+              <TableCell>
+                <Badge variant="outline">{client.type}</Badge>
+              </TableCell>
+              <TableCell className="font-mono text-xs">{client.tin}</TableCell>
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  <Progress
+                    value={client.compliance}
+                    className="w-[60px] h-2"
+                    indicatorClassName={
+                      client.compliance >= 90
+                        ? "bg-green-500"
+                        : client.compliance >= 70
+                          ? "bg-blue-500"
+                          : client.compliance >= 50
+                            ? "bg-yellow-500"
+                            : "bg-red-500"
+                    }
+                  />
+                  <span className="text-xs font-medium">{client.compliance}%</span>
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="flex items-center gap-1 text-muted-foreground">
+                  <FileText className="h-3 w-3" />
+                  <span className="text-xs">{client.documents}</span>
+                </div>
+              </TableCell>
+              <TableCell className="text-muted-foreground text-sm">{client.lastActivity}</TableCell>
+              <TableCell>
+                <Badge
+                  variant={
+                    client.status === "Active" ? "default" : client.status === "Pending" ? "secondary" : "destructive"
+                  }
+                  className={client.status === "Active" ? "bg-green-500 hover:bg-green-600" : ""}
+                >
+                  {client.status}
+                </Badge>
+              </TableCell>
+              <TableCell className="text-right">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                      <span className="sr-only">Open menu</span>
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuItem asChild>
+                      <Link href={`/clients/${client.id}`}>View Details</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>Edit Client</DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="text-destructive">Delete Client</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <div className="flex items-center justify-end space-x-2 p-4">
+        <div className="flex-1 text-sm text-muted-foreground">Showing 1-5 of 156 clients</div>
+        <div className="space-x-2">
+          <Button variant="outline" size="sm" disabled>
+            Previous
+          </Button>
+          <Button variant="outline" size="sm">
+            Next
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
