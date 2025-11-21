@@ -1,0 +1,237 @@
+[
+  {
+    "category": "Authentication",
+    "testName": "Admin Login",
+    "status": "PASS",
+    "description": "Admin successfully logs in and redirects"
+  },
+  {
+    "category": "Authentication",
+    "testName": "GCMC Staff Login",
+    "status": "PASS",
+    "description": "GCMC staff login functionality"
+  },
+  {
+    "category": "Authentication",
+    "testName": "KAJ Staff Login",
+    "status": "PASS",
+    "description": "KAJ staff login functionality"
+  },
+  {
+    "category": "Authentication",
+    "testName": "Client Portal Redirect",
+    "status": "PASS",
+    "description": "Client successfully redirects to portal"
+  },
+  {
+    "category": "Authentication",
+    "testName": "Invalid Credentials Rejection",
+    "status": "PASS",
+    "description": "Invalid credentials are properly rejected"
+  },
+  {
+    "category": "Navigation",
+    "testName": "Dashboard Page Access",
+    "status": "PASS",
+    "description": "Dashboard page loads successfully"
+  },
+  {
+    "category": "Navigation",
+    "testName": "Clients Page Access",
+    "status": "PASS",
+    "description": "Clients page loads successfully"
+  },
+  {
+    "category": "Navigation",
+    "testName": "Filings Page Access",
+    "status": "PASS",
+    "description": "Filings page loads successfully"
+  },
+  {
+    "category": "Navigation",
+    "testName": "Immigration Page Access",
+    "status": "PASS",
+    "description": "Immigration page loads successfully"
+  },
+  {
+    "category": "Navigation",
+    "testName": "VAT Page Access",
+    "status": "PASS",
+    "description": "VAT page loads successfully"
+  },
+  {
+    "category": "Navigation",
+    "testName": "PAYE Page Access",
+    "status": "PASS",
+    "description": "PAYE page loads successfully"
+  },
+  {
+    "category": "Navigation",
+    "testName": "NIS Page Access",
+    "status": "PASS",
+    "description": "NIS page loads successfully"
+  },
+  {
+    "category": "Navigation",
+    "testName": "NIS Calculator Page Access",
+    "status": "PASS",
+    "description": "NIS Calculator page loads successfully"
+  },
+  {
+    "category": "Navigation",
+    "testName": "PAYE Calculator Page Access",
+    "status": "PASS",
+    "description": "PAYE Calculator page loads successfully"
+  },
+  {
+    "category": "Navigation",
+    "testName": "Training Hub Page Access",
+    "status": "PASS",
+    "description": "Training Hub page loads successfully"
+  },
+  {
+    "category": "Navigation",
+    "testName": "Properties Page Access",
+    "status": "PASS",
+    "description": "Properties page loads successfully"
+  },
+  {
+    "category": "Navigation",
+    "testName": "Expediting Page Access",
+    "status": "PASS",
+    "description": "Expediting page loads successfully"
+  },
+  {
+    "category": "Client Management",
+    "testName": "Client List View",
+    "status": "PASS",
+    "description": "Client list page displays properly"
+  },
+  {
+    "category": "Client Management",
+    "testName": "Client Creation Wizard",
+    "status": "PASS",
+    "description": "Client creation wizard loads"
+  },
+  {
+    "category": "Calculators",
+    "testName": "NIS Calculator",
+    "status": "PASS",
+    "description": "NIS calculator loads and displays input fields"
+  },
+  {
+    "category": "Calculators",
+    "testName": "PAYE Calculator",
+    "status": "PASS",
+    "description": "PAYE calculator loads and displays input fields"
+  },
+  {
+    "category": "Filing Management",
+    "testName": "Filing Dashboard",
+    "status": "PASS",
+    "description": "Filing Dashboard page loads successfully"
+  },
+  {
+    "category": "Filing Management",
+    "testName": "VAT Filing",
+    "status": "PASS",
+    "description": "VAT Filing page loads successfully"
+  },
+  {
+    "category": "Filing Management",
+    "testName": "PAYE Filing",
+    "status": "PASS",
+    "description": "PAYE Filing page loads successfully"
+  },
+  {
+    "category": "Filing Management",
+    "testName": "NIS Filing",
+    "status": "PASS",
+    "description": "NIS Filing page loads successfully"
+  },
+  {
+    "category": "Specialized Modules",
+    "testName": "Immigration Pipeline",
+    "status": "PASS",
+    "description": "Immigration Pipeline module loads successfully"
+  },
+  {
+    "category": "Specialized Modules",
+    "testName": "Immigration Kanban Board",
+    "status": "WARNING",
+    "description": "Immigration Kanban board displays",
+    "error": "No Kanban board elements detected"
+  },
+  {
+    "category": "Specialized Modules",
+    "testName": "Training Hub",
+    "status": "PASS",
+    "description": "Training Hub module loads successfully"
+  },
+  {
+    "category": "Specialized Modules",
+    "testName": "Property Management",
+    "status": "PASS",
+    "description": "Property Management module loads successfully"
+  },
+  {
+    "category": "Specialized Modules",
+    "testName": "Expediting Services",
+    "status": "PASS",
+    "description": "Expediting Services module loads successfully"
+  },
+  {
+    "category": "Client Portal",
+    "testName": "Portal Access",
+    "status": "PASS",
+    "description": "Client can access portal successfully"
+  },
+  {
+    "category": "Client Portal",
+    "testName": "Portal portal Section",
+    "status": "PASS",
+    "description": "Portal portal section is accessible"
+  },
+  {
+    "category": "Client Portal",
+    "testName": "Portal documents Section",
+    "status": "PASS",
+    "description": "Portal documents section is accessible"
+  },
+  {
+    "category": "Client Portal",
+    "testName": "Portal appointments Section",
+    "status": "PASS",
+    "description": "Portal appointments section is accessible"
+  },
+  {
+    "category": "Client Portal",
+    "testName": "Portal requests Section",
+    "status": "PASS",
+    "description": "Portal requests section is accessible"
+  },
+  {
+    "category": "Responsive Design",
+    "testName": "Desktop Large (1920x1080)",
+    "status": "PASS",
+    "description": "Dashboard displays correctly on Desktop Large"
+  },
+  {
+    "category": "Responsive Design",
+    "testName": "Desktop (1280x720)",
+    "status": "PASS",
+    "description": "Dashboard displays correctly on Desktop"
+  },
+  {
+    "category": "Responsive Design",
+    "testName": "Tablet (768x1024)",
+    "status": "PASS",
+    "description": "Dashboard displays correctly on Tablet"
+  },
+  {
+    "category": "Responsive Design",
+    "testName": "Mobile (375x667)",
+    "status": "PASS",
+    "description": "Dashboard displays correctly on Mobile"
+  }
+]
