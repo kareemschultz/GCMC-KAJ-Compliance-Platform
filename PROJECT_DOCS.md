@@ -24,6 +24,11 @@ The project is built using a modern web stack optimized for performance, securit
   - `/documents`: Centralized document management.
   - `/portal`: External client portal (separate layout).
   - `/users`: Internal user/staff management.
+  - `/training`: **(New)** Training & Workshop management.
+  - `/immigration`: **(New)** Visa & Work Permit pipeline.
+  - `/network`: **(New)** Partner directory & networking hub.
+  - `/paralegal`: **(New)** Legal document generation & management.
+  - `/settings`: System configuration (Compliance, Notifications).
 - `/components`: Reusable UI components and feature-specific widgets.
 - `/lib`: Utility functions, constants, and shared logic.
 - `/types`: TypeScript definitions for data models.
@@ -34,16 +39,30 @@ The project is built using a modern web stack optimized for performance, securit
 - **Profiles**: Detailed views including TIN, NIS, Business Reg, and contact info.
 - **Services**: Dynamic service catalog (Trainings, Immigration, Paralegal).
 - **Onboarding**: Wizard-based flow for adding new clients with requirement checks.
+- **Immigration Tab**: Dedicated tab for tracking client-specific visa/permit cases.
 
-### Compliance Engine
+### Compliance Engine (KAJ Focus)
 - **Filings**: Tracking for GRA (VAT, CIT, PAYE) and NIS contributions.
 - **VAT Return**: Interactive VAT-3 form with auto-calculation logic (14% rate).
 - **Alerts**: Automated notifications for expiring documents and overdue filings.
 - **Tax Calendar**: Dashboard widget tracking key 2025 deadlines (VAT, PAYE, Corporate Tax).
 
+### Consultancy Hub (GCMC Focus)
+- **Training Module**:
+    - **Calendar**: Visual schedule of upcoming workshops.
+    - **Registration**: Manage participant lists and enrollments.
+- **Immigration Pipeline**:
+    - **Kanban Board**: Drag-and-drop interface for tracking case status (To Do -> Processing -> Approved).
+    - **Case Management**: Detailed tracking of Work Permits, Visas, and Citizenship applications.
+- **Networking Hub**:
+    - **Partner Directory**: Database of trusted contacts (Real Estate, Legal, IT).
+    - **Referrals**: Track referrals to and from partners.
+- **Paralegal Services**:
+    - **Document Generator**: Create Affidavits, Business Agreements, and Deeds of Gift.
+    - **Template Management**: Standardized legal templates for quick generation.
+
 ### Document System
 - **Smart Upload**: Context-aware uploads that capture metadata (Expiry Dates, ID Numbers).
-- **Document Generator**: Template-based generation for legal documents (Affidavits, Agreements).
 - **Print Profiles**: One-click printable summaries of client portfolios.
 - **Client Reports**: Customizable PDF/Excel reports for client summaries and compliance status.
 
@@ -55,6 +74,14 @@ The project is built using a modern web stack optimized for performance, securit
 ### Knowledge & Support
 - **Knowledge Base**: Centralized repository for GRA/NIS forms and regulatory guides.
 - **Communications Log**: Track emails, calls, and meetings per client.
+
+### System Administration
+- **User Management**:
+    - **Role-Based Access**: Admin, Manager, Staff roles.
+    - **Invite System**: Email-based invitation flow for new users.
+- **Settings**:
+    - **Compliance Config**: Set default tax rates, filing frequencies, and alert thresholds.
+    - **Notification Preferences**: Configure email and in-app alert settings.
 
 ## 4. Deployment & DevOps
 The project is containerized using Docker for consistent deployment across environments.
@@ -123,3 +150,9 @@ The following core user flows have been verified end-to-end:
 ### 6. Client Actions
 - **Flow**: Client Detail -> Edit Profile / Generate Report.
 - **Verification**: Verified the "Edit Client" dialog updates profile data and "Generate Report" modal simulates report creation with date range selection.
+
+### 7. GCMC Expansion Flows
+- **Training**: Schedule Workshop -> Add Participant -> Verify in Calendar.
+- **Immigration**: Create Case -> Move Card in Kanban -> Verify Status Update.
+- **Paralegal**: Generate Document -> Select Template -> Download/Print.
+- **Network**: Add Partner -> View in Directory -> Filter by Category.

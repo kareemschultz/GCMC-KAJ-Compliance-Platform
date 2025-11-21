@@ -1,0 +1,61 @@
+# Contributing to GCMC & KAJ Compliance Suite
+
+Thank you for your interest in contributing! This document provides guidelines for developers working on the platform.
+
+## Development Workflow
+
+1.  **Fork & Clone**: Fork the repository and clone it locally.
+2.  **Branching**: Create a feature branch for your work.
+    *   `feature/new-module`
+    *   `fix/bug-description`
+    *   `docs/update-readme`
+3.  **Install**: Run `npm install` to get dependencies.
+4.  **Develop**: Run `npm run dev` to start the local server.
+5.  **Commit**: Use descriptive commit messages.
+    *   `feat: add training calendar component`
+    *   `fix: resolve vat calculation error`
+6.  **Pull Request**: Submit a PR to the `main` branch.
+
+## Code Style & Standards
+
+*   **Framework**: We use **Next.js 14+** with the **App Router**.
+*   **Language**: **TypeScript** is mandatory. Avoid `any` types.
+*   **Styling**: Use **Tailwind CSS** utility classes. Avoid custom CSS files unless necessary.
+*   **Components**:
+    *   Use **Functional Components**.
+    *   Keep components small and focused (Single Responsibility Principle).
+    *   Place reusable components in `components/ui` or `components/shared`.
+    *   Place feature-specific components in `components/[feature]`.
+*   **UI Library**: We use **shadcn/ui**. Do not reinvent standard components (buttons, inputs, dialogs).
+
+## Directory Structure
+
+*   `app/`: Pages and layouts. Follows Next.js routing conventions.
+*   `components/`: React components.
+    *   `ui/`: Generic UI elements (Buttons, Cards).
+    *   `clients/`, `filings/`, etc.: Feature modules.
+*   `lib/`: Utilities.
+    *   `utils.ts`: Helper functions (cn, formatters).
+    *   `api.ts`: API abstraction layer.
+    *   `constants.ts`: Static data and configuration.
+
+## Testing
+
+*   **Manual Testing**: Verify your changes in the browser.
+*   **Mock Data**: If adding new features, ensure `lib/api.ts` is updated with mock data/endpoints to support the UI.
+*   **Linting**: Run `npm run lint` before committing to catch errors.
+
+## Adding New Features
+
+1.  **Define the Route**: Create the folder in `app/(dashboard)/`.
+2.  **Create Components**: Build the UI in `components/[feature]/`.
+3.  **Update Sidebar**: Add the link to `components/app-sidebar.tsx`.
+4.  **Update API**: Add necessary mock endpoints to `lib/api.ts`.
+5.  **Update Docs**: Add the new feature to `PROJECT_DOCS.md`.
+
+## Reporting Issues
+
+Please use the GitHub Issues tab to report bugs or request features. Include:
+*   Steps to reproduce.
+*   Expected behavior.
+*   Screenshots (if applicable).

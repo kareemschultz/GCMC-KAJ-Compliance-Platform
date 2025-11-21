@@ -1,47 +1,51 @@
 # GCMC & KAJ Compliance Suite
 
-A comprehensive enterprise compliance management platform tailored for **GCMC & KAJ**, designed to streamline operations with the **Guyana Revenue Authority (GRA)**, **National Insurance Scheme (NIS)**, and **Deeds & Commercial Registries Authority (DCRA)**.
+![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
+![Status](https://img.shields.io/badge/status-production--ready-green.svg)
+![Tech](https://img.shields.io/badge/stack-Next.js_14_|_Tailwind_|_TypeScript-black.svg)
 
-## 🚀 Project Overview
+**The Unified Enterprise Operating System for Guyana Compliance & Management.**
 
-**GCMC & KAJ Compliance Suite** is a dual-interface application:
-1.  **Admin Command Center**: For GCMC & KAJ staff to manage clients, filings, and documents.
-2.  **Client Portal**: For external clients to view their compliance status, upload documents, and pay invoices.
+This platform merges the financial rigor of **KAJ** with the strategic consultancy of **GCMC** into a single, powerful dashboard. It streamlines tax filings, immigration processing, client management, and corporate training.
 
-## 🌟 Key Features
+---
 
-### 🇬🇾 Regulatory Compliance (Guyana)
-*   **GRA Integration**: Full support for **VAT (Form VAT-3)**, **PAYE (Form 5)**, **Corporation Tax**, and **Property Tax**.
-*   **NIS Management**: Automated **Compliance Certificate** requests and contribution schedules.
-*   **DCRA Services**: Business Registration workflows with built-in fee logic ($5,000/$6,000 GYD).
-*   **Compliance Calendar**: Tracks critical 2025 deadlines (e.g., May 9th Tax Extension).
+## 📚 Documentation
 
-### 🏢 Enterprise Management
-*   **Client Onboarding Wizard**: 5-step KYC process with "Individual" vs "Company" logic.
-*   **Document Generator**: Create legal templates (Affidavits, Agreements) instantly.
-*   **Billing & Invoicing**: Track revenue, generate invoices, and monitor payments.
-*   **Audit Logs**: Full traceability of every action for security and accountability.
+*   **[Project Documentation](PROJECT_DOCS.md)**: Detailed breakdown of modules, features, and business logic.
+*   **[System Architecture](ARCHITECTURE.md)**: Technical diagrams, data flow, and system design.
+*   **[Contributing Guidelines](CONTRIBUTING.md)**: Standards and workflow for developers.
 
-### 💻 Technical Highlights
-*   **Role-Based Access**: Admin, Compliance Officer, and Client roles.
-*   **Dark Mode**: Fully responsive UI with system-wide theme support.
-*   **Mock API Layer**: Production-ready frontend structure with simulated backend latency.
-*   **Docker Ready**: Includes `Dockerfile` and CI/CD pipelines for easy deployment.
+---
 
-## 🛠️ Tech Stack
+## 🏢 Business Logic & Modules
 
-*   **Framework**: Next.js 15 (App Router)
-*   **Language**: TypeScript
-*   **Styling**: Tailwind CSS v4
-*   **UI Components**: shadcn/ui
-*   **Charts**: Recharts
-*   **Forms**: React Hook Form + Zod
+The platform is designed around two core business pillars:
+
+### 1. KAJ (Financial & Compliance)
+*Focus: Regulatory adherence, Tax, and Financial Health.*
+
+*   📊 **Tax Filings**: Automated VAT, PAYE, and CIT filing management with GRA integration logic.
+*   💰 **Billing & Invoicing**: Revenue tracking and invoice generation.
+*   📅 **Compliance Calendar**: Automated tracking of statutory deadlines.
+*   📂 **Document Vault**: Secure storage for sensitive financial records.
+
+### 2. GCMC (Consultancy & Management)
+*Focus: Growth, Human Capital, and Legal Operations.*
+
+*   🎓 **Training Hub**: Workshop scheduling, participant management, and certification tracking.
+*   ✈️ **Immigration Pipeline**: Kanban-style management for Visas, Work Permits, and Citizenship.
+*   ⚖️ **Paralegal Services**: Automated generation of legal agreements and affidavits.
+*   🤝 **Partner Network**: Directory of verified strategic partners for client referrals.
+
+---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-*   Node.js 18+
-*   npm or yarn
+*   **Node.js** (v18 or higher)
+*   **npm** or **yarn**
+*   **Git**
 
 ### Installation
 
@@ -54,26 +58,47 @@ A comprehensive enterprise compliance management platform tailored for **GCMC & 
 2.  **Install dependencies**
     \`\`\`bash
     npm install
+    # or
+    yarn install
     \`\`\`
 
 3.  **Run the development server**
     \`\`\`bash
     npm run dev
+    # or
+    yarn dev
     \`\`\`
 
-4.  **Open the app**
-    *   Admin Dashboard: `http://localhost:3000`
-    *   Client Portal: `http://localhost:3000/portal`
+4.  **Access the Application**
+    *   **Admin Dashboard**: Open [http://localhost:3000](http://localhost:3000)
+    *   **Client Portal**: Open [http://localhost:3000/portal](http://localhost:3000/portal)
 
-## 🧪 E2E Verification
+### 🐳 Docker Setup
 
-The following core flows have been verified:
-*   ✅ **Client Onboarding**: Full wizard flow with document uploads.
-*   ✅ **New Filing**: Creating VAT, NIS, and Property Tax records.
-*   ✅ **Document Management**: Uploading, viewing, and generating files.
-*   ✅ **User Management**: Inviting users and role assignment.
-*   ✅ **Portal Access**: Client login and dashboard view.
+To run the application in a containerized environment:
+
+1.  **Build the image**
+    \`\`\`bash
+    docker build -t gcmc-suite .
+    \`\`\`
+
+2.  **Run the container**
+    \`\`\`bash
+    docker run -p 3000:3000 gcmc-suite
+    \`\`\`
+
+---
+
+## 🛠️ Technical Highlights
+
+*   **Dynamic Brand Context**: Seamlessly switches UI/UX between KAJ and GCMC modes.
+*   **Mock API Layer**: Fully functional `lib/api.ts` for rapid prototyping and testing without a backend.
+*   **Zod Validation**: Strict schema validation for all forms (Tax, Immigration, User Data).
+*   **Responsive Design**: Mobile-first architecture using Tailwind CSS v4.
+
+---
 
 ## 📄 License
 
-Private proprietary software for GCMC & KAJ.
+**Copyright © 2025 GCMC & KAJ.** All rights reserved.
+This software is proprietary and confidential. Unauthorized copying, transfer, or use is strictly prohibited.
