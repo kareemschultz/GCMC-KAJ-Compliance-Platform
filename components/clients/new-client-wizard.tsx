@@ -20,7 +20,7 @@ import { formatPhoneNumber, formatNationalId, validateFormat } from "@/lib/input
 import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { SERVICE_CATALOG, COMMON_REQUIREMENTS, SERVICE_REQUIREMENTS } from "@/lib/constants"
-import { Plus, ArrowRight, ArrowLeft, Check, AlertCircle, Loader2, Info, Upload, X, FileText } from "lucide-react"
+import { Plus, ArrowRight, ArrowLeft, Check, CheckCircle, AlertCircle, Loader2, Info, Upload, X, FileText } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/components/ui/use-toast"
 import { api } from "@/lib/api"
