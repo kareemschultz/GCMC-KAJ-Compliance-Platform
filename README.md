@@ -1,12 +1,12 @@
-# GCMC & KAJ Compliance Suite
+# GK Enterprise Suite
 
-![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)
 ![Status](https://img.shields.io/badge/status-production--ready-green.svg)
 ![Tech](https://img.shields.io/badge/stack-Next.js_14_|_Tailwind_|_TypeScript-black.svg)
 
 **The Unified Enterprise Operating System for Guyana Compliance & Management.**
 
-This platform merges the financial rigor of **KAJ** with the strategic consultancy of **GCMC** into a single, powerful dashboard. It streamlines tax filings, immigration processing, client management, and corporate training.
+This platform merges the financial rigor of **KAJ** with the strategic consultancy of **GCMC** into a single, powerful dashboard. It streamlines tax filings, accounting, payroll, immigration processing, client management, and corporate training.
 
 ---
 
@@ -20,15 +20,15 @@ This platform merges the financial rigor of **KAJ** with the strategic consultan
 
 ## 🏢 Business Logic & Modules
 
-The platform is designed around two core business pillars:
+The platform is designed around two core business pillars, unified by a global **Client Context System**:
 
 ### 1. KAJ (Financial & Compliance)
-*Focus: Regulatory adherence, Tax, and Financial Health.*
+*Focus: Regulatory adherence, Tax, Accounting, and Financial Health.*
 
-*   📊 **Tax Filings**: Automated VAT, PAYE, and CIT filing management with GRA integration logic.
-*   💰 **Billing & Invoicing**: Revenue tracking and invoice generation.
+*   📊 **Accounting & Reports**: Financial statements (P&L, Cash Flow), Audit workflows, and Banking services.
+*   💸 **NIS & Payroll**: Automated payroll calculations, NIS schedule generation, and employee registry.
+*   📝 **Tax Filings**: Automated VAT, PAYE, and CIT filing management with GRA integration logic.
 *   📅 **Compliance Calendar**: Automated tracking of statutory deadlines.
-*   📂 **Document Vault**: Secure storage for sensitive financial records.
 
 ### 2. GCMC (Consultancy & Management)
 *Focus: Growth, Human Capital, and Legal Operations.*
@@ -51,8 +51,8 @@ The platform is designed around two core business pillars:
 
 1.  **Clone the repository**
     \`\`\`bash
-    git clone https://github.com/your-org/gcmc-compliance-suite.git
-    cd gcmc-compliance-suite
+    git clone https://github.com/your-org/gk-enterprise-suite.git
+    cd gk-enterprise-suite
     \`\`\`
 
 2.  **Install dependencies**
@@ -72,6 +72,7 @@ The platform is designed around two core business pillars:
 4.  **Access the Application**
     *   **Admin Dashboard**: Open [http://localhost:3000](http://localhost:3000)
     *   **Client Portal**: Open [http://localhost:3000/portal](http://localhost:3000/portal)
+    *   **Booking Page**: Open [http://localhost:3000/book](http://localhost:3000/book)
 
 ### 🐳 Docker Setup
 
@@ -79,18 +80,19 @@ To run the application in a containerized environment:
 
 1.  **Build the image**
     \`\`\`bash
-    docker build -t gcmc-suite .
+    docker build -t gk-suite .
     \`\`\`
 
 2.  **Run the container**
     \`\`\`bash
-    docker run -p 3000:3000 gcmc-suite
+    docker run -p 3000:3000 gk-suite
     \`\`\`
 
 ---
 
 ## 🛠️ Technical Highlights
 
+*   **Client Context System**: Global state management allows acting "on behalf of" specific clients across all modules.
 *   **Dynamic Brand Context**: Seamlessly switches UI/UX between KAJ and GCMC modes.
 *   **Mock API Layer**: Fully functional `lib/api.ts` for rapid prototyping and testing without a backend.
 *   **Zod Validation**: Strict schema validation for all forms (Tax, Immigration, User Data).
@@ -100,5 +102,5 @@ To run the application in a containerized environment:
 
 ## 📄 License
 
-**Copyright © 2025 GCMC & KAJ.** All rights reserved.
+**Copyright © 2025 GK Enterprise Suite.** All rights reserved.
 This software is proprietary and confidential. Unauthorized copying, transfer, or use is strictly prohibited.

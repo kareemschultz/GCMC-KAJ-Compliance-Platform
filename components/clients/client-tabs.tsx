@@ -1,7 +1,7 @@
 "use client"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -368,11 +368,154 @@ export function ClientTabs() {
       </TabsContent>
 
       <TabsContent value="filings" className="space-y-4">
-        <div className="text-sm text-muted-foreground">Filings content placeholder</div>
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-medium">Tax & Compliance Filings</h3>
+            <p className="text-sm text-muted-foreground">History of submissions to GRA and NIS.</p>
+          </div>
+          <Button size="sm">
+            <Plus className="mr-2 h-4 w-4" /> New Filing
+          </Button>
+        </div>
+        <Card>
+          <CardContent className="p-0">
+            <div className="space-y-0">
+              {[
+                {
+                  name: "VAT Return - Oct 2023",
+                  type: "VAT",
+                  date: "Nov 15, 2023",
+                  status: "Submitted",
+                  amount: "$45,200",
+                },
+                {
+                  name: "NIS Schedule - Oct 2023",
+                  type: "NIS",
+                  date: "Nov 10, 2023",
+                  status: "Submitted",
+                  amount: "$12,500",
+                },
+                {
+                  name: "PAYE Return - Oct 2023",
+                  type: "PAYE",
+                  date: "Nov 15, 2023",
+                  status: "Processing",
+                  amount: "$8,900",
+                },
+                {
+                  name: "VAT Return - Sep 2023",
+                  type: "VAT",
+                  date: "Oct 14, 2023",
+                  status: "Approved",
+                  amount: "$42,100",
+                },
+                {
+                  name: "NIS Schedule - Sep 2023",
+                  type: "NIS",
+                  date: "Oct 10, 2023",
+                  status: "Approved",
+                  amount: "$12,500",
+                },
+              ].map((filing, i) => (
+                <div
+                  key={i}
+                  className="flex items-center justify-between p-4 border-b last:border-0 hover:bg-muted/50 transition-colors"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="h-10 w-10 rounded-lg bg-muted flex items-center justify-center">
+                      <FileText className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm">{filing.name}</p>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span>{filing.date}</span>
+                        <span>•</span>
+                        <span>{filing.type}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-6">
+                    <div className="text-right hidden sm:block">
+                      <p className="font-medium text-sm">{filing.amount}</p>
+                      <Badge
+                        variant={filing.status === "Approved" ? "default" : "secondary"}
+                        className="mt-1 text-[10px] h-5"
+                      >
+                        {filing.status}
+                      </Badge>
+                    </div>
+                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <Eye className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </TabsContent>
 
       <TabsContent value="compliance" className="space-y-4">
-        <div className="text-sm text-muted-foreground">Compliance content placeholder</div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Compliance Status</CardTitle>
+              <CardDescription>Current standing with regulatory bodies.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {[
+                { authority: "Guyana Revenue Authority (GRA)", status: "Compliant", lastCheck: "Today" },
+                { authority: "National Insurance Scheme (NIS)", status: "Compliant", lastCheck: "Today" },
+                { authority: "Commercial Registry", status: "Review Needed", lastCheck: "Yesterday" },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div>
+                    <p className="font-medium text-sm">{item.authority}</p>
+                    <p className="text-xs text-muted-foreground">Last checked: {item.lastCheck}</p>
+                  </div>
+                  <Badge
+                    variant={item.status === "Compliant" ? "default" : "destructive"}
+                    className={
+                      item.status === "Compliant"
+                        ? "bg-green-100 text-green-700 hover:bg-green-100 border-green-200"
+                        : ""
+                    }
+                  >
+                    {item.status}
+                  </Badge>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Upcoming Deadlines</CardTitle>
+              <CardDescription>Critical dates for this client.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {[
+                { event: "VAT Return Due", date: "Nov 20, 2023", daysLeft: "5 days" },
+                { event: "NIS Remittance Due", date: "Nov 15, 2023", daysLeft: "Today" },
+                { event: "Annual Return Filing", date: "Dec 31, 2023", daysLeft: "45 days" },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-4">
+                  <div className="flex flex-col items-center justify-center h-12 w-12 rounded-lg bg-primary/10 text-primary">
+                    <span className="text-xs font-bold uppercase">{item.date.split(" ")[0]}</span>
+                    <span className="text-sm font-bold">{item.date.split(" ")[1].replace(",", "")}</span>
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-sm">{item.event}</p>
+                    <p className="text-xs text-muted-foreground">{item.daysLeft} remaining</p>
+                  </div>
+                  <Button variant="ghost" size="sm">
+                    View
+                  </Button>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </div>
       </TabsContent>
 
       <TabsContent value="services" className="space-y-4">

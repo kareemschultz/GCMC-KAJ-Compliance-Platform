@@ -1,154 +1,221 @@
 "use client"
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+import type React from "react"
+
+import { useState, useEffect } from "react"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Search, MapPin, Phone, Mail, ExternalLink } from "lucide-react"
-
-const PARTNERS = [
-  {
-    id: 1,
-    name: "Guyana Real Estate Services",
-    category: "Real Estate",
-    contact: "James Wilson",
-    email: "james@guyana-re.com",
-    phone: "+592 600-1234",
-    location: "Georgetown",
-    description: "Specializing in commercial office space and expat housing.",
-    verified: true,
-  },
-  {
-    id: 2,
-    name: "TechSolutions GY",
-    category: "IT Services",
-    contact: "Sarah Persaud",
-    email: "support@techgy.com",
-    phone: "+592 622-5678",
-    location: "Remote / On-site",
-    description: "Network setup, cybersecurity audits, and hardware procurement.",
-    verified: true,
-  },
-  {
-    id: 3,
-    name: "Persaud & Associates",
-    category: "Legal",
-    contact: "Anil Persaud",
-    email: "anil@persaudlaw.gy",
-    phone: "+592 225-9876",
-    location: "Georgetown",
-    description: "Corporate law, litigation, and property disputes.",
-    verified: true,
-  },
-  {
-    id: 4,
-    name: "BuildRight Construction",
-    category: "Construction",
-    contact: "Mike Johnson",
-    email: "mike@buildright.gy",
-    phone: "+592 611-4321",
-    location: "East Coast Demerara",
-    description: "Commercial renovation and office fit-outs.",
-    verified: false,
-  },
-]
+import { Input } from "@/components/ui/input"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Search, Phone, Mail, Globe, MapPin, CheckCircle2, Building, Laptop, Scale, HardHat } from "lucide-react"
+import { api } from "@/lib/api"
+import type { Partner } from "@/types"
+import { AddPartnerDialog } from "./add-partner-dialog"
 
 export function PartnerDirectory() {
-  const [search, setSearch] = useState("")
-  const [category, setCategory] = useState("All")
+  const [partners, setPartners] = useState<Partner[]>([])
+  const [searchQuery, setSearchQuery] = useState("")
+  const [loading, setLoading] = useState(true)
 
-  const filteredPartners = PARTNERS.filter((partner) => {
-    const matchesSearch =
-      partner.name.toLowerCase().includes(search.toLowerCase()) ||
-      partner.description.toLowerCase().includes(search.toLowerCase())
-    const matchesCategory = category === "All" || partner.category === category
-    return matchesSearch && matchesCategory
-  })
+  useEffect(() => {
+    const fetchPartners = async () => {
+      try {
+        const data = await api.partners.list()
+        setPartners(data)
+      } catch (error) {
+        console.error("Failed to fetch partners:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
 
-  const categories = ["All", ...Array.from(new Set(PARTNERS.map((p) => p.category)))]
+    fetchPartners()
+  }, [])
+
+  const filteredPartners = partners.filter(
+    (partner) =>
+      partner.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      partner.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      partner.contactPerson.toLowerCase().includes(searchQuery.toLowerCase()),
+  )
+
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case "REAL_ESTATE":
+        return <Building className="h-4 w-4" />
+      case "IT_TECHNICIAN":
+        return <Laptop className="h-4 w-4" />
+      case "LAW_FIRM":
+        return <Scale className="h-4 w-4" />
+      case "CONSTRUCTION":
+        return <HardHat className="h-4 w-4" />
+      default:
+        return <Building className="h-4 w-4" />
+    }
+  }
+
+  const getCategoryLabel = (category: string) => {
+    return category.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase())
+  }
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative flex-1 md:max-w-sm">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
+            type="search"
             placeholder="Search partners..."
             className="pl-8"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
-          {categories.map((cat) => (
-            <Button
-              key={cat}
-              variant={category === cat ? "default" : "outline"}
-              size="sm"
-              onClick={() => setCategory(cat)}
-              className="whitespace-nowrap"
-            >
-              {cat}
-            </Button>
-          ))}
-        </div>
+        <AddPartnerDialog />
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredPartners.map((partner) => (
-          <Card key={partner.id} className="overflow-hidden transition-all hover:shadow-md">
-            <CardHeader className="flex flex-row items-start gap-4 space-y-0 pb-2">
-              <Avatar className="h-12 w-12 rounded-lg border">
-                <AvatarFallback className="rounded-lg bg-primary/10 text-primary font-bold">
-                  {partner.name.substring(0, 2).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1 space-y-1">
-                <CardTitle className="text-base leading-none">{partner.name}</CardTitle>
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="text-[10px] font-normal">
-                    {partner.category}
-                  </Badge>
-                  {partner.verified && (
-                    <Badge variant="outline" className="border-green-200 text-[10px] text-green-700 bg-green-50">
-                      Verified Partner
-                    </Badge>
-                  )}
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-4 text-sm text-muted-foreground line-clamp-2">{partner.description}</div>
-              <div className="space-y-2 text-sm">
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-muted-foreground" />
-                  <span>{partner.location}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Mail className="h-4 w-4 text-muted-foreground" />
-                  <a href={`mailto:${partner.email}`} className="hover:underline">
-                    {partner.email}
-                  </a>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Phone className="h-4 w-4 text-muted-foreground" />
-                  <span>{partner.phone}</span>
-                </div>
-              </div>
-              <div className="mt-4 flex gap-2">
-                <Button className="w-full" size="sm">
-                  Contact
-                </Button>
-                <Button variant="outline" size="icon" className="shrink-0 bg-transparent">
-                  <ExternalLink className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+      <Tabs defaultValue="ALL" className="w-full">
+        <TabsList className="flex h-auto w-full flex-wrap justify-start gap-2 bg-transparent p-0 md:w-auto md:bg-muted md:p-1">
+          <TabsTrigger
+            value="ALL"
+            className="flex-1 md:flex-none data-[state=active]:bg-muted md:data-[state=active]:bg-background"
+          >
+            All
+          </TabsTrigger>
+          <TabsTrigger
+            value="REAL_ESTATE"
+            className="flex-1 md:flex-none data-[state=active]:bg-muted md:data-[state=active]:bg-background"
+          >
+            Real Estate
+          </TabsTrigger>
+          <TabsTrigger
+            value="IT_TECHNICIAN"
+            className="flex-1 md:flex-none data-[state=active]:bg-muted md:data-[state=active]:bg-background"
+          >
+            IT & Tech
+          </TabsTrigger>
+          <TabsTrigger
+            value="LAW_FIRM"
+            className="flex-1 md:flex-none data-[state=active]:bg-muted md:data-[state=active]:bg-background"
+          >
+            Legal
+          </TabsTrigger>
+          <TabsTrigger
+            value="CONSTRUCTION"
+            className="flex-1 md:flex-none data-[state=active]:bg-muted md:data-[state=active]:bg-background"
+          >
+            Construction
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="ALL" className="mt-6">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredPartners.map((partner) => (
+              <PartnerCard
+                key={partner.id}
+                partner={partner}
+                getCategoryIcon={getCategoryIcon}
+                getCategoryLabel={getCategoryLabel}
+              />
+            ))}
+          </div>
+        </TabsContent>
+
+        {["REAL_ESTATE", "IT_TECHNICIAN", "LAW_FIRM", "CONSTRUCTION"].map((category) => (
+          <TabsContent key={category} value={category} className="mt-6">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {filteredPartners
+                .filter((p) => p.category === category)
+                .map((partner) => (
+                  <PartnerCard
+                    key={partner.id}
+                    partner={partner}
+                    getCategoryIcon={getCategoryIcon}
+                    getCategoryLabel={getCategoryLabel}
+                  />
+                ))}
+            </div>
+          </TabsContent>
         ))}
-      </div>
+      </Tabs>
     </div>
+  )
+}
+
+function PartnerCard({
+  partner,
+  getCategoryIcon,
+  getCategoryLabel,
+}: {
+  partner: Partner
+  getCategoryIcon: (c: string) => React.ReactNode
+  getCategoryLabel: (c: string) => string
+}) {
+  return (
+    <Card>
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-2">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              {getCategoryIcon(partner.category)}
+            </div>
+            <div>
+              <CardTitle className="text-base">{partner.companyName}</CardTitle>
+              <CardDescription className="text-xs">{getCategoryLabel(partner.category)}</CardDescription>
+            </div>
+          </div>
+          {partner.verified && (
+            <Badge
+              variant="secondary"
+              className="flex items-center gap-1 bg-green-500/10 text-green-600 hover:bg-green-500/20"
+            >
+              <CheckCircle2 className="h-3 w-3" />
+              Verified
+            </Badge>
+          )}
+        </div>
+      </CardHeader>
+      <CardContent className="grid gap-3 text-sm">
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <Phone className="h-4 w-4" />
+          <span>{partner.phone}</span>
+        </div>
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <Mail className="h-4 w-4" />
+          <a href={`mailto:${partner.email}`} className="hover:text-primary hover:underline">
+            {partner.email}
+          </a>
+        </div>
+        {partner.website && (
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <Globe className="h-4 w-4" />
+            <a
+              href={partner.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-primary hover:underline"
+            >
+              Website
+            </a>
+          </div>
+        )}
+        {partner.location && (
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <MapPin className="h-4 w-4" />
+            <span>{partner.location}</span>
+          </div>
+        )}
+      </CardContent>
+      <CardFooter>
+        <Button variant="outline" className="w-full bg-transparent">
+          View Profile
+        </Button>
+      </CardFooter>
+    </Card>
   )
 }

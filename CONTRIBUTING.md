@@ -1,4 +1,4 @@
-# Contributing to GCMC & KAJ Compliance Suite
+# Contributing to GK Enterprise Suite
 
 Thank you for your interest in contributing! This document provides guidelines for developers working on the platform.
 
@@ -12,7 +12,7 @@ Thank you for your interest in contributing! This document provides guidelines f
 3.  **Install**: Run `npm install` to get dependencies.
 4.  **Develop**: Run `npm run dev` to start the local server.
 5.  **Commit**: Use descriptive commit messages.
-    *   `feat: add training calendar component`
+    *   `feat: add payroll calculator`
     *   `fix: resolve vat calculation error`
 6.  **Pull Request**: Submit a PR to the `main` branch.
 
@@ -33,7 +33,7 @@ Thank you for your interest in contributing! This document provides guidelines f
 *   `app/`: Pages and layouts. Follows Next.js routing conventions.
 *   `components/`: React components.
     *   `ui/`: Generic UI elements (Buttons, Cards).
-    *   `clients/`, `filings/`, etc.: Feature modules.
+    *   `clients/`, `accounting/`, `nis/`, etc.: Feature modules.
 *   `lib/`: Utilities.
     *   `utils.ts`: Helper functions (cn, formatters).
     *   `api.ts`: API abstraction layer.

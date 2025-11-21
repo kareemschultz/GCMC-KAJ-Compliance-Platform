@@ -1,9 +1,9 @@
-# GCMC & KAJ Compliance Suite - Technical Documentation
+# GK Enterprise Suite - Technical Documentation
 
 ## 1. Project Identity
-*   **Name**: GCMC & KAJ Compliance Suite
-*   **Repo**: `gcmc-kaj-compliance-suite`
-*   **Description**: Enterprise compliance platform for Guyana regulatory management serving GCMC & KAJ.
+*   **Name**: GK Enterprise Suite
+*   **Repo**: `gk-enterprise-suite`
+*   **Description**: Enterprise compliance and management platform for Guyana regulatory management serving GCMC & KAJ.
 
 ## 2. Architecture Overview
 The project is built using a modern web stack optimized for performance, security, and scalability.
@@ -14,74 +14,66 @@ The project is built using a modern web stack optimized for performance, securit
 - **Styling**: Tailwind CSS v4
 - **Theming**: next-themes (Dark/Light Mode)
 - **UI Components**: shadcn/ui (Radix Primitives)
-- **State Management**: React Server Components & Client Hooks
+- **State Management**: React Context (Client & Brand)
 - **Deployment**: Docker Containerized
 
 ### Directory Structure
 - `/app`: Core application routes and layouts.
   - `/clients`: Client management module.
   - `/filings`: Tax and compliance filing module.
+  - `/accounting`: **(New)** Financial statements & audit workflows.
+  - `/nis`: **(New)** Payroll & NIS management.
   - `/documents`: Centralized document management.
   - `/portal`: External client portal (separate layout).
+  - `/book`: Public appointment booking page.
   - `/users`: Internal user/staff management.
-  - `/training`: **(New)** Training & Workshop management.
-  - `/immigration`: **(New)** Visa & Work Permit pipeline.
-  - `/network`: **(New)** Partner directory & networking hub.
-  - `/paralegal`: **(New)** Legal document generation & management.
-  - `/settings`: System configuration (Compliance, Notifications).
+  - `/training`: Training & Workshop management.
+  - `/immigration`: Visa & Work Permit pipeline.
+  - `/network`: Partner directory & networking hub.
+  - `/paralegal`: Legal document generation & management.
+  - `/settings`: System configuration.
 - `/components`: Reusable UI components and feature-specific widgets.
 - `/lib`: Utility functions, constants, and shared logic.
 - `/types`: TypeScript definitions for data models.
 
 ## 3. Core Modules
 
-### Client Management
+### Client Management & Context
+- **Client Context**: Global switcher allows users to perform actions on behalf of a specific client.
 - **Profiles**: Detailed views including TIN, NIS, Business Reg, and contact info.
-- **Services**: Dynamic service catalog (Trainings, Immigration, Paralegal).
-- **Onboarding**: Wizard-based flow for adding new clients with requirement checks.
-- **Immigration Tab**: Dedicated tab for tracking client-specific visa/permit cases.
+- **Onboarding**: Wizard-based flow for adding new clients (Company vs Individual).
 
-### Compliance Engine (KAJ Focus)
-- **Filings**: Tracking for GRA (VAT, CIT, PAYE) and NIS contributions.
+### Financial Engine (KAJ Focus)
+- **Accounting & Reports**:
+    - **Financial Statements**: P&L and Cash Flow generation.
+    - **Audit Workflow**: Track NGO/Co-op audits from initiation to completion.
+    - **Banking**: Manage bank account openings and loan applications.
+- **NIS & Payroll**:
+    - **Payroll Calculator**: Auto-calculate PAYE, NIS (5.6% / 8.4%), and Net Salary.
+    - **Employee Registry**: Manage workforce details for payroll processing.
+    - **NIS Schedules**: Generate monthly contribution schedules.
+- **Tax Filings**: Tracking for GRA (VAT, CIT, PAYE).
 - **VAT Return**: Interactive VAT-3 form with auto-calculation logic (14% rate).
-- **Alerts**: Automated notifications for expiring documents and overdue filings.
-- **Tax Calendar**: Dashboard widget tracking key 2025 deadlines (VAT, PAYE, Corporate Tax).
 
 ### Consultancy Hub (GCMC Focus)
 - **Training Module**:
     - **Calendar**: Visual schedule of upcoming workshops.
     - **Registration**: Manage participant lists and enrollments.
 - **Immigration Pipeline**:
-    - **Kanban Board**: Drag-and-drop interface for tracking case status (To Do -> Processing -> Approved).
-    - **Case Management**: Detailed tracking of Work Permits, Visas, and Citizenship applications.
+    - **Kanban Board**: Drag-and-drop interface for tracking case status.
+    - **Case Management**: Detailed tracking of Work Permits, Visas, and Citizenship.
 - **Networking Hub**:
     - **Partner Directory**: Database of trusted contacts (Real Estate, Legal, IT).
-    - **Referrals**: Track referrals to and from partners.
 - **Paralegal Services**:
     - **Document Generator**: Create Affidavits, Business Agreements, and Deeds of Gift.
-    - **Template Management**: Standardized legal templates for quick generation.
+
+### Client Portal
+- **Self-Service**: Clients can log in to view their profile, documents, and filing status.
+- **Service Requests**: Clients can request new services (e.g., "Renew Visa") directly.
 
 ### Document System
-- **Smart Upload**: Context-aware uploads that capture metadata (Expiry Dates, ID Numbers).
+- **Smart Upload**: Context-aware uploads that capture metadata.
 - **Print Profiles**: One-click printable summaries of client portfolios.
-- **Client Reports**: Customizable PDF/Excel reports for client summaries and compliance status.
-
-### Financial Tools
-- **Exchange Rates**: Live-updated widget for major currencies (USD, EUR, GBP) to GYD.
-- **Revenue Analytics**: Visual correlation between compliance scores and client revenue.
-- **Billing Module**: Invoice tracking and revenue collection management.
-
-### Knowledge & Support
-- **Knowledge Base**: Centralized repository for GRA/NIS forms and regulatory guides.
-- **Communications Log**: Track emails, calls, and meetings per client.
-
-### System Administration
-- **User Management**:
-    - **Role-Based Access**: Admin, Manager, Staff roles.
-    - **Invite System**: Email-based invitation flow for new users.
-- **Settings**:
-    - **Compliance Config**: Set default tax rates, filing frequencies, and alert thresholds.
-    - **Notification Preferences**: Configure email and in-app alert settings.
 
 ## 4. Deployment & DevOps
 The project is containerized using Docker for consistent deployment across environments.
@@ -107,22 +99,7 @@ The application currently runs in **Mock Mode**. This means:
 To connect a real backend:
 1. **Create API Routes**: Implement Next.js Route Handlers in `app/api/` or connect to an external Express/Python server.
 2. **Update `lib/api.ts`**: Replace the mock functions with real `fetch()` calls.
-   \`\`\`typescript
-   // Example update in lib/api.ts
-   create: async (data) => {
-     const res = await fetch('/api/clients', {
-       method: 'POST',
-       body: JSON.stringify(data)
-     });
-     if (!res.ok) throw new Error('Failed');
-     return res.json();
-   }
-   \`\`\`
 3. **Environment Variables**: Configure your `.env` file with database credentials.
-
-### Troubleshooting
-- **Buttons not working?** Ensure you are seeing the "Toast" notifications. If not, check that `<Toaster />` is in `app/layout.tsx`.
-- **Data disappearing?** This is expected in Mock Mode. Connect a database for persistence.
 
 ## 7. E2E Verification & Testing
 The following core user flows have been verified end-to-end:
@@ -131,28 +108,18 @@ The following core user flows have been verified end-to-end:
 - **Flow**: Dashboard -> Add Client -> Wizard (5 Steps) -> Success.
 - **Verification**: Validated form logic, conditional requirements (Business vs Individual), and success toast.
 
-### 2. Document Management
-- **Flow**: Dashboard -> Upload Document -> Select Type -> Upload -> Success.
-- **Verification**: Confirmed metadata capture for specific types (e.g., ID Numbers for National ID) and file handling.
+### 2. Payroll Processing
+- **Flow**: Dashboard -> NIS & Payroll -> Calculator -> Enter Salary -> Calculate.
+- **Verification**: Verified correct deduction of NIS (5.6%) and PAYE logic.
 
-### 3. Compliance Filing
-- **Flow**: Dashboard -> New Filing -> Select Form (VAT/NIS) -> Fill Form -> Submit.
-- **Verification**: Verified VAT calculation logic (Input/Output/Adjustments) and NIS contribution rules.
+### 3. Accounting Workflows
+- **Flow**: Dashboard -> Accounting -> Financial Statements -> Download P&L.
+- **Verification**: Verified data visualization and download triggers.
 
-### 4. Client Portal
+### 4. Immigration Workflow
+- **Flow**: Dashboard -> Immigration -> New Case -> Move Card -> Verify Status.
+- **Verification**: Confirmed Kanban drag-and-drop updates case status.
+
+### 5. Client Portal
 - **Flow**: Login -> Portal Dashboard -> View Services -> Request Service.
 - **Verification**: Confirmed isolation of portal layout and functionality of client-facing actions.
-
-### 5. User Management (Enterprise)
-- **Flow**: Admin Dashboard -> Users -> Add User -> Send Invite -> Accept Invite (Simulated).
-- **Verification**: Verified invite dialog, role assignment, and the "Accept Invite" landing page flow.
-
-### 6. Client Actions
-- **Flow**: Client Detail -> Edit Profile / Generate Report.
-- **Verification**: Verified the "Edit Client" dialog updates profile data and "Generate Report" modal simulates report creation with date range selection.
-
-### 7. GCMC Expansion Flows
-- **Training**: Schedule Workshop -> Add Participant -> Verify in Calendar.
-- **Immigration**: Create Case -> Move Card in Kanban -> Verify Status Update.
-- **Paralegal**: Generate Document -> Select Template -> Download/Print.
-- **Network**: Add Partner -> View in Directory -> Filter by Category.

@@ -1,74 +1,54 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Calendar, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Plus, MoreHorizontal, Calendar, AlertCircle } from "lucide-react"
-import { format } from "date-fns"
+import { api } from "@/lib/api"
+import type { VisaApplication } from "@/types"
+import { format, differenceInDays, parseISO } from "date-fns"
+import { Progress } from "@/components/ui/progress"
 
-// Mock Data
-const INITIAL_COLUMNS = {
-  todo: {
-    id: "todo",
-    title: "To Do / Intake",
-    items: [
-      {
-        id: "imm-1",
-        client: "TechCorp Guyana Inc.",
-        applicant: "John Smith",
-        type: "Work Permit",
-        dueDate: new Date(2025, 4, 15),
-        priority: "High",
-      },
-      {
-        id: "imm-2",
-        client: "Mining Ventures Ltd",
-        applicant: "Maria Garcia",
-        type: "Business Visa",
-        dueDate: new Date(2025, 4, 20),
-        priority: "Medium",
-      },
-    ],
+// Define columns
+const columns = {
+  APPLICATION_SUBMITTED: {
+    id: "APPLICATION_SUBMITTED",
+    title: "Submitted",
+    color: "bg-blue-500/10 text-blue-500",
   },
-  in_progress: {
-    id: "in_progress",
-    title: "Processing (GRA/Home Affairs)",
-    items: [
-      {
-        id: "imm-3",
-        client: "Oil & Gas Services",
-        applicant: "Robert Chen",
-        type: "Work Permit Extension",
-        dueDate: new Date(2025, 3, 30),
-        priority: "Critical",
-      },
-    ],
+  UNDER_REVIEW: {
+    id: "UNDER_REVIEW",
+    title: "In Review",
+    color: "bg-yellow-500/10 text-yellow-500",
   },
-  review: {
-    id: "review",
-    title: "Pending Approval",
-    items: [
-      {
-        id: "imm-4",
-        client: "Retail Holdings",
-        applicant: "Sarah Jones",
-        type: "Citizenship",
-        dueDate: new Date(2025, 5, 1),
-        priority: "Low",
-      },
-    ],
-  },
-  done: {
-    id: "done",
-    title: "Completed / Issued",
-    items: [],
+  APPROVED: {
+    id: "APPROVED",
+    title: "Approved",
+    color: "bg-green-500/10 text-green-500",
   },
 }
 
 export function ImmigrationKanban() {
-  const [columns, setColumns] = useState(INITIAL_COLUMNS)
+  const [applications, setApplications] = useState<VisaApplication[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        const data = await api.immigration.list()
+        setApplications(data)
+      } catch (error) {
+        console.error("Failed to fetch visa applications:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchApplications()
+  }, [])
 
   const onDragEnd = (result: any) => {
     if (!result.destination) return
@@ -76,113 +56,119 @@ export function ImmigrationKanban() {
     const { source, destination } = result
 
     if (source.droppableId !== destination.droppableId) {
-      const sourceColumn = columns[source.droppableId as keyof typeof columns]
-      const destColumn = columns[destination.droppableId as keyof typeof columns]
-      const sourceItems = [...sourceColumn.items]
-      const destItems = [...destColumn.items]
-      const [removed] = sourceItems.splice(source.index, 1)
-      destItems.splice(destination.index, 0, removed)
-      setColumns({
-        ...columns,
-        [source.droppableId]: {
-          ...sourceColumn,
-          items: sourceItems,
-        },
-        [destination.droppableId]: {
-          ...destColumn,
-          items: destItems,
-        },
+      const newApplications = applications.map((app) => {
+        if (app.id === result.draggableId) {
+          return { ...app, status: destination.droppableId as any }
+        }
+        return app
       })
-    } else {
-      const column = columns[source.droppableId as keyof typeof columns]
-      const copiedItems = [...column.items]
-      const [removed] = copiedItems.splice(source.index, 1)
-      copiedItems.splice(destination.index, 0, removed)
-      setColumns({
-        ...columns,
-        [source.droppableId]: {
-          ...column,
-          items: copiedItems,
-        },
-      })
+
+      setApplications(newApplications)
+      // In a real app, we would call the API to update the status here
     }
   }
 
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
   return (
-    <div className="h-[calc(100vh-200px)] w-full overflow-x-auto">
-      <DragDropContext onDragEnd={onDragEnd}>
-        <div className="flex h-full gap-6">
-          {Object.values(columns).map((column) => (
-            <div key={column.id} className="flex h-full w-[350px] min-w-[350px] flex-col rounded-lg bg-muted/50 p-4">
-              <div className="mb-4 flex items-center justify-between">
-                <h3 className="font-semibold text-foreground">
-                  {column.title} <span className="ml-2 text-muted-foreground">({column.items.length})</span>
-                </h3>
-                {column.id === "todo" && (
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
-              <Droppable droppableId={column.id}>
-                {(provided) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    className="flex flex-1 flex-col gap-3 overflow-y-auto"
-                  >
-                    {column.items.map((item, index) => (
-                      <Draggable key={item.id} draggableId={item.id} index={index}>
-                        {(provided) => (
-                          <Card
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className="cursor-grab active:cursor-grabbing"
-                          >
-                            <CardHeader className="p-4 pb-2">
-                              <div className="flex items-start justify-between">
-                                <Badge
-                                  variant={
-                                    item.priority === "Critical"
-                                      ? "destructive"
-                                      : item.priority === "High"
-                                        ? "default"
-                                        : "secondary"
-                                  }
-                                  className="text-[10px]"
-                                >
-                                  {item.priority}
-                                </Badge>
-                                <Button variant="ghost" size="icon" className="h-6 w-6">
-                                  <MoreHorizontal className="h-3 w-3" />
-                                </Button>
-                              </div>
-                              <CardTitle className="text-sm font-medium leading-tight">{item.applicant}</CardTitle>
-                            </CardHeader>
-                            <CardContent className="p-4 pt-2">
-                              <div className="mb-2 text-xs text-muted-foreground">{item.client}</div>
-                              <div className="mb-3 text-xs font-medium">{item.type}</div>
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                  <Calendar className="h-3 w-3" />
-                                  {format(item.dueDate, "MMM d")}
-                                </div>
-                                {item.priority === "Critical" && <AlertCircle className="h-4 w-4 text-destructive" />}
-                              </div>
-                            </CardContent>
-                          </Card>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        {Object.values(columns).map((column) => (
+          <div key={column.id} className="flex flex-col gap-4">
+            <div className={`flex items-center justify-between rounded-lg p-3 ${column.color}`}>
+              <h3 className="font-semibold">{column.title}</h3>
+              <Badge variant="secondary" className="bg-background/50">
+                {applications.filter((app) => app.status === column.id).length}
+              </Badge>
             </div>
-          ))}
-        </div>
-      </DragDropContext>
-    </div>
+
+            <Droppable droppableId={column.id}>
+              {(provided) => (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  className="flex flex-1 flex-col gap-3 rounded-lg bg-muted/50 p-2"
+                >
+                  {applications
+                    .filter((app) => app.status === column.id)
+                    .map((app, index) => {
+                      const expiryDate = parseISO(app.expiryDate)
+                      const daysUntilExpiry = differenceInDays(expiryDate, new Date())
+                      const isExpiringSoon = daysUntilExpiry < 30 && daysUntilExpiry > 0
+
+                      // Calculate progress based on status
+                      let progress = 0
+                      if (app.status === "APPLICATION_SUBMITTED") progress = 33
+                      if (app.status === "UNDER_REVIEW") progress = 66
+                      if (app.status === "APPROVED") progress = 100
+
+                      return (
+                        <Draggable key={app.id} draggableId={app.id} index={index}>
+                          {(provided) => (
+                            <Card
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              className="cursor-grab active:cursor-grabbing"
+                            >
+                              <CardHeader className="flex flex-row items-start justify-between space-y-0 p-4 pb-2">
+                                <div className="flex items-center gap-2">
+                                  <Avatar className="h-8 w-8">
+                                    <AvatarFallback>
+                                      {app.applicantName
+                                        .split(" ")
+                                        .map((n) => n[0])
+                                        .join("")}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  <div className="grid gap-1">
+                                    <CardTitle className="text-sm font-medium leading-none">
+                                      {app.applicantName}
+                                    </CardTitle>
+                                    <p className="text-xs text-muted-foreground">{app.permitType.replace("_", " ")}</p>
+                                  </div>
+                                </div>
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </CardHeader>
+                              <CardContent className="p-4 pt-2">
+                                <div className="flex flex-col gap-3">
+                                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                                    <div className="flex items-center gap-1">
+                                      <Calendar className="h-3 w-3" />
+                                      <span>Expires: {format(expiryDate, "MMM d, yyyy")}</span>
+                                    </div>
+                                    {isExpiringSoon && (
+                                      <Badge variant="destructive" className="h-5 px-1.5 text-[10px]">
+                                        Expiring Soon
+                                      </Badge>
+                                    )}
+                                  </div>
+
+                                  <div className="space-y-1">
+                                    <div className="flex justify-between text-xs">
+                                      <span className="text-muted-foreground">Progress</span>
+                                      <span className="font-medium">{progress}%</span>
+                                    </div>
+                                    <Progress value={progress} className="h-1.5" />
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          )}
+                        </Draggable>
+                      )
+                    })}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </div>
+        ))}
+      </div>
+    </DragDropContext>
   )
 }

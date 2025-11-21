@@ -6,13 +6,14 @@ import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { BrandProvider } from "@/components/brand-context"
+import { ClientProvider } from "@/components/client-context"
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "GCMC & KAJ Compliance Platform",
-  description: "Guyanese Business Compliance Management Platform for GCMC & KAJ",
+  title: "GK Enterprise Suite",
+  description: "Comprehensive Compliance & Financial Management for GCMC & KAJ",
   generator: "v0.app",
   icons: {
     icon: [
@@ -43,9 +44,11 @@ export default function RootLayout({
       <body className={`font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <BrandProvider>
-            {children}
-            <Analytics />
-            <Toaster />
+            <ClientProvider>
+              {children}
+              <Analytics />
+              <Toaster />
+            </ClientProvider>
           </BrandProvider>
         </ThemeProvider>
       </body>

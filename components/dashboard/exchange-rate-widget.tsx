@@ -1,4 +1,6 @@
-import { ArrowDown, ArrowUp, RefreshCcw, TrendingUp } from "lucide-react"
+"use client"
+
+import { ArrowDown, ArrowUp, RefreshCcw, TrendingUp, Minus } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
@@ -54,7 +56,10 @@ export function ExchangeRateWidget() {
       <CardContent>
         <div className="grid gap-4">
           {RATES.map((item) => (
-            <div key={item.currency} className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
+            <div
+              key={item.currency}
+              className="flex flex-col gap-2 rounded-lg border p-3 shadow-sm sm:flex-row sm:items-center sm:justify-between"
+            >
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted font-bold">
                   {item.currency}
@@ -64,7 +69,7 @@ export function ExchangeRateWidget() {
                   <p className="text-xs text-muted-foreground">1 {item.currency} =</p>
                 </div>
               </div>
-              <div className="text-right">
+              <div className="flex items-center justify-between sm:block sm:text-right">
                 <p className="font-bold text-lg">${item.rate.toFixed(2)}</p>
                 <div
                   className={`flex items-center justify-end text-xs ${
@@ -77,6 +82,7 @@ export function ExchangeRateWidget() {
                 >
                   {item.trend === "up" && <ArrowUp className="mr-1 h-3 w-3" />}
                   {item.trend === "down" && <ArrowDown className="mr-1 h-3 w-3" />}
+                  {item.trend === "neutral" && <Minus className="mr-1 h-3 w-3" />}
                   {item.change > 0 ? "+" : ""}
                   {item.change.toFixed(2)}%
                 </div>

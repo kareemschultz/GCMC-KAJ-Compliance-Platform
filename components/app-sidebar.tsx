@@ -20,6 +20,9 @@ import {
   Network,
   Plane,
   Scale,
+  Calculator,
+  Package,
+  Home,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -38,6 +41,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { UserProfileDialog } from "@/components/user-profile-dialog"
 import { useBrand } from "@/components/brand-context"
+import { ClientSwitcher } from "@/components/client-switcher"
 import { cn } from "@/lib/utils"
 
 const kajNavItems = [
@@ -45,6 +49,11 @@ const kajNavItems = [
     title: "Dashboard",
     url: "/",
     icon: LayoutDashboard,
+  },
+  {
+    title: "Accounting & Reports",
+    url: "/accounting",
+    icon: PieChart,
   },
   {
     title: "Clients",
@@ -60,6 +69,11 @@ const kajNavItems = [
     title: "Filings",
     url: "/filings",
     icon: FileStack,
+  },
+  {
+    title: "NIS & Payroll",
+    url: "/nis",
+    icon: Calculator,
   },
   {
     title: "Tasks",
@@ -81,11 +95,6 @@ const kajNavItems = [
     url: "/knowledge-base",
     icon: Book,
   },
-  {
-    title: "Reports",
-    url: "/reports",
-    icon: PieChart,
-  },
 ]
 
 const gcmcNavItems = [
@@ -93,6 +102,16 @@ const gcmcNavItems = [
     title: "Dashboard",
     url: "/",
     icon: LayoutDashboard,
+  },
+  {
+    title: "Property Management",
+    url: "/properties",
+    icon: Home,
+  },
+  {
+    title: "Expediting Service",
+    url: "/expediting",
+    icon: Package,
   },
   {
     title: "Immigration & Visas",
@@ -189,6 +208,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   GCMC (Consult)
                 </button>
               </div>
+              <ClientSwitcher />
             </div>
           </SidebarMenuItem>
         </SidebarMenu>

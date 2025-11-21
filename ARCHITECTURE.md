@@ -1,7 +1,7 @@
 # System Architecture
 
 ## Overview
-The GCMC & KAJ Compliance Suite is designed as a modular, component-based application using the Next.js App Router. It follows a **Client-Server** architecture where the frontend (Next.js) interacts with a backend service (currently mocked via `lib/api.ts`, ready for REST/GraphQL integration).
+The GK Enterprise Suite is designed as a modular, component-based application using the Next.js App Router. It follows a **Client-Server** architecture where the frontend (Next.js) interacts with a backend service (currently mocked via `lib/api.ts`, ready for REST/GraphQL integration).
 
 ## High-Level Architecture
 
@@ -13,6 +13,7 @@ graph TD
     subgraph "Application Layer"
         App -->|Render| Layout[Root Layout]
         Layout -->|Context| Brand[Brand Context Provider]
+        Layout -->|Context| Client[Client Context Provider]
         Brand -->|Route| Page[Page Component]
         Page -->|Interact| Components[UI Components]
     end
@@ -31,7 +32,7 @@ graph TD
 
 ## Module Interaction
 
-The application is divided into two main business domains that share a common core.
+The application is divided into two main business domains that share a common core and client context.
 
 \`\`\`mermaid
 graph LR
@@ -44,8 +45,8 @@ graph LR
 
     subgraph "KAJ (Financial)"
         Filings[Tax Filings]
-        Billing[Invoicing]
-        Reports[Financial Reports]
+        Accounting[Accounting & Reports]
+        Payroll[NIS & Payroll]
     end
 
     subgraph "GCMC (Consultancy)"
@@ -56,8 +57,9 @@ graph LR
     end
 
     Clients --> Filings
+    Clients --> Accounting
+    Clients --> Payroll
     Clients --> Immigration
-    Clients --> Billing
     
     Docs --> Filings
     Docs --> Paralegal
@@ -65,15 +67,16 @@ graph LR
     Users --> Settings
 \`\`\`
 
-## Data Flow: Compliance Filing
+## Data Flow: Payroll Calculation
 
-1.  **Initiation**: User clicks "New Filing" in Dashboard.
-2.  **Context**: System checks selected Client ID.
-3.  **Form Load**: `NewFilingDropdown` selects the correct form (VAT/NIS).
-4.  **Input**: User enters financial data.
-5.  **Validation**: Zod schema validates inputs (e.g., VAT calculations).
-6.  **Submission**: Data sent to `api.filings.create`.
-7.  **Feedback**: Toast notification confirms success; Dashboard refreshes.
+1.  **Input**: User enters Gross Salary and Allowances in `PayrollCalculator`.
+2.  **Logic**:
+    *   NIS Employee = Gross * 5.6% (Capped at ceiling if applicable).
+    *   NIS Employer = Gross * 8.4%.
+    *   Taxable Income = Gross - Statutory Deductions.
+    *   PAYE = Taxable Income * 28% (Standard Rate).
+3.  **Output**: Net Salary displayed to user.
+4.  **Action**: "Save to Slip" triggers API to store record.
 
 ## Data Flow: Immigration Case
 
@@ -88,10 +91,11 @@ graph LR
 *   `RootLayout`
     *   `ThemeProvider`
     *   `BrandProvider`
+    *   `ClientProvider`
         *   `AppSidebar` (Dynamic based on Brand)
-        *   `Header`
+        *   `Header` (Shows Active Client)
         *   `MainContent`
-            *   `Page` (e.g., `/dashboard`, `/clients/[id]`)
+            *   `Page` (e.g., `/dashboard`, `/accounting`)
                 *   `StatsCards`
                 *   `DataTables` / `KanbanBoards`
                 *   `ActionDialogs` (Modals)

@@ -30,7 +30,7 @@ export function NewClientWizard() {
   const { toast } = useToast()
   const router = useRouter()
   const [formData, setFormData] = React.useState({
-    type: "Company",
+    type: "COMPANY",
     name: "",
     email: "",
     phone: "",
@@ -41,6 +41,16 @@ export function NewClientWizard() {
     regNumber: "",
     idType: "National ID",
     idNumber: "",
+    firstName: "",
+    middleName: "",
+    surname: "",
+    dateOfBirth: "",
+    placeOfBirth: "",
+    gender: "Male",
+    passportNumber: "",
+    passportExpiry: "",
+    idIssueDate: "",
+    isLocalContentQualified: false,
     selectedServices: [] as string[],
     uploadedFiles: {} as Record<string, File>,
   })
@@ -50,11 +60,21 @@ export function NewClientWizard() {
   const validateStep = (currentStep: number) => {
     switch (currentStep) {
       case 1:
+        if (formData.type === "INDIVIDUAL") {
+          return formData.firstName.length > 1 && formData.surname.length > 1
+        }
         return formData.name.length > 2
       case 2:
         return formData.email.includes("@") && formData.phone.length > 5
       case 3:
-        return formData.idNumber.length > 3 && formData.tin.length > 5
+        if (formData.type === "INDIVIDUAL") {
+          return (
+            formData.idNumber.length > 3 &&
+            formData.dateOfBirth.length > 0 &&
+            (formData.tin.length > 5 || formData.nis.length > 5)
+          )
+        }
+        return formData.tin.length > 5
       default:
         return true
     }
@@ -92,7 +112,7 @@ export function NewClientWizard() {
       router.push("/clients/1")
 
       setFormData({
-        type: "Company",
+        type: "COMPANY",
         name: "",
         email: "",
         phone: "",
@@ -103,6 +123,16 @@ export function NewClientWizard() {
         regNumber: "",
         idType: "National ID",
         idNumber: "",
+        firstName: "",
+        middleName: "",
+        surname: "",
+        dateOfBirth: "",
+        placeOfBirth: "",
+        gender: "Male",
+        passportNumber: "",
+        passportExpiry: "",
+        idIssueDate: "",
+        isLocalContentQualified: false,
         selectedServices: [],
         uploadedFiles: {},
       })
@@ -183,22 +213,102 @@ export function NewClientWizard() {
                     <SelectValue placeholder="Select client type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Company">Company</SelectItem>
-                    <SelectItem value="Individual">Individual</SelectItem>
-                    <SelectItem value="Partnership">Partnership</SelectItem>
-                    <SelectItem value="Sole Trader">Sole Trader</SelectItem>
+                    <SelectItem value="COMPANY">Company</SelectItem>
+                    <SelectItem value="INDIVIDUAL">Individual</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="name">{formData.type === "Individual" ? "Full Name" : "Business Name"}</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder={formData.type === "Individual" ? "John Doe" : "ABC Corp Ltd"}
-                />
-              </div>
+
+              {formData.type === "INDIVIDUAL" ? (
+                <div className="grid gap-4">
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="firstName">First Name</Label>
+                      <Input
+                        id="firstName"
+                        value={formData.firstName}
+                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                        placeholder="John"
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="middleName">Middle Name</Label>
+                      <Input
+                        id="middleName"
+                        value={formData.middleName}
+                        onChange={(e) => setFormData({ ...formData, middleName: e.target.value })}
+                        placeholder="A."
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="surname">Surname</Label>
+                      <Input
+                        id="surname"
+                        value={formData.surname}
+                        onChange={(e) => setFormData({ ...formData, surname: e.target.value })}
+                        placeholder="Doe"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="dob">Date of Birth</Label>
+                      <Input
+                        id="dob"
+                        type="date"
+                        value={formData.dateOfBirth}
+                        onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="gender">Gender</Label>
+                      <Select
+                        value={formData.gender}
+                        onValueChange={(value) => setFormData({ ...formData, gender: value })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Gender" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Male">Male</SelectItem>
+                          <SelectItem value="Female">Female</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="pob">Place of Birth (Region/City)</Label>
+                    <Input
+                      id="pob"
+                      value={formData.placeOfBirth}
+                      onChange={(e) => setFormData({ ...formData, placeOfBirth: e.target.value })}
+                      placeholder="Georgetown, Region 4"
+                    />
+                  </div>
+                  <div className="flex items-center space-x-2 pt-2">
+                    <Checkbox
+                      id="localContent"
+                      checked={formData.isLocalContentQualified}
+                      onCheckedChange={(checked) =>
+                        setFormData({ ...formData, isLocalContentQualified: checked as boolean })
+                      }
+                    />
+                    <Label htmlFor="localContent" className="font-medium">
+                      Local Content Qualified (Guyanese National)
+                    </Label>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid gap-2">
+                  <Label htmlFor="name">Business Name</Label>
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="ABC Corp Ltd"
+                  />
+                </div>
+              )}
             </div>
           )}
 
@@ -237,59 +347,75 @@ export function NewClientWizard() {
 
           {step === 3 && (
             <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="idType">Primary Identification</Label>
-                  <Select
-                    value={formData.idType}
-                    onValueChange={(value) => setFormData({ ...formData, idType: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select ID Type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="National ID">National ID Card</SelectItem>
-                      <SelectItem value="Passport">Passport</SelectItem>
-                      <SelectItem value="Drivers License">Driver's License</SelectItem>
-                    </SelectContent>
-                  </Select>
+              {formData.type === "INDIVIDUAL" ? (
+                <div className="grid gap-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="idNumber">National ID Card #</Label>
+                      <Input
+                        id="idNumber"
+                        value={formData.idNumber}
+                        onChange={(e) => setFormData({ ...formData, idNumber: e.target.value })}
+                        placeholder="144xxxxxx"
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="idIssue">Date of Issue</Label>
+                      <Input
+                        id="idIssue"
+                        type="date"
+                        value={formData.idIssueDate}
+                        onChange={(e) => setFormData({ ...formData, idIssueDate: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="passport">Passport Number</Label>
+                      <Input
+                        id="passport"
+                        value={formData.passportNumber}
+                        onChange={(e) => setFormData({ ...formData, passportNumber: e.target.value })}
+                        placeholder="R07xxxxx"
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="passportExpiry">Passport Expiry</Label>
+                      <Input
+                        id="passportExpiry"
+                        type="date"
+                        value={formData.passportExpiry}
+                        onChange={(e) => setFormData({ ...formData, passportExpiry: e.target.value })}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="idNumber">{formData.idType} Number</Label>
-                  <Input
-                    id="idNumber"
-                    value={formData.idNumber}
-                    onChange={(e) => setFormData({ ...formData, idNumber: e.target.value })}
-                    placeholder={
-                      formData.idType === "National ID"
-                        ? "123456789"
-                        : formData.idType === "Passport"
-                          ? "P1234567"
-                          : "D1234567"
-                    }
-                  />
-                </div>
-              </div>
+              ) : null}
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="tin">TIN (Taxpayer ID)</Label>
-                  <Input
-                    id="tin"
-                    value={formData.tin}
-                    onChange={(e) => setFormData({ ...formData, tin: e.target.value })}
-                    placeholder="123-456-789"
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="nis">NIS Number</Label>
-                  <Input
-                    id="nis"
-                    value={formData.nis}
-                    onChange={(e) => setFormData({ ...formData, nis: e.target.value })}
-                    placeholder="A-123456"
-                  />
-                </div>
+                {formData.type === "COMPANY" && (
+                  <div className="grid gap-2">
+                    <Label htmlFor="tin">TIN (Taxpayer ID)</Label>
+                    <Input
+                      id="tin"
+                      value={formData.tin}
+                      onChange={(e) => setFormData({ ...formData, tin: e.target.value })}
+                      placeholder="123-456-789"
+                    />
+                  </div>
+                )}
+
+                {formData.type === "INDIVIDUAL" && (
+                  <div className="grid gap-2">
+                    <Label htmlFor="nis">NIS Number</Label>
+                    <Input
+                      id="nis"
+                      value={formData.nis}
+                      onChange={(e) => setFormData({ ...formData, nis: e.target.value })}
+                      placeholder="A-123456"
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -302,7 +428,7 @@ export function NewClientWizard() {
                     placeholder="V-123456"
                   />
                 </div>
-                {formData.type !== "Individual" && (
+                {formData.type !== "INDIVIDUAL" && (
                   <div className="grid gap-2">
                     <Label htmlFor="reg">Business Reg. No. (DCRA)</Label>
                     <Input

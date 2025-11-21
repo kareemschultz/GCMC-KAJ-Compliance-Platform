@@ -1,0 +1,180 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// --- USER & AUTHENTICATION ---
+enum UserRole {
+  SUPER_ADMIN     // You (Access everything)
+  GCMC_STAFF      // Sees Immigration, Legal, Training
+  KAJ_STAFF       // Sees Tax, Payroll, NIS
+  CLIENT          // External user (Client Portal)
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  fullName      String
+  role          UserRole  @default(CLIENT)
+  createdAt     DateTime  @default(now())
+  
+  // Relations
+  clientProfile Client?   @relation(fields: [clientId], references: [id])
+  clientId      String?
+}
+
+// --- CORE CLIENT DATA ---
+model Client {
+  id            String    @id @default(uuid())
+  name          String    // Company Name or Individual Name
+  type          String    // "INDIVIDUAL" or "COMPANY"
+  tinNumber     String?   // Taxpayer Identification Number (GRA)
+  nisNumber     String?   // National Insurance Scheme Number
+  email         String
+  phone         String
+  address       String
+  
+  // KAJ Relations (Financial)
+  taxReturns    TaxReturn[]
+  nisSchedules  NISSchedule[]
+  
+  // GCMC Relations (Consultancy)
+  visas         VisaApplication[]
+  legalDocs     LegalDocument[]
+  
+  // Accounting Relations
+  financialStatements FinancialStatement[]
+  auditCases        AuditCase[]
+  bankServices      BankService[]
+  
+  users         User[]
+}
+
+// --- KAJ MODULE: TAX & COMPLIANCE ---
+model TaxReturn {
+  id            String    @id @default(uuid())
+  filingType    String    // "VAT", "PAYE", "INCOME_TAX", "CORP_TAX"
+  period        String    // e.g., "2025-01"
+  status        String    // "PENDING", "SUBMITTED", "APPROVED"
+  amountDue     Decimal   
+  filingDate    DateTime?
+  
+  client        Client    @relation(fields: [clientId], references: [id])
+  clientId      String
+}
+
+model NISSchedule {
+  id            String    @id @default(uuid())
+  month         String    // e.g., "September 2025"
+  totalWages    Decimal
+  
+  // Automatic Calculation Logic fields
+  employeeDed   Decimal   // 5.6%
+  employerCont  Decimal   // 8.4%
+  totalRemit    Decimal   // 14% Total
+  
+  status        String    // "DRAFT", "FILED"
+  client        Client    @relation(fields: [clientId], references: [id])
+  clientId      String
+}
+
+// --- GCMC MODULE: IMMIGRATION & LEGAL ---
+model VisaApplication {
+  id            String    @id @default(uuid())
+  applicantName String
+  permitType    String    // "WORK_PERMIT", "CITIZENSHIP", "BUSINESS_VISA"
+  expiryDate    DateTime
+  status        String    // "APPLICATION_SUBMITTED", "UNDER_REVIEW", "APPROVED"
+  
+  client        Client    @relation(fields: [clientId], references: [id])
+  clientId      String
+}
+
+model LegalDocument {
+  id            String    @id @default(uuid())
+  docType       String    // "WILL", "AFFIDAVIT", "AGREEMENT_SALE"
+  contentJson   Json      // Stores the form data (e.g. "Beneficiary Name")
+  pdfUrl        String?   // Link to generated PDF
+  createdAt     DateTime  @default(now())
+  
+  client        Client    @relation(fields: [clientId], references: [id])
+  clientId      String
+}
+
+// --- GCMC MODULE: NETWORKING ---
+model Partner {
+  id            String    @id @default(uuid())
+  companyName   String
+  category      String    // "REAL_ESTATE", "IT_TECHNICIAN", "LAW_FIRM"
+  contactPerson String
+  phone         String
+  email         String
+  website       String?
+}
+
+// --- GCMC MODULE: TRAINING ---
+model TrainingSession {
+  id            String    @id @default(uuid())
+  title         String    // e.g., "Customer Relations Workshop"
+  date          DateTime
+  capacity      Int
+  price         Decimal
+  attendees     TrainingAttendee[]
+}
+
+model TrainingAttendee {
+  id            String    @id @default(uuid())
+  name          String
+  email         String
+  status        String    // "REGISTERED", "PAID", "ATTENDED"
+  
+  session       TrainingSession @relation(fields: [sessionId], references: [id])
+  sessionId     String
+}
+
+// --- SHARED: APPOINTMENTS ---
+model Appointment {
+  id            String    @id @default(uuid())
+  serviceType   String    // "GCMC_CONSULT", "KAJ_TAX_PREP"
+  startTime     DateTime
+  endTime       DateTime
+  status        String    // "CONFIRMED", "CANCELLED"
+  clientName    String
+  clientEmail   String
+}
+
+// --- ACCOUNTING MODULE ---
+model FinancialStatement {
+  id            String    @id @default(uuid())
+  type          String    // "INCOME_STATEMENT" | "CASH_FLOW"
+  period        String
+  data          Json
+  createdAt     DateTime  @default(now())
+  
+  client        Client    @relation(fields: [clientId], references: [id])
+  clientId      String
+}
+
+model AuditCase {
+  id            String    @id @default(uuid())
+  entityName    String
+  entityType    String    // "NGO" | "CO_OP"
+  status        String    // "OPEN" | "REVIEW" | "CLOSED"
+  assignedAuditor String?
+  dueDate       DateTime
+  progress      Int       @default(0)
+}
+
+model BankService {
+  id            String    @id @default(uuid())
+  clientName    String
+  service       String    // "ACCOUNT_OPENING" | "LOAN_APP"
+  bankName      String
+  status        String    // "PENDING" | "APPROVED" | "REJECTED" | "IN_PROGRESS"
+  submittedDate DateTime  @default(now())
+  lastUpdate    DateTime  @updatedAt
+}
