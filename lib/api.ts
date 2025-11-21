@@ -89,6 +89,13 @@ export const api = {
           role: "Admin",
           status: "Active",
         },
+        {
+          id: 2,
+          name: "Jane Smith",
+          email: "jane@gcmc.gy",
+          role: "Compliance Officer",
+          status: "Active",
+        },
       ]
     },
     create: async (data: any) => {
@@ -99,6 +106,16 @@ export const api = {
         ...data,
         status: "Active",
       }
+    },
+    update: async (id: number | string, data: any) => {
+      await delay(800)
+      console.log(`[API] Updated user ${id}:`, data)
+      return { id, ...data }
+    },
+    delete: async (id: number | string) => {
+      await delay(800)
+      console.log(`[API] Deleted user ${id}`)
+      return true
     },
   },
 }

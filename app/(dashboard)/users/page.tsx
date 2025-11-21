@@ -45,6 +45,16 @@ export default function UsersPage() {
     }
   }
 
+  const handleDeleteUser = async (id: number | string) => {
+    try {
+      await api.users.delete(id)
+      toast.success("User deactivated successfully")
+      fetchUsers()
+    } catch (error) {
+      toast.error("Failed to deactivate user")
+    }
+  }
+
   useEffect(() => {
     fetchUsers()
   }, [])
@@ -137,10 +147,18 @@ export default function UsersPage() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>Edit User</DropdownMenuItem>
-                        <DropdownMenuItem>Resend Invite</DropdownMenuItem>
+                        <AddUserDialog
+                          user={user}
+                          onUserAdded={fetchUsers}
+                          trigger={<DropdownMenuItem onSelect={(e) => e.preventDefault()}>Edit User</DropdownMenuItem>}
+                        />
+                        <DropdownMenuItem onClick={() => toast.success("Invite resent")}>
+                          Resend Invite
+                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-red-600">Deactivate</DropdownMenuItem>
+                        <DropdownMenuItem className="text-red-600" onClick={() => handleDeleteUser(user.id)}>
+                          Deactivate
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>

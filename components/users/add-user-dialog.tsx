@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -20,7 +20,20 @@ import { toast } from "sonner"
 import { api } from "@/lib/api"
 import { Plus } from "lucide-react"
 
-export function AddUserDialog({ onUserAdded }: { onUserAdded?: () => void }) {
+interface User {
+  id: number | string
+  name: string
+  email: string
+  role: string
+}
+
+interface AddUserDialogProps {
+  onUserAdded?: () => void
+  user?: User
+  trigger?: React.ReactNode
+}
+
+export function AddUserDialog({ onUserAdded, user, trigger }: AddUserDialogProps) {
   const [open, setOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
@@ -29,20 +42,37 @@ export function AddUserDialog({ onUserAdded }: { onUserAdded?: () => void }) {
     role: "Staff",
   })
 
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      })
+    } else {
+      setFormData({ name: "", email: "", role: "Staff" })
+    }
+  }, [user, open])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
     try {
-      await api.users.create(formData)
-      toast.success("User invited successfully", {
-        description: `An invitation email has been sent to ${formData.email}`,
-      })
+      if (user) {
+        await api.users.update(user.id, formData)
+        toast.success("User updated successfully")
+      } else {
+        await api.users.create(formData)
+        toast.success("User invited successfully", {
+          description: `An invitation email has been sent to ${formData.email}`,
+        })
+      }
       setOpen(false)
-      setFormData({ name: "", email: "", role: "Staff" })
+      if (!user) setFormData({ name: "", email: "", role: "Staff" })
       onUserAdded?.()
     } catch (error) {
-      toast.error("Failed to invite user")
+      toast.error(user ? "Failed to update user" : "Failed to invite user")
     } finally {
       setIsLoading(false)
     }
@@ -51,16 +81,20 @@ export function AddUserDialog({ onUserAdded }: { onUserAdded?: () => void }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Add User
-        </Button>
+        {trigger || (
+          <Button>
+            <Plus className="mr-2 h-4 w-4" />
+            Add User
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Invite New User</DialogTitle>
+          <DialogTitle>{user ? "Edit User" : "Invite New User"}</DialogTitle>
           <DialogDescription>
-            Send an invitation to a new team member. They will receive an email to set up their account.
+            {user
+              ? "Update user details and role permissions."
+              : "Send an invitation to a new team member. They will receive an email to set up their account."}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
@@ -109,7 +143,7 @@ export function AddUserDialog({ onUserAdded }: { onUserAdded?: () => void }) {
           </div>
           <DialogFooter>
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? "Sending Invite..." : "Send Invitation"}
+              {isLoading ? "Saving..." : user ? "Save Changes" : "Send Invitation"}
             </Button>
           </DialogFooter>
         </form>

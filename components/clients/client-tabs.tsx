@@ -22,8 +22,10 @@ import { ServiceRequestModal } from "@/components/services/service-request-modal
 import { DocumentUploadModal } from "@/components/documents/document-upload-modal"
 import { DocumentGeneratorModal } from "@/components/documents/document-generator-modal"
 import { DocumentPreviewModal } from "@/components/documents/document-preview-modal"
+import { ImmigrationKanban } from "@/components/immigration/immigration-kanban"
 import { COMMON_REQUIREMENTS, SERVICE_REQUIREMENTS } from "@/lib/constants"
 import { useState } from "react"
+import { Plus } from "lucide-react"
 
 export function ClientTabs() {
   // Mock active services for this client
@@ -50,6 +52,7 @@ export function ClientTabs() {
         <TabsTrigger value="filings">Filings</TabsTrigger>
         <TabsTrigger value="compliance">Compliance</TabsTrigger>
         <TabsTrigger value="services">Services</TabsTrigger>
+        <TabsTrigger value="immigration">Immigration</TabsTrigger>
         <TabsTrigger value="communications">Communications</TabsTrigger>
         <TabsTrigger value="tasks">Tasks</TabsTrigger>
       </TabsList>
@@ -405,6 +408,18 @@ export function ClientTabs() {
               </CardContent>
             </Card>
           ))}
+        </div>
+      </TabsContent>
+
+      <TabsContent value="immigration" className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-medium">Immigration Cases</h3>
+          <Button size="sm">
+            <Plus className="mr-2 h-4 w-4" /> New Case
+          </Button>
+        </div>
+        <div className="rounded-md border p-4">
+          <ImmigrationKanban />
         </div>
       </TabsContent>
 
