@@ -10,6 +10,8 @@ import type {
   FinancialStatement,
   AuditCase,
   BankService,
+  Property,
+  ExpediteJob,
 } from "@/types"
 import {
   mockClients,
@@ -21,6 +23,8 @@ import {
   mockFinancialStatements,
   mockAuditCases,
   mockBankServices,
+  mockProperties,
+  mockExpediteJobs,
 } from "@/lib/mock-data"
 
 // Mock API delay to simulate real network requests
@@ -254,6 +258,47 @@ export const api = {
         status: "PENDING",
         submittedDate: new Date().toISOString(),
         lastUpdate: new Date().toISOString(),
+      }
+    },
+  },
+  property: {
+    list: async (): Promise<Property[]> => {
+      await delay(800)
+      return mockProperties
+    },
+    create: async (data: any): Promise<Property> => {
+      await delay(1000)
+      console.log("[API] Created Property:", data)
+      return {
+        id: Math.random().toString(36).substr(2, 9),
+        ...data,
+        status: "Vacant",
+        financials: {
+          arrearsGyd: 0,
+          lastPaymentDate: null,
+        },
+      }
+    },
+  },
+  expediting: {
+    list: async (): Promise<ExpediteJob[]> => {
+      await delay(800)
+      return mockExpediteJobs
+    },
+    create: async (data: any): Promise<ExpediteJob> => {
+      await delay(1000)
+      console.log("[API] Created Expedite Job:", data)
+      return {
+        id: Math.random().toString(36).substr(2, 9),
+        ...data,
+        status: "PICKED_UP",
+        statusHistory: [
+          {
+            status: "PICKED_UP",
+            timestamp: new Date().toISOString(),
+            notes: "Initial pickup",
+          },
+        ],
       }
     },
   },

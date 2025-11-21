@@ -19,7 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Plus, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
-export function AddWorkshopDialog() {
+export function AddEmployeeDialog() {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()
@@ -27,12 +27,13 @@ export function AddWorkshopDialog() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1000))
     setLoading(false)
     setOpen(false)
     toast({
-      title: "Workshop Scheduled",
-      description: "The new training session has been added to the calendar.",
+      title: "Employee Added",
+      description: "New employee has been added to the registry.",
     })
   }
 
@@ -40,54 +41,63 @@ export function AddWorkshopDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="w-full">
-          <Plus className="mr-2 h-4 w-4" /> Add Workshop
+          <Plus className="mr-2 h-4 w-4" />
+          Add Employee
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Schedule New Workshop</DialogTitle>
-          <DialogDescription>Create a new training session or seminar.</DialogDescription>
+          <DialogTitle>Add New Employee</DialogTitle>
+          <DialogDescription>Enter employee details for payroll and NIS.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
-          <div className="grid gap-2">
-            <Label htmlFor="title">Workshop Title</Label>
-            <Input id="title" placeholder="e.g. Advanced Leadership" required />
-          </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="date">Date</Label>
-              <Input id="date" type="date" required />
+              <Label htmlFor="firstName">First Name</Label>
+              <Input id="firstName" required />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="time">Time</Label>
-              <Input id="time" type="time" required />
+              <Label htmlFor="lastName">Last Name</Label>
+              <Input id="lastName" required />
             </div>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="type">Type</Label>
+            <Label htmlFor="role">Job Title</Label>
+            <Input id="role" placeholder="e.g. Accountant" required />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="department">Department</Label>
             <Select>
               <SelectTrigger>
-                <SelectValue placeholder="Select type" />
+                <SelectValue placeholder="Select department" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="workshop">Workshop</SelectItem>
-                <SelectItem value="seminar">Seminar</SelectItem>
-                <SelectItem value="webinar">Webinar</SelectItem>
+                <SelectItem value="finance">Finance</SelectItem>
+                <SelectItem value="hr">Human Resources</SelectItem>
+                <SelectItem value="it">IT</SelectItem>
+                <SelectItem value="operations">Operations</SelectItem>
+                <SelectItem value="marketing">Marketing</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          <div className="grid gap-2">
-            <Label htmlFor="instructor">Instructor</Label>
-            <Input id="instructor" placeholder="Instructor Name" required />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="nis">NIS Number</Label>
+              <Input id="nis" placeholder="A-1234567" required />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="tin">TIN</Label>
+              <Input id="tin" placeholder="123-456-789" required />
+            </div>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="capacity">Capacity</Label>
-            <Input id="capacity" type="number" placeholder="e.g. 20" required />
+            <Label htmlFor="salary">Gross Monthly Salary (GYD)</Label>
+            <Input id="salary" type="number" placeholder="0.00" required />
           </div>
           <DialogFooter>
             <Button type="submit" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Schedule Workshop
+              Add Employee
             </Button>
           </DialogFooter>
         </form>

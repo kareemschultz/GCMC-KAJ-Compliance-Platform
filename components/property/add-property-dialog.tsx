@@ -16,10 +16,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Plus, Loader2 } from "lucide-react"
+import { Building2, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { api } from "@/lib/api"
 
-export function NewImmigrationCaseDialog() {
+export function AddPropertyDialog() {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()
@@ -27,58 +28,72 @@ export function NewImmigrationCaseDialog() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setLoading(false)
-    setOpen(false)
-    toast({
-      title: "Case Created",
-      description: "New immigration case has been started successfully.",
-    })
+    try {
+      // In a real app, we would gather form data here
+      await api.property.create({
+        address: "New Property",
+        type: "Residential",
+      })
+      setOpen(false)
+      toast({
+        title: "Property Added",
+        description: "New property has been added to the portfolio.",
+      })
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to add property.",
+        variant: "destructive",
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="w-full">
-          <Plus className="mr-2 h-4 w-4" /> New Application
+          <Building2 className="mr-2 h-4 w-4" />
+          Add Property
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>New Immigration Case</DialogTitle>
-          <DialogDescription>Start a new visa or work permit application.</DialogDescription>
+          <DialogTitle>Add New Property</DialogTitle>
+          <DialogDescription>Enter the details of the new property to manage.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
           <div className="grid gap-2">
-            <Label htmlFor="client">Client Name</Label>
-            <Input id="client" placeholder="Search client..." required />
+            <Label htmlFor="address">Property Address</Label>
+            <Input id="address" placeholder="123 Main St, Georgetown" required />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="type">Application Type</Label>
-            <Select>
+            <Label htmlFor="type">Property Type</Label>
+            <Select defaultValue="Residential">
               <SelectTrigger>
                 <SelectValue placeholder="Select type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="work-permit">Work Permit</SelectItem>
-                <SelectItem value="visa-extension">Visa Extension</SelectItem>
-                <SelectItem value="citizenship">Citizenship by Naturalization</SelectItem>
-                <SelectItem value="marriage">Marriage Registration</SelectItem>
+                <SelectItem value="Residential">Residential</SelectItem>
+                <SelectItem value="Commercial">Commercial</SelectItem>
+                <SelectItem value="Industrial">Industrial</SelectItem>
+                <SelectItem value="Land">Land</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="nationality">Nationality</Label>
-            <Input id="nationality" placeholder="e.g. Brazilian" required />
+            <Label htmlFor="owner">Owner Name</Label>
+            <Input id="owner" placeholder="Client Name" required />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="passport">Passport Number</Label>
-            <Input id="passport" placeholder="Passport #" required />
+            <Label htmlFor="fee">Management Fee (%)</Label>
+            <Input id="fee" type="number" placeholder="10" min="0" max="100" required />
           </div>
           <DialogFooter>
             <Button type="submit" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Create Case
+              Add Property
             </Button>
           </DialogFooter>
         </form>

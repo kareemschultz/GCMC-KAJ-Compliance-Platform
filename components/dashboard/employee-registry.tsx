@@ -13,8 +13,9 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { MoreHorizontal, Plus, Search, FileText, UserCog } from "lucide-react"
+import { MoreHorizontal, Search, FileText, UserCog } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { AddEmployeeDialog } from "./add-employee-dialog"
 
 // Mock data for employees
 const initialEmployees = [
@@ -100,10 +101,7 @@ export function EmployeeRegistry() {
             />
           </div>
         </div>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Add Employee
-        </Button>
+        <AddEmployeeDialog />
       </div>
 
       <Card>

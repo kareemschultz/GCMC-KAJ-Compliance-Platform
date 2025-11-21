@@ -76,8 +76,8 @@ export function DocumentGeneratorModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          <FileText className="mr-2 h-4 w-4" /> Generate from Template
+        <Button className="w-full">
+          <FileText className="mr-2 h-4 w-4" /> Generate Document
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">

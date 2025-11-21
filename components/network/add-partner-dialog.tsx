@@ -39,7 +39,7 @@ export function AddPartnerDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button className="w-full">
           <Plus className="mr-2 h-4 w-4" /> Add Partner
         </Button>
       </DialogTrigger>

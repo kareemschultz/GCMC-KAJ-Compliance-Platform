@@ -24,3 +24,5 @@ export function useBrand() {
   }
   return context
 }
+
+export const useBrandContext = useBrand

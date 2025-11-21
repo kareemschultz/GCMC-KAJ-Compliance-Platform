@@ -4,10 +4,10 @@ import { useState } from "react"
 import { Package, MapPin, Clock, Check, Truck, Building } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { mockExpediteJobs } from "@/lib/mock-data"
 import type { ExpediteJob } from "@/types"
 import { cn } from "@/lib/utils"
+import { AddExpediteJobDialog } from "./add-expedite-job-dialog"
 
 const statusConfig = {
   PICKED_UP: {
@@ -65,10 +65,7 @@ export function ExpediteTracker() {
             <CardTitle>Expediting Tracker</CardTitle>
             <CardDescription>Track documents through government agencies</CardDescription>
           </div>
-          <Button>
-            <Package className="mr-2 h-4 w-4" />
-            New Expedite Job
-          </Button>
+          <AddExpediteJobDialog />
         </div>
       </CardHeader>
       <CardContent>

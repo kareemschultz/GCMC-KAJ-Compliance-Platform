@@ -1,13 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { Building2, Calendar, AlertCircle, Download } from "lucide-react"
+import { Calendar, AlertCircle, Download } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { mockProperties } from "@/lib/mock-data"
 import type { Property } from "@/types"
+import { AddPropertyDialog } from "./add-property-dialog"
 
 export function PropertyManager() {
   const [properties] = useState<Property[]>(mockProperties)
@@ -31,10 +32,7 @@ export function PropertyManager() {
             <CardTitle>Property Portfolio</CardTitle>
             <CardDescription>Manage rental properties and tenant information</CardDescription>
           </div>
-          <Button>
-            <Building2 className="mr-2 h-4 w-4" />
-            Add Property
-          </Button>
+          <AddPropertyDialog />
         </div>
       </CardHeader>
       <CardContent>

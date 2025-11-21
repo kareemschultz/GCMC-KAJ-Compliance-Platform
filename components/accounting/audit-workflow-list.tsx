@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress"
 import { FileCheck, ArrowRight } from "lucide-react"
 import type { AuditCase } from "@/types"
 import { format } from "date-fns"
+import { AddAuditCaseDialog } from "./add-audit-case-dialog"
 
 interface AuditWorkflowListProps {
   data: AuditCase[]
@@ -22,8 +23,13 @@ export function AuditWorkflowList({ data, isLoading }: AuditWorkflowListProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Audit Workflow</CardTitle>
-        <CardDescription>Track ongoing audits for NGOs and Co-operative Societies</CardDescription>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle>Audit Workflow</CardTitle>
+            <CardDescription>Track ongoing audits for NGOs and Co-operative Societies</CardDescription>
+          </div>
+          <AddAuditCaseDialog />
+        </div>
       </CardHeader>
       <CardContent>
         <Table>

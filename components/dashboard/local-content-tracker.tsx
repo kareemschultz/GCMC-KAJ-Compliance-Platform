@@ -95,7 +95,7 @@ export function LocalContentTracker() {
               key={req.id}
               className={cn(
                 "flex items-start justify-between p-3 rounded-lg border",
-                req.status === "uploaded" ? "bg-green-50 border-green-200" : "bg-white",
+                req.status === "uploaded" ? "bg-green-50 border-green-200" : "bg-white text-slate-900",
               )}
             >
               <div className="flex gap-3">
@@ -110,7 +110,9 @@ export function LocalContentTracker() {
                   <h4 className={cn("font-medium text-sm", req.status === "uploaded" && "text-green-900")}>
                     {req.label}
                   </h4>
-                  <p className="text-xs text-muted-foreground">{req.description}</p>
+                  <p className={cn("text-xs", req.status === "uploaded" ? "text-green-700" : "text-slate-500")}>
+                    {req.description}
+                  </p>
                   {req.fileName && (
                     <p className="text-xs text-green-700 mt-1 font-medium flex items-center gap-1">
                       <FileText className="h-3 w-3" /> {req.fileName}

@@ -32,6 +32,13 @@ The project is built using a modern web stack optimized for performance, securit
   - `/network`: Partner directory & networking hub.
   - `/paralegal`: Legal document generation & management.
   - `/settings`: System configuration.
+  - `/property`: **(New)** Property management.
+    - `/portfolio`: Manage rental properties, tenants, and lease agreements.
+    - `/financials`: Track monthly rent, management fees, and arrears.
+    - `/alerts`: Automated notifications for expiring leases.
+  - `/expediting`: **(New)** Expediting services.
+    - `/documents`: Visual timeline of document processing through government agencies (GRA, Deeds, etc.).
+    - `/status`: Real-time tracking from "Picked Up" to "Delivered".
 - `/components`: Reusable UI components and feature-specific widgets.
 - `/lib`: Utility functions, constants, and shared logic.
 - `/types`: TypeScript definitions for data models.
@@ -66,6 +73,13 @@ The project is built using a modern web stack optimized for performance, securit
     - **Partner Directory**: Database of trusted contacts (Real Estate, Legal, IT).
 - **Paralegal Services**:
     - **Document Generator**: Create Affidavits, Business Agreements, and Deeds of Gift.
+- **Property Management**:
+    - **Portfolio Tracker**: Manage rental properties, tenants, and lease agreements.
+    - **Financials**: Track monthly rent, management fees, and arrears.
+    - **Alerts**: Automated notifications for expiring leases.
+- **Expediting Services**:
+    - **Document Tracker**: Visual timeline of document processing through government agencies (GRA, Deeds, etc.).
+    - **Status Updates**: Real-time tracking from "Picked Up" to "Delivered".
 
 ### Client Portal
 - **Self-Service**: Clients can log in to view their profile, documents, and filing status.
