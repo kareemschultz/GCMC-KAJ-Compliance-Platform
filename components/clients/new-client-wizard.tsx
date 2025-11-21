@@ -26,7 +26,11 @@ import { useToast } from "@/components/ui/use-toast"
 import { api } from "@/lib/api"
 import { useRouter } from "next/navigation"
 
-export function NewClientWizard() {
+interface NewClientWizardProps {
+  onClientCreated?: (client: any) => void
+}
+
+export function NewClientWizard({ onClientCreated }: NewClientWizardProps) {
   const [open, setOpen] = React.useState(false)
   const [step, setStep] = React.useState(1)
   const [isLoading, setIsLoading] = React.useState(false)
@@ -90,11 +94,47 @@ export function NewClientWizard() {
   }
 
   const handleNext = () => {
-    if (validateStep(step) && step < totalSteps) setStep(step + 1)
-    else if (!validateStep(step)) {
+    console.log('handleNext called, step:', step, 'validation result:', validateStep(step))
+    console.log('Form data for validation:', {
+      type: formData.type,
+      primaryIdType: formData.primaryIdType,
+      primaryIdNumber: formData.primaryIdNumber,
+      dateOfBirth: formData.dateOfBirth,
+      firstName: formData.firstName,
+      surname: formData.surname,
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone
+    })
+
+    if (validateStep(step) && step < totalSteps) {
+      setStep(step + 1)
+    } else if (!validateStep(step)) {
+      let errorMessage = "Please fill in all required fields correctly."
+
+      if (step === 1) {
+        if (formData.type === "INDIVIDUAL") {
+          errorMessage = "Please fill in First Name and Surname."
+        } else {
+          errorMessage = "Please fill in Company Name."
+        }
+      } else if (step === 2) {
+        errorMessage = "Please fill in Email and Phone Number."
+      } else if (step === 3) {
+        if (formData.type === "INDIVIDUAL") {
+          if (!formData.dateOfBirth) {
+            errorMessage = "Date of Birth is required. Please go back to Step 1 and fill it in."
+          } else if (!formData.primaryIdType || formData.primaryIdNumber.length <= 3) {
+            errorMessage = "Please select an ID type and enter the ID number."
+          }
+        } else {
+          errorMessage = "Please provide either TIN or Business Registration Number."
+        }
+      }
+
       toast({
         title: "Validation Error",
-        description: "Please fill in all required fields correctly.",
+        description: errorMessage,
         variant: "destructive",
       })
     }
@@ -109,16 +149,35 @@ export function NewClientWizard() {
       setIsLoading(true)
       console.log("Uploading files:", formData.uploadedFiles)
 
-      await api.clients.create(formData)
+      const response = await api.clients.create(formData)
+
+      // Create client object for callback
+      const newClient = {
+        id: response.data?.id || `client-${Date.now()}`,
+        name: formData.name || `${formData.firstName} ${formData.surname}`.trim(),
+        type: formData.type,
+        email: formData.email,
+        phone: formData.phone,
+        tin: formData.tin,
+        status: "Active",
+        compliance: 75, // Default compliance score
+        documents: Object.keys(formData.uploadedFiles).length,
+        lastActivity: "Just now",
+        createdAt: new Date().toISOString()
+      }
 
       toast({
         title: "Client Created Successfully",
-        description: `${formData.name} has been added to the platform with ${Object.keys(formData.uploadedFiles).length} documents.`,
+        description: `${newClient.name} has been added to the platform with ${Object.keys(formData.uploadedFiles).length} documents.`,
       })
+
+      // Call the callback if provided
+      if (onClientCreated) {
+        onClientCreated(newClient)
+      }
 
       setOpen(false)
       setStep(1)
-      router.push("/clients/1")
 
       setFormData({
         type: "COMPANY",
@@ -828,7 +887,11 @@ export function NewClientWizard() {
             <ArrowLeft className="mr-2 h-4 w-4" /> Back
           </Button>
           {step < totalSteps ? (
-            <Button onClick={handleNext}>
+            <Button
+              onClick={handleNext}
+              disabled={!validateStep(step)}
+              className={!validateStep(step) ? "opacity-50 cursor-not-allowed" : ""}
+            >
               Next <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           ) : (

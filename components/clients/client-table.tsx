@@ -1,6 +1,7 @@
 "use client"
 
-import { MoreHorizontal, FileText, ArrowUpDown } from "lucide-react"
+import * as React from "react"
+import { MoreHorizontal, FileText, ArrowUpDown, RefreshCw, Users, Search } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -15,67 +16,81 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Progress } from "@/components/ui/progress"
+import { Skeleton } from "@/components/ui/skeleton"
 import Link from "next/link"
 
-const clients = [
-  {
-    id: "1",
-    name: "ABC Corporation Ltd",
-    initials: "AB",
-    type: "Company",
-    tin: "123-456-789",
-    compliance: 85,
-    documents: 24,
-    lastActivity: "2 hours ago",
-    status: "Active",
-  },
-  {
-    id: "2",
-    name: "John Smith Trading",
-    initials: "JS",
-    type: "Sole Trader",
-    tin: "987-654-321",
-    compliance: 92,
-    documents: 12,
-    lastActivity: "1 day ago",
-    status: "Active",
-  },
-  {
-    id: "3",
-    name: "Guyana Tech Solutions",
-    initials: "GT",
-    type: "Company",
-    tin: "456-789-123",
-    compliance: 65,
-    documents: 18,
-    lastActivity: "3 days ago",
-    status: "Pending",
-  },
-  {
-    id: "4",
-    name: "Sarah Jones",
-    initials: "SJ",
-    type: "Individual",
-    tin: "789-123-456",
-    compliance: 45,
-    documents: 5,
-    lastActivity: "1 week ago",
-    status: "Inactive",
-  },
-  {
-    id: "5",
-    name: "Georgetown Retailers",
-    initials: "GR",
-    type: "Partnership",
-    tin: "321-654-987",
-    compliance: 78,
-    documents: 32,
-    lastActivity: "5 hours ago",
-    status: "Active",
-  },
-]
+interface Client {
+  id: string
+  name: string
+  type: string
+  email: string
+  phone: string
+  tin: string
+  status: string
+  compliance: number
+  documents: number
+  lastActivity: string
+  createdAt: string
+}
 
-export function ClientTable() {
+interface ClientTableProps {
+  clients: Client[]
+  loading?: boolean
+  onRefresh?: () => void
+}
+
+function getInitials(name: string): string {
+  return name
+    .split(' ')
+    .map(part => part.charAt(0))
+    .join('')
+    .toUpperCase()
+    .slice(0, 2)
+}
+
+function getStatusColor(status: string): "default" | "secondary" | "destructive" | "outline" {
+  switch (status.toLowerCase()) {
+    case 'active':
+      return 'default'
+    case 'pending':
+      return 'secondary'
+    case 'inactive':
+      return 'destructive'
+    default:
+      return 'outline'
+  }
+}
+
+function getComplianceColor(compliance: number): string {
+  if (compliance >= 85) return 'text-green-600'
+  if (compliance >= 70) return 'text-blue-600'
+  if (compliance >= 50) return 'text-yellow-600'
+  return 'text-red-600'
+}
+
+function LoadingSkeleton() {
+  return (
+    <TableRow>
+      <TableCell><Skeleton className="h-4 w-4" /></TableCell>
+      <TableCell><div className="flex items-center gap-3">
+        <Skeleton className="h-8 w-8 rounded-full" />
+        <div className="space-y-1">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-3 w-24" />
+        </div>
+      </div></TableCell>
+      <TableCell><Skeleton className="h-4 w-16" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-24" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-16" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-8" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-20" /></TableCell>
+      <TableCell><Skeleton className="h-6 w-16" /></TableCell>
+      <TableCell><Skeleton className="h-8 w-8" /></TableCell>
+    </TableRow>
+  )
+}
+
+export function ClientTable({ clients, loading = false, onRefresh }: ClientTableProps) {
   return (
     <div className="rounded-md border bg-card">
       <Table>
@@ -99,89 +114,126 @@ export function ClientTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {clients.map((client) => (
-            <TableRow key={client.id}>
-              <TableCell>
-                <Checkbox />
-              </TableCell>
-              <TableCell>
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-9 w-9">
-                    <AvatarImage src={`/placeholder-text.png?text=${client.initials}`} alt={client.name} />
-                    <AvatarFallback>{client.initials}</AvatarFallback>
-                  </Avatar>
-                  <div className="flex flex-col">
-                    <Link href={`/clients/${client.id}`} className="font-medium hover:underline">
-                      {client.name}
-                    </Link>
-                    <span className="text-xs text-muted-foreground">{client.tin}</span>
+          {loading ? (
+            // Loading state
+            <>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <LoadingSkeleton key={index} />
+              ))}
+            </>
+          ) : clients.length === 0 ? (
+            // Empty state
+            <TableRow>
+              <TableCell colSpan={9} className="text-center py-12">
+                <div className="flex flex-col items-center gap-4">
+                  <Users className="h-12 w-12 text-muted-foreground" />
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-medium">No clients found</h3>
+                    <p className="text-muted-foreground text-sm">
+                      {onRefresh ? "Try refreshing or create your first client." : "Create your first client to get started."}
+                    </p>
                   </div>
-                </div>
-              </TableCell>
-              <TableCell>
-                <Badge variant="outline">{client.type}</Badge>
-              </TableCell>
-              <TableCell className="font-mono text-xs">{client.tin}</TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Progress
-                    value={client.compliance}
-                    className="w-[60px] h-2"
-                    indicatorClassName={
-                      client.compliance >= 90
-                        ? "bg-green-500"
-                        : client.compliance >= 70
-                          ? "bg-blue-500"
-                          : client.compliance >= 50
-                            ? "bg-yellow-500"
-                            : "bg-red-500"
-                    }
-                  />
-                  <span className="text-xs font-medium">{client.compliance}%</span>
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="flex items-center gap-1 text-muted-foreground">
-                  <FileText className="h-3 w-3" />
-                  <span className="text-xs">{client.documents}</span>
-                </div>
-              </TableCell>
-              <TableCell className="text-muted-foreground text-sm">{client.lastActivity}</TableCell>
-              <TableCell>
-                <Badge
-                  variant={
-                    client.status === "Active" ? "default" : client.status === "Pending" ? "secondary" : "destructive"
-                  }
-                  className={client.status === "Active" ? "bg-green-500 hover:bg-green-600" : ""}
-                >
-                  {client.status}
-                </Badge>
-              </TableCell>
-              <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                      <span className="sr-only">Open menu</span>
-                      <MoreHorizontal className="h-4 w-4" />
+                  {onRefresh && (
+                    <Button variant="outline" onClick={onRefresh} className="gap-2">
+                      <RefreshCw className="h-4 w-4" />
+                      Refresh
                     </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem asChild>
-                      <Link href={`/clients/${client.id}`}>View Details</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>Edit Client</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-destructive">Delete Client</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                  )}
+                </div>
               </TableCell>
             </TableRow>
-          ))}
+          ) : (
+            // Client rows
+            clients.map((client) => (
+              <TableRow key={client.id}>
+                <TableCell>
+                  <Checkbox />
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-9 w-9">
+                      <AvatarFallback>{getInitials(client.name)}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col">
+                      <Link href={`/clients/${client.id}`} className="font-medium hover:underline">
+                        {client.name}
+                      </Link>
+                      <span className="text-xs text-muted-foreground">{client.email}</span>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Badge variant="outline">{client.type}</Badge>
+                </TableCell>
+                <TableCell className="font-mono text-xs">{client.tin}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <Progress
+                      value={client.compliance}
+                      className="w-[60px] h-2"
+                      indicatorClassName={
+                        client.compliance >= 90
+                          ? "bg-green-500"
+                          : client.compliance >= 70
+                            ? "bg-blue-500"
+                            : client.compliance >= 50
+                              ? "bg-yellow-500"
+                              : "bg-red-500"
+                      }
+                    />
+                    <span className={`text-xs font-medium ${getComplianceColor(client.compliance)}`}>
+                      {client.compliance}%
+                    </span>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-1 text-muted-foreground">
+                    <FileText className="h-3 w-3" />
+                    <span className="text-xs">{client.documents}</span>
+                  </div>
+                </TableCell>
+                <TableCell className="text-muted-foreground text-sm">{client.lastActivity}</TableCell>
+                <TableCell>
+                  <Badge variant={getStatusColor(client.status)}>
+                    {client.status}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <span className="sr-only">Open menu</span>
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuItem asChild>
+                        <Link href={`/clients/${client.id}`}>View Details</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>Edit Client</DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem className="text-destructive">Delete Client</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
-      <div className="flex items-center justify-end space-x-2 p-4">
-        <div className="flex-1 text-sm text-muted-foreground">Showing 1-5 of 156 clients</div>
+      <div className="flex items-center justify-between p-4 border-t">
+        <div className="flex items-center gap-4">
+          <div className="text-sm text-muted-foreground">
+            Showing {clients.length} client{clients.length !== 1 ? 's' : ''}
+          </div>
+          {onRefresh && (
+            <Button variant="ghost" size="sm" onClick={onRefresh} className="gap-2 text-muted-foreground">
+              <RefreshCw className="h-4 w-4" />
+              Refresh
+            </Button>
+          )}
+        </div>
         <div className="space-x-2">
           <Button variant="outline" size="sm" disabled>
             Previous

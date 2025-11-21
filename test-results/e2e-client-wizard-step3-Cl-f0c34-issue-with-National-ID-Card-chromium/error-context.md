@@ -335,45 +335,34 @@
                   - button [disabled]: Previous
                   - button: Next
   - list
-  - generic [ref=e5] [cursor=pointer]:
-    - button "Open Next.js Dev Tools" [ref=e6]:
-      - img [ref=e7]
-    - generic [ref=e10]:
-      - button "Open issues overlay" [ref=e11]:
-        - generic [ref=e12]:
-          - generic [ref=e13]: "1"
-          - generic [ref=e14]: "2"
-        - generic [ref=e15]:
-          - text: Issue
-          - generic [ref=e16]: s
-      - button "Collapse issues badge" [ref=e17]:
-        - img [ref=e18]
+  - button "Open Next.js Dev Tools" [ref=e6] [cursor=pointer]:
+    - img [ref=e7]
   - alert
-  - dialog "New Client Onboarding" [ref=e21]:
+  - dialog "New Client Onboarding" [ref=e11]:
+    - generic [ref=e12]:
+      - heading "New Client Onboarding" [level=2] [ref=e13]
+      - paragraph [ref=e14]: "Step 1 of 5: Basic Information"
     - generic [ref=e22]:
-      - heading "New Client Onboarding" [level=2] [ref=e23]
-      - paragraph [ref=e24]: "Step 1 of 5: Basic Information"
-    - generic [ref=e32]:
-      - generic [ref=e33]:
-        - generic [ref=e34]: Client Type
-        - combobox [active] [ref=e35]:
-          - generic [ref=e37]: Company
-          - generic [ref=e38]:
-            - button [ref=e39]:
+      - generic [ref=e23]:
+        - generic [ref=e24]: Client Type
+        - combobox [active] [ref=e25]:
+          - generic [ref=e27]: Company
+          - generic [ref=e28]:
+            - button [ref=e29] [cursor=pointer]:
               - img
             - img
-      - generic [ref=e40]:
-        - generic [ref=e41]: Business Name
-        - textbox "Business Name" [ref=e42]:
+      - generic [ref=e30]:
+        - generic [ref=e31]: Business Name
+        - textbox "Business Name" [ref=e32]:
           - /placeholder: ABC Corp Ltd
-    - generic [ref=e43]:
+    - generic [ref=e33]:
       - button "Back" [disabled]:
         - img
         - text: Back
-      - button "Next" [ref=e44]:
+      - button "Next" [ref=e34]:
         - text: Next
         - img
-    - button "Close" [ref=e45]:
+    - button "Close" [ref=e35]:
       - img
-      - generic [ref=e46]: Close
+      - generic [ref=e36]: Close
 ```
