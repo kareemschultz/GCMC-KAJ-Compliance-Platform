@@ -11,7 +11,14 @@
     "db:studio": "prisma studio",
     "dev": "next dev",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "next start",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:report": "playwright show-report",
+    "test:e2e:install": "playwright install",
+    "test:setup": "playwright install && pnpm run db:push && pnpm run db:seed"
   },
   "dependencies": {
     "@hello-pangea/dnd": "latest",
@@ -72,10 +79,12 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.1",
     "@tailwindcss/postcss": "^4.1.9",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "playwright": "^1.56.1",
     "postcss": "^8.5",
     "prisma": "^5.22.0",
     "tailwindcss": "^4.1.9",
