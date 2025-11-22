@@ -148,22 +148,24 @@ export function NewClientWizard({ onClientCreated }: NewClientWizardProps) {
     try {
       setIsLoading(true)
       console.log("Uploading files:", formData.uploadedFiles)
+      console.log("Submitting client data:", formData)
 
       const response = await api.clients.create(formData)
+      console.log("API response:", response)
 
-      // Create client object for callback
+      // Use actual database response to create client object
       const newClient = {
-        id: response.data?.id || `client-${Date.now()}`,
-        name: formData.name || `${formData.firstName} ${formData.surname}`.trim(),
-        type: formData.type,
-        email: formData.email,
-        phone: formData.phone,
-        tin: formData.tin,
-        status: "Active",
-        compliance: 75, // Default compliance score
+        id: response.id,
+        name: response.name || formData.name || `${formData.firstName} ${formData.surname}`.trim(),
+        type: response.type || formData.type,
+        email: response.email || formData.email,
+        phone: response.phone || formData.phone,
+        tin: response.tinNumber || response.tin || formData.tin,
+        status: response.isActive ? "Active" : "Inactive",
+        compliance: 75, // Default compliance score for UI
         documents: Object.keys(formData.uploadedFiles).length,
         lastActivity: "Just now",
-        createdAt: new Date().toISOString()
+        createdAt: response.createdAt || new Date().toISOString()
       }
 
       toast({
@@ -208,9 +210,10 @@ export function NewClientWizard({ onClientCreated }: NewClientWizardProps) {
         uploadedFiles: {},
       })
     } catch (error) {
+      console.error("Error creating client:", error)
       toast({
         title: "Error",
-        description: "Failed to create client. Please try again.",
+        description: `Failed to create client: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`,
         variant: "destructive",
       })
     } finally {

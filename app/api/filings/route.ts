@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
         where,
         skip,
         take: limit,
-        orderBy: { createdAt: "desc" },
+        orderBy: { filingDate: "desc" },
         include: {
           client: {
             select: { id: true, name: true, email: true }

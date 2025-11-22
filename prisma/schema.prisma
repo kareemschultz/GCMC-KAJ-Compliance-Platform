@@ -8,19 +8,12 @@ generator client {
 }
 
 // --- USER & AUTHENTICATION ---
-enum UserRole {
-  SUPER_ADMIN     // You (Access everything)
-  GCMC_STAFF      // Sees Immigration, Legal, Training
-  KAJ_STAFF       // Sees Tax, Payroll, NIS
-  CLIENT          // External user (Client Portal)
-}
-
 model User {
   id            String    @id @default(uuid())
   email         String    @unique
   fullName      String
   passwordHash  String
-  role          UserRole  @default(CLIENT)
+  role          String    @default("CLIENT") // SUPER_ADMIN, GCMC_STAFF, KAJ_STAFF, CLIENT
   lastLogin     DateTime?
   isActive      Boolean   @default(true)
   createdAt     DateTime  @default(now())
@@ -106,10 +99,10 @@ model VisaApplication {
 model LegalDocument {
   id            String    @id @default(uuid())
   docType       String    // "WILL", "AFFIDAVIT", "AGREEMENT_SALE"
-  contentJson   Json      // Stores the form data (e.g. "Beneficiary Name")
+  contentJson   String    // Stores the form data as JSON string (e.g. "Beneficiary Name")
   pdfUrl        String?   // Link to generated PDF
   createdAt     DateTime  @default(now())
-  
+
   client        Client    @relation(fields: [clientId], references: [id])
   clientId      String
 }
@@ -161,9 +154,9 @@ model FinancialStatement {
   id            String    @id @default(uuid())
   type          String    // "INCOME_STATEMENT" | "CASH_FLOW"
   period        String
-  data          Json
+  data          String    // JSON data as string
   createdAt     DateTime  @default(now())
-  
+
   client        Client    @relation(fields: [clientId], references: [id])
   clientId      String
 }
@@ -252,8 +245,8 @@ model ExpediteJob {
   assignedRunner      String
   expectedCompletion  DateTime
   status              String    // "PICKED_UP", "AT_AGENCY", "PROCESSING", "READY_FOR_COLLECTION", "OUT_FOR_DELIVERY", "COMPLETED"
-  statusHistoryJson   Json      // Stores status history as JSON
-  
+  statusHistoryJson   String    // Stores status history as JSON string
+
   client        Client    @relation(fields: [clientId], references: [id])
   createdAt     DateTime  @default(now())
 }

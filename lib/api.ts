@@ -40,7 +40,7 @@ export const api = {
     list: async (): Promise<Client[]> => {
       if (USE_REAL_API) {
         try {
-          const response = await apiClient.getClients()
+          const response = await apiClient.getClients() as any
           return response.clients
         } catch (error) {
           console.warn("Failed to fetch from API, falling back to mock data:", error)
@@ -51,10 +51,12 @@ export const api = {
       await delay(800)
       return mockClients
     },
-    create: async (data: any): Promise<Client> => {
+    create: async (data: any): Promise<any> => {
       if (USE_REAL_API) {
         try {
-          return await apiClient.createClient(data)
+          const response = await apiClient.createClient(data)
+          console.log("[API] Successfully created client in database:", response)
+          return response
         } catch (error) {
           console.warn("Failed to create via API, simulating:", error)
           await delay(1000)

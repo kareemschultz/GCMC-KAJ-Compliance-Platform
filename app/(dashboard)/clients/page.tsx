@@ -132,11 +132,17 @@ export default function ClientsPage() {
   }
 
   const handleClientCreated = (newClient: Client) => {
+    console.log("handleClientCreated called with:", newClient)
     setClients(prev => [newClient, ...prev])
     toast({
       title: "Success",
       description: `Client "${newClient.name}" created successfully.`,
     })
+
+    // Also refetch data from the server to ensure consistency
+    setTimeout(() => {
+      fetchClients()
+    }, 1000)
   }
 
   return (
