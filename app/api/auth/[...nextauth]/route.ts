@@ -61,7 +61,7 @@ const handler = NextAuth({
         sameSite: "lax",
         path: "/",
         secure: process.env.NODE_ENV === "production",
-        domain: process.env.NODE_ENV === "production" ? ".gcmc.gy" : "localhost"
+        domain: process.env.NODE_ENV === "production" && process.env.NEXTAUTH_URL?.includes("gcmc.gy") ? ".gcmc.gy" : undefined
       }
     },
     callbackUrl: {

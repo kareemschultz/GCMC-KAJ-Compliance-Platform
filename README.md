@@ -1,7 +1,8 @@
 # GK Enterprise Suite
 
-![Version](https://img.shields.io/badge/version-3.3.0-blue.svg)
+![Version](https://img.shields.io/badge/version-3.3.1-blue.svg)
 ![Status](https://img.shields.io/badge/status-production--ready-brightgreen.svg)
+![Docker](https://img.shields.io/badge/docker-ready-2496ED.svg)
 ![Tech](https://img.shields.io/badge/stack-Next.js_16_|_Tailwind_v4_|_TypeScript-black.svg)
 ![Tests](https://img.shields.io/badge/tests-65_E2E_tests-brightgreen.svg)
 ![Security](https://img.shields.io/badge/security-production--hardened-blue.svg)
@@ -10,19 +11,20 @@
 
 This platform merges the financial rigor of **KAJ** with the strategic consultancy of **GCMC** into a single, powerful dashboard. It streamlines tax filings, accounting, payroll, immigration processing, client management, and corporate training with enterprise-grade security and comprehensive testing.
 
-## 🚀 Latest Production Ready Release (v3.3.0)
+## 🚀 Latest Production Ready Release (v3.3.1)
 
-**✅ CLIENT PERSISTENCE ISSUE RESOLVED - PRODUCTION READY**
+**✅ DOCKER DEPLOYMENT READY - FULLY CONTAINERIZED**
 
-Critical database and client persistence fixes ensure full production readiness:
+Complete Docker containerization with production-grade infrastructure:
 
-- **🎯 Fixed Client Deletion After Refresh**: Clients now persist properly with real database IDs
-- **🗄️ Database Infrastructure**: Working SQLite (dev) and PostgreSQL (production) setup
-- **📋 Production Guide**: Complete deployment guide with Docker Compose configuration
-- **🔧 Build System**: Production builds succeed with TypeScript error handling
-- **⚙️ Enhanced Configuration**: Next.js optimization with proper containerization support
+- **🐳 Docker Deployment**: Full containerization with PostgreSQL, PgAdmin, and application
+- **🔧 Prisma Alpine Linux Fix**: Resolved SSL compatibility and binary targets for production containers
+- **🔐 Authentication System**: NextAuth.js properly configured for Docker localhost access
+- **🗄️ Database Infrastructure**: PostgreSQL 14-alpine running in Docker with persistent data
+- **📊 Health Monitoring**: Production health checks with `/api/health` endpoint
+- **🛡️ Production Security**: Enhanced cookie handling and secure authentication flow
 
-> **Status**: Application is fully production-ready with real database persistence and comprehensive deployment documentation. Running on http://localhost:3001
+> **Status**: Application is fully containerized and production-ready with Docker Compose orchestration. Running on http://localhost:3000
 
 ---
 
@@ -120,22 +122,54 @@ The platform is designed around two core business pillars, unified by a global *
 | KAJ Staff | kaj@gcmc.gy | kaj123 | Tax, Accounting, Payroll |
 | Client | client@abccorp.gy | client123 | Portal access only |
 
-### 🐳 Docker Setup
+### 🐳 Docker Setup (Recommended for Production)
 
-To run the application with database in containers:
+**Quick Start with Docker Compose:**
 
-1.  **Start all services**
+1.  **Prerequisites**
+    - Docker Desktop installed and running
+    - Git for cloning the repository
+
+2.  **Deploy with Docker Compose**
     \`\`\`bash
+    # Clone the repository
+    git clone https://github.com/kareemschultz/GCMC-KAJ-Compliance-Platform.git
+    cd GCMC-KAJ-Compliance-Platform
+
+    # Copy production environment template
+    cp .env.production .env.production
+    # Edit .env.production with your production values if needed
+
+    # Start all services (PostgreSQL + Application + PgAdmin)
     docker-compose up -d
     \`\`\`
 
-2.  **Access the application**
-    Open [http://localhost:3000](http://localhost:3000)
+3.  **Access the Application**
+    - **Main Application**: [http://localhost:3000](http://localhost:3000)
+    - **Database Admin (PgAdmin)**: [http://localhost:5050](http://localhost:5050)
+    - **Health Check**: [http://localhost:3000/api/health](http://localhost:3000/api/health)
 
-3.  **Stop services**
+4.  **Verify Deployment**
+    \`\`\`bash
+    # Check container status
+    docker ps
+
+    # View application logs
+    docker logs gcmc-compliance-suite
+
+    # Test health endpoint
+    curl http://localhost:3000/api/health
+    \`\`\`
+
+5.  **Stop Services**
     \`\`\`bash
     docker-compose down
     \`\`\`
+
+#### **What Gets Deployed**
+- **gcmc-compliance-suite**: Main application container (Next.js 16 + TypeScript)
+- **gcmc-postgres**: PostgreSQL 14-alpine database with persistent data
+- **gcmc-pgadmin**: Database administration interface
 
 ---
 
