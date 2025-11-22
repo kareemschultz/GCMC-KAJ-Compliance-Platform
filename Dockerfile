@@ -72,4 +72,13 @@ ENV PORT 3000
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
 
+# Health check
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:3000/api/health || exit 1
+
+# Install curl for health check
+USER root
+RUN apk add --no-cache curl
+USER nextjs
+
 CMD ["node", "server.js"]
