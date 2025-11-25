@@ -1,0 +1,306 @@
+{
+  "config": {
+    "configFile": "/home/kareem/GK-Enterprise-Suite/playwright.config.ts",
+    "rootDir": "/home/kareem/GK-Enterprise-Suite/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "/home/kareem/GK-Enterprise-Suite/tests/global-setup.ts",
+    "globalTeardown": "/home/kareem/GK-Enterprise-Suite/tests/global-teardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "playwright-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/results.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/home/kareem/GK-Enterprise-Suite/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/home/kareem/GK-Enterprise-Suite/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kareem/GK-Enterprise-Suite/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/home/kareem/GK-Enterprise-Suite/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kareem/GK-Enterprise-Suite/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/home/kareem/GK-Enterprise-Suite/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kareem/GK-Enterprise-Suite/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/home/kareem/GK-Enterprise-Suite/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kareem/GK-Enterprise-Suite/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/home/kareem/GK-Enterprise-Suite/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "ultimate-comprehensive.spec.ts",
+      "file": "ultimate-comprehensive.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "ULTIMATE 100% COMPREHENSIVE TESTING",
+          "file": "ultimate-comprehensive.spec.ts",
+          "line": 82,
+          "column": 6,
+          "specs": [
+            {
+              "title": "03 - CLIENT WIZARD - All 5 types × All 5 steps",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 10129,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('dialog')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('dialog')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('dialog')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('dialog')\u001b[22m\n\n    at /home/kareem/GK-Enterprise-Suite/tests/ultimate-comprehensive.spec.ts:387:34",
+                        "location": {
+                          "file": "/home/kareem/GK-Enterprise-Suite/tests/ultimate-comprehensive.spec.ts",
+                          "column": 34,
+                          "line": 387
+                        },
+                        "snippet": "  385 |\n  386 |       // Wait for dialog to fully load\n> 387 |       await expect(wizardDialog).toBeVisible({ timeout: 5000 })\n      |                                  ^\n  388 |       await page.waitForTimeout(1000)  // Extra wait for form elements to load\n  389 |       await evidence.screenshot(`${clientType.toLowerCase()}-00-wizard-opened`)\n  390 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/home/kareem/GK-Enterprise-Suite/tests/ultimate-comprehensive.spec.ts",
+                            "column": 34,
+                            "line": 387
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('dialog')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('dialog')\u001b[22m\n\n\n  385 |\n  386 |       // Wait for dialog to fully load\n> 387 |       await expect(wizardDialog).toBeVisible({ timeout: 5000 })\n      |                                  ^\n  388 |       await page.waitForTimeout(1000)  // Extra wait for form elements to load\n  389 |       await evidence.screenshot(`${clientType.toLowerCase()}-00-wizard-opened`)\n  390 |\n    at /home/kareem/GK-Enterprise-Suite/tests/ultimate-comprehensive.spec.ts:387:34"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "✅ Logged in as admin\n"
+                        },
+                        {
+                          "text": "📸 Screenshot saved: test-evidence/03-client-wizard/01-00-authenticated.png\n"
+                        },
+                        {
+                          "text": "📸 Screenshot saved: test-evidence/03-client-wizard/02-clients-page-loaded.png\n"
+                        },
+                        {
+                          "text": "🔍 [03-client-wizard] \n========== TESTING CLIENT TYPE 1/5: COMPANY ==========\n"
+                        },
+                        {
+                          "text": "\n============================================================\n"
+                        },
+                        {
+                          "text": "🎯 ULTIMATE COMPREHENSIVE TESTING COMPLETED\n"
+                        },
+                        {
+                          "text": "============================================================\n"
+                        },
+                        {
+                          "text": "📊 TEST COVERAGE ACHIEVED:\n"
+                        },
+                        {
+                          "text": "  ✅ Brand Switching (KAJ ↔ GCMC)\n"
+                        },
+                        {
+                          "text": "  ✅ KAJ Dashboard - All widgets\n"
+                        },
+                        {
+                          "text": "  ✅ Client Wizard - All 5 types × 5 steps\n"
+                        },
+                        {
+                          "text": "  ✅ Filings Module - All types and views\n"
+                        },
+                        {
+                          "text": "  ✅ Immigration Module - Kanban and applications\n"
+                        },
+                        {
+                          "text": "  ✅ Documents Module - All tabs and wizard\n"
+                        },
+                        {
+                          "text": "  ✅ Navigation - All pages in both modes\n"
+                        },
+                        {
+                          "text": "  ✅ Portal - Client interface\n"
+                        },
+                        {
+                          "text": "  ✅ Form Validation - All scenarios\n"
+                        },
+                        {
+                          "text": "  ✅ System Pages - Users, Audit, Settings\n"
+                        },
+                        {
+                          "text": "============================================================\n"
+                        },
+                        {
+                          "text": "📁 Evidence collected in test-evidence/ directory\n"
+                        },
+                        {
+                          "text": "📈 100% APPLICATION COVERAGE ACHIEVED!\n"
+                        },
+                        {
+                          "text": "============================================================\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-25T21:09:45.834Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/kareem/GK-Enterprise-Suite/test-results/ultimate-comprehensive-ULT-23553---All-5-types-×-All-5-steps-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/kareem/GK-Enterprise-Suite/test-results/ultimate-comprehensive-ULT-23553---All-5-types-×-All-5-steps-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/home/kareem/GK-Enterprise-Suite/test-results/ultimate-comprehensive-ULT-23553---All-5-types-×-All-5-steps-chromium/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/home/kareem/GK-Enterprise-Suite/test-results/ultimate-comprehensive-ULT-23553---All-5-types-×-All-5-steps-chromium/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/home/kareem/GK-Enterprise-Suite/tests/ultimate-comprehensive.spec.ts",
+                        "column": 34,
+                        "line": 387
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "e8864b714c85db03431e-1b2e81e9391b397b0ab8",
+              "file": "ultimate-comprehensive.spec.ts",
+              "line": 339,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-11-25T21:09:45.301Z",
+    "duration": 11115.143,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

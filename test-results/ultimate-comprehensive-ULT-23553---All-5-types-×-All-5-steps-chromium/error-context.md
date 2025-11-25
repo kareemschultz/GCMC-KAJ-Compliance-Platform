@@ -251,82 +251,28 @@
   - dialog "New Client Onboarding" [ref=e11]:
     - generic [ref=e12]:
       - heading "New Client Onboarding" [level=2] [ref=e13]
-      - paragraph [ref=e14]: "Step 5 of 5: Requirements Review"
+      - paragraph [ref=e14]: "Step 1 of 5: Basic Information"
     - generic [ref=e22]:
       - generic [ref=e23]:
-        - heading "Review Information" [level=4] [ref=e24]:
-          - img [ref=e25]
-          - text: Review Information
-        - generic [ref=e27]:
+        - generic [ref=e24]: Client Type
+        - combobox [active] [ref=e25]:
+          - generic [ref=e27]: Company
           - generic [ref=e28]:
-            - generic [ref=e29]: Client Name
-            - text: Test Company Company 0
-          - generic [ref=e30]:
-            - generic [ref=e31]: Type
-            - text: COMPANY
-          - generic [ref=e32]:
-            - generic [ref=e33]: Email
-            - text: testcompany0@example.com
-          - generic [ref=e34]:
-            - generic [ref=e35]: TIN
-            - text: TIN012345678
-          - generic [ref=e36]:
-            - generic [ref=e37]: Account Type
-            - text: Standard (Invite Sent)
-      - generic [ref=e38]:
-        - generic [ref=e39]:
-          - img [ref=e40]
-          - heading "Required Documents Checklist" [level=4] [ref=e42]
-        - paragraph [ref=e43]: Please upload the available documents below. You can also skip this step and upload them later in the client profile.
-      - generic [ref=e48]:
-        - heading "1 Standard KYC Documents" [level=4] [ref=e49]:
-          - generic [ref=e50]: "1"
-          - text: Standard KYC Documents
-        - generic [ref=e51]:
-          - generic [ref=e52]:
-            - generic [ref=e53]:
-              - img [ref=e55]
-              - generic [ref=e58]:
-                - generic [ref=e59]: Valid ID (National ID / Passport / License)
-                - generic [ref=e60]: Required for all clients
-            - button "Upload" [active] [ref=e62]:
+            - button [ref=e29] [cursor=pointer]:
               - img
-              - text: Upload
-          - generic [ref=e63]:
-            - generic [ref=e64]:
-              - img [ref=e66]
-              - generic [ref=e69]:
-                - generic [ref=e70]: TIN Certificate
-                - generic [ref=e71]: Required for all clients
-            - button "Upload" [ref=e73]:
-              - img
-              - text: Upload
-          - generic [ref=e74]:
-            - generic [ref=e75]:
-              - img [ref=e77]
-              - generic [ref=e80]:
-                - generic [ref=e81]: Proof of Address (Utility Bill)
-                - generic [ref=e82]: Required for all clients
-            - button "Upload" [ref=e84]:
-              - img
-              - text: Upload
-          - generic [ref=e85]:
-            - generic [ref=e86]:
-              - img [ref=e88]
-              - generic [ref=e91]:
-                - generic [ref=e92]: Passport Size Photo
-                - generic [ref=e93]: Required for all clients
-            - button "Upload" [ref=e95]:
-              - img
-              - text: Upload
-    - generic [ref=e96]:
-      - button "Back" [ref=e97]:
+            - img
+      - generic [ref=e30]:
+        - generic [ref=e31]: Business Name
+        - textbox "Business Name" [ref=e32]:
+          - /placeholder: ABC Corp Ltd
+    - generic [ref=e33]:
+      - button "Back" [disabled]:
         - img
         - text: Back
-      - button "Add" [ref=e98]:
-        - text: Add
+      - button "Next" [disabled]:
+        - text: Next
         - img
-    - button "Close" [ref=e99]:
+    - button "Close" [ref=e34]:
       - img
-      - generic [ref=e100]: Close
+      - generic [ref=e35]: Close
 ```

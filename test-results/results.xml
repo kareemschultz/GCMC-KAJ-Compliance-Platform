@@ -1,0 +1,84 @@
+<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="11.115143">
+<testsuite name="ultimate-comprehensive.spec.ts" timestamp="2025-11-25T21:09:45.473Z" hostname="chromium" tests="1" failures="1" skipped="0" time="10.129" errors="0">
+<testcase name="ULTIMATE 100% COMPREHENSIVE TESTING › 03 - CLIENT WIZARD - All 5 types × All 5 steps" classname="ultimate-comprehensive.spec.ts" time="10.129">
+<failure message="ultimate-comprehensive.spec.ts:339:7 03 - CLIENT WIZARD - All 5 types × All 5 steps" type="FAILURE">
+<![CDATA[  [chromium] › ultimate-comprehensive.spec.ts:339:7 › ULTIMATE 100% COMPREHENSIVE TESTING › 03 - CLIENT WIZARD - All 5 types × All 5 steps 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('dialog')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('dialog')
+
+
+      385 |
+      386 |       // Wait for dialog to fully load
+    > 387 |       await expect(wizardDialog).toBeVisible({ timeout: 5000 })
+          |                                  ^
+      388 |       await page.waitForTimeout(1000)  // Extra wait for form elements to load
+      389 |       await evidence.screenshot(`${clientType.toLowerCase()}-00-wizard-opened`)
+      390 |
+        at /home/kareem/GK-Enterprise-Suite/tests/ultimate-comprehensive.spec.ts:387:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/ultimate-comprehensive-ULT-23553---All-5-types-×-All-5-steps-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/ultimate-comprehensive-ULT-23553---All-5-types-×-All-5-steps-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/ultimate-comprehensive-ULT-23553---All-5-types-×-All-5-steps-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/ultimate-comprehensive-ULT-23553---All-5-types-×-All-5-steps-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/ultimate-comprehensive-ULT-23553---All-5-types-×-All-5-steps-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[✅ Logged in as admin
+📸 Screenshot saved: test-evidence/03-client-wizard/01-00-authenticated.png
+📸 Screenshot saved: test-evidence/03-client-wizard/02-clients-page-loaded.png
+🔍 [03-client-wizard] 
+========== TESTING CLIENT TYPE 1/5: COMPANY ==========
+
+============================================================
+🎯 ULTIMATE COMPREHENSIVE TESTING COMPLETED
+============================================================
+📊 TEST COVERAGE ACHIEVED:
+  ✅ Brand Switching (KAJ ↔ GCMC)
+  ✅ KAJ Dashboard - All widgets
+  ✅ Client Wizard - All 5 types × 5 steps
+  ✅ Filings Module - All types and views
+  ✅ Immigration Module - Kanban and applications
+  ✅ Documents Module - All tabs and wizard
+  ✅ Navigation - All pages in both modes
+  ✅ Portal - Client interface
+  ✅ Form Validation - All scenarios
+  ✅ System Pages - Users, Audit, Settings
+============================================================
+📁 Evidence collected in test-evidence/ directory
+📈 100% APPLICATION COVERAGE ACHIEVED!
+============================================================
+
+[[ATTACHMENT|ultimate-comprehensive-ULT-23553---All-5-types-×-All-5-steps-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|ultimate-comprehensive-ULT-23553---All-5-types-×-All-5-steps-chromium/video.webm]]
+
+[[ATTACHMENT|ultimate-comprehensive-ULT-23553---All-5-types-×-All-5-steps-chromium/error-context.md]]
+
+[[ATTACHMENT|ultimate-comprehensive-ULT-23553---All-5-types-×-All-5-steps-chromium/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
