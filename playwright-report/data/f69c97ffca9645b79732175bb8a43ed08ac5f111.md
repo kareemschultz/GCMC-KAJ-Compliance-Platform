@@ -1,0 +1,332 @@
+# Page snapshot
+
+```yaml
+- generic:
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - list:
+              - listitem:
+                - generic:
+                  - generic:
+                    - generic:
+                      - img
+                    - generic:
+                      - generic: GCMC & KAJ
+                      - generic: Compliance Suite
+                  - generic:
+                    - button: KAJ (Financial)
+                    - button: GCMC (Consult)
+                  - combobox:
+                    - generic:
+                      - img
+                      - generic: All Clients
+                    - img
+          - generic:
+            - generic:
+              - generic: Financial Services
+              - list:
+                - listitem:
+                  - link:
+                    - /url: /
+                    - img
+                    - generic: Dashboard
+                - listitem:
+                  - link:
+                    - /url: /accounting
+                    - img
+                    - generic: Accounting & Reports
+                - listitem:
+                  - link:
+                    - /url: /clients
+                    - img
+                    - generic: Clients
+                - listitem:
+                  - link:
+                    - /url: /documents
+                    - img
+                    - generic: Documents
+                - listitem:
+                  - link:
+                    - /url: /filings
+                    - img
+                    - generic: Filings
+                - listitem:
+                  - link:
+                    - /url: /nis
+                    - img
+                    - generic: NIS & Payroll
+                - listitem:
+                  - link:
+                    - /url: /tasks
+                    - img
+                    - generic: Tasks
+                - listitem:
+                  - link:
+                    - /url: /analytics
+                    - img
+                    - generic: Analytics
+                - listitem:
+                  - link:
+                    - /url: /billing
+                    - img
+                    - generic: Billing
+                - listitem:
+                  - link:
+                    - /url: /knowledge-base
+                    - img
+                    - generic: Knowledge Base
+            - generic:
+              - generic: System
+              - list:
+                - listitem:
+                  - link:
+                    - /url: /users
+                    - img
+                    - generic: User Management
+                - listitem:
+                  - link:
+                    - /url: /audit-logs
+                    - img
+                    - generic: Audit Logs
+                - listitem:
+                  - link:
+                    - /url: /settings
+                    - img
+                    - generic: Settings
+          - generic:
+            - list:
+              - listitem:
+                - button:
+                  - generic:
+                    - img
+                  - generic:
+                    - generic: John Doe
+                    - generic: john@gcmc.gy
+              - listitem:
+                - link:
+                  - /url: /login
+                  - img
+                  - generic: Log Out
+          - button
+    - main:
+      - generic:
+        - generic:
+          - button:
+            - img
+            - generic: Toggle Sidebar
+          - generic:
+            - button:
+              - generic: Search platform...
+              - generic:
+                - generic: ⌘
+                - text: K
+            - generic:
+              - heading [level=2]: Command Palette
+              - paragraph: Search for a command to run...
+        - generic:
+          - button:
+            - img
+            - generic: Notifications
+      - main:
+        - generic:
+          - generic:
+            - generic:
+              - heading [level=1]: Clients
+              - generic: "2"
+            - button [expanded]:
+              - img
+              - text: New Client
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - img
+                    - textbox:
+                      - /placeholder: Search clients by name, email, or TIN...
+                  - combobox:
+                    - generic:
+                      - generic: Client Type
+                    - generic:
+                      - img
+                  - combobox:
+                    - generic:
+                      - generic: Status
+                    - generic:
+                      - img
+                  - button:
+                    - img
+                    - text: More
+            - generic:
+              - generic:
+                - table:
+                  - rowgroup:
+                    - row:
+                      - cell:
+                        - checkbox
+                      - cell:
+                        - button:
+                          - text: Client Name
+                          - img
+                      - cell: Type
+                      - cell: TIN Number
+                      - cell: Compliance
+                      - cell: Documents
+                      - cell: Last Activity
+                      - cell: Status
+                      - cell: Actions
+                  - rowgroup:
+                    - row:
+                      - cell:
+                        - checkbox
+                      - cell:
+                        - generic:
+                          - generic:
+                            - generic: GT
+                          - generic:
+                            - link:
+                              - /url: /clients/guyana-tech
+                              - text: Guyana Tech Solutions
+                            - generic: info@guyanatech.gy
+                      - cell:
+                        - generic: COMPANY
+                      - cell
+                      - cell:
+                        - generic:
+                          - progressbar
+                          - generic: "%"
+                      - cell:
+                        - generic:
+                          - img
+                      - cell
+                      - cell
+                      - cell:
+                        - button:
+                          - generic: Open menu
+                          - img
+                    - row:
+                      - cell:
+                        - checkbox
+                      - cell:
+                        - generic:
+                          - generic:
+                            - generic: AC
+                          - generic:
+                            - link:
+                              - /url: /clients/abc-corp-ltd
+                              - text: ABC Corporation Ltd
+                            - generic: contact@abccorp.gy
+                      - cell:
+                        - generic: COMPANY
+                      - cell
+                      - cell:
+                        - generic:
+                          - progressbar
+                          - generic: "%"
+                      - cell:
+                        - generic:
+                          - img
+                      - cell
+                      - cell
+                      - cell:
+                        - button:
+                          - generic: Open menu
+                          - img
+              - generic:
+                - generic:
+                  - generic: Showing 2 clients
+                  - button:
+                    - img
+                    - text: Refresh
+                - generic:
+                  - button [disabled]: Previous
+                  - button: Next
+  - list
+  - button "Open Next.js Dev Tools" [ref=e6] [cursor=pointer]:
+    - img [ref=e7]
+  - alert
+  - dialog "New Client Onboarding" [ref=e11]:
+    - generic [ref=e12]:
+      - heading "New Client Onboarding" [level=2] [ref=e13]
+      - paragraph [ref=e14]: "Step 5 of 5: Requirements Review"
+    - generic [ref=e22]:
+      - generic [ref=e23]:
+        - heading "Review Information" [level=4] [ref=e24]:
+          - img [ref=e25]
+          - text: Review Information
+        - generic [ref=e27]:
+          - generic [ref=e28]:
+            - generic [ref=e29]: Client Name
+            - text: Test Company Company 0
+          - generic [ref=e30]:
+            - generic [ref=e31]: Type
+            - text: COMPANY
+          - generic [ref=e32]:
+            - generic [ref=e33]: Email
+            - text: testcompany0@example.com
+          - generic [ref=e34]:
+            - generic [ref=e35]: TIN
+            - text: TIN012345678
+          - generic [ref=e36]:
+            - generic [ref=e37]: Account Type
+            - text: Standard (Invite Sent)
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - img [ref=e40]
+          - heading "Required Documents Checklist" [level=4] [ref=e42]
+        - paragraph [ref=e43]: Please upload the available documents below. You can also skip this step and upload them later in the client profile.
+      - generic [ref=e48]:
+        - heading "1 Standard KYC Documents" [level=4] [ref=e49]:
+          - generic [ref=e50]: "1"
+          - text: Standard KYC Documents
+        - generic [ref=e51]:
+          - generic [ref=e52]:
+            - generic [ref=e53]:
+              - img [ref=e55]
+              - generic [ref=e58]:
+                - generic [ref=e59]: Valid ID (National ID / Passport / License)
+                - generic [ref=e60]: Required for all clients
+            - button "Upload" [active] [ref=e62]:
+              - img
+              - text: Upload
+          - generic [ref=e63]:
+            - generic [ref=e64]:
+              - img [ref=e66]
+              - generic [ref=e69]:
+                - generic [ref=e70]: TIN Certificate
+                - generic [ref=e71]: Required for all clients
+            - button "Upload" [ref=e73]:
+              - img
+              - text: Upload
+          - generic [ref=e74]:
+            - generic [ref=e75]:
+              - img [ref=e77]
+              - generic [ref=e80]:
+                - generic [ref=e81]: Proof of Address (Utility Bill)
+                - generic [ref=e82]: Required for all clients
+            - button "Upload" [ref=e84]:
+              - img
+              - text: Upload
+          - generic [ref=e85]:
+            - generic [ref=e86]:
+              - img [ref=e88]
+              - generic [ref=e91]:
+                - generic [ref=e92]: Passport Size Photo
+                - generic [ref=e93]: Required for all clients
+            - button "Upload" [ref=e95]:
+              - img
+              - text: Upload
+    - generic [ref=e96]:
+      - button "Back" [ref=e97]:
+        - img
+        - text: Back
+      - button "Add" [ref=e98]:
+        - text: Add
+        - img
+    - button "Close" [ref=e99]:
+      - img
+      - generic [ref=e100]: Close
+```
