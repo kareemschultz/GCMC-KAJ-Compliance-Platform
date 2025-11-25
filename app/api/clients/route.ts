@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth/next"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
+import { withErrorHandler } from "@/lib/middleware/error-handler"
+import { withRateLimit, RATE_LIMITS } from "@/lib/middleware/rate-limit"
+import { withSecurity, sanitizeInput } from "@/lib/middleware/security"
+import { logger } from "@/lib/middleware/logger"
 
 const createClientSchema = z.object({
   // Basic info - flexible based on type
@@ -68,12 +72,14 @@ const createClientSchema = z.object({
   path: ["identification"]
 })
 
-export async function GET(request: NextRequest) {
-  try {
-    const session = await getServerSession()
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
+const getHandler = withErrorHandler(async (request: NextRequest) => {
+  const startTime = Date.now()
+  logger.apiRequest('GET', '/api/clients')
+
+  const session = await getServerSession()
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
 
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get("page") || "1")
@@ -113,33 +119,32 @@ export async function GET(request: NextRequest) {
       prisma.client.count({ where }),
     ])
 
-    return NextResponse.json({
-      clients,
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages: Math.ceil(total / limit),
-      },
-    })
-  } catch (error) {
-    console.error("Error fetching clients:", error)
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    )
+  const duration = Date.now() - startTime
+  logger.apiResponse('GET', '/api/clients', 200, duration)
+
+  return NextResponse.json({
+    clients,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+    },
+  })
+})
+
+const postHandler = withErrorHandler(async (request: NextRequest) => {
+  const startTime = Date.now()
+  logger.apiRequest('POST', '/api/clients')
+
+  const session = await getServerSession()
+  if (!session) {
+    throw new Error("Unauthorized")
   }
-}
 
-export async function POST(request: NextRequest) {
-  try {
-    const session = await getServerSession()
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
-
-    const body = await request.json()
-    const validatedData = createClientSchema.parse(body)
+  const body = await request.json()
+  const sanitizedBody = sanitizeInput(body)
+  const validatedData = createClientSchema.parse(sanitizedBody)
 
     // Prepare client data with only fields that exist in the schema
     const clientData = {
@@ -171,19 +176,22 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    return NextResponse.json(client, { status: 201 })
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Validation error", details: error.errors },
-        { status: 400 }
-      )
-    }
+  const duration = Date.now() - startTime
+  logger.apiResponse('POST', '/api/clients', 201, duration)
+  logger.info('Client created successfully', { clientId: client.id, name: client.name })
 
-    console.error("Error creating client:", error)
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    )
-  }
-}
+  return NextResponse.json(client, { status: 201 })
+})
+
+// Apply middleware
+export const GET = withSecurity({
+  requireAuth: true,
+  allowedMethods: ['GET'],
+  enableCORS: true
+})(withRateLimit(RATE_LIMITS.MODERATE)(getHandler))
+
+export const POST = withSecurity({
+  requireAuth: true,
+  allowedMethods: ['POST'],
+  enableCORS: true
+})(withRateLimit(RATE_LIMITS.STRICT)(postHandler))

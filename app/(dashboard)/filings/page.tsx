@@ -59,8 +59,8 @@ export default function FilingsPage() {
     <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Filings & Compliance</h2>
-          <p className="text-muted-foreground">Manage tax returns and regulatory filings</p>
+          <h1 className="text-3xl font-bold tracking-tight" data-testid="filings-page-title">Filings & Compliance</h1>
+          <p className="text-muted-foreground" data-testid="filings-page-description">Manage tax returns and regulatory filings</p>
         </div>
         <div className="flex items-center space-x-2">
           <Button asChild variant="outline">

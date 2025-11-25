@@ -6,18 +6,66 @@ const __dirname = dirname(__filename)
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // typescript: {
-  //   ignoreBuildErrors: true,
-  // },
-  images: {
-    unoptimized: true,
+  // Enable experimental features for better performance
+  experimental: {
+    // Use Turbo for faster builds in development
+    turbopack: {
+      root: __dirname,
+      // Enable experimental features
+      resolveExtensions: [
+        '.mdx',
+        '.tsx',
+        '.ts',
+        '.jsx',
+        '.js',
+        '.mjs',
+        '.json',
+      ],
+    },
+    // Enable concurrent features
+    serverComponentsExternalPackages: ['@prisma/client'],
+    // Optimize images
+    optimizeServerReact: true,
+    // Enable ppr for better performance
+    ppr: true,
   },
-  output: 'standalone',
 
-  // Explicitly set the workspace root to avoid lockfile conflicts
-  turbopack: {
-    root: __dirname,
+  // Build optimization
+  swcMinify: true,
+
+  // Bundle optimization
+  webpack: (config, { isServer, webpack }) => {
+    // Optimize bundle size
+    if (!isServer) {
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            priority: 10,
+            reuseExistingChunk: true,
+          },
+          common: {
+            minChunks: 2,
+            priority: 5,
+            reuseExistingChunk: true,
+          },
+        },
+      }
+    }
+
+    return config
   },
+
+  // Image optimization
+  images: {
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  },
+
+  output: 'standalone',
 
   // Security headers
   async headers() {

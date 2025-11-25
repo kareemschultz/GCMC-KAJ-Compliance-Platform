@@ -9,21 +9,31 @@ export default function PortalLogin() {
     <div className="flex min-h-screen items-center justify-center bg-muted/30 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Client Portal</CardTitle>
-          <CardDescription className="text-center">Enter your TIN and password to access your account</CardDescription>
+          <CardTitle className="text-2xl font-bold text-center" data-testid="portal-login-title">Client Portal</CardTitle>
+          <CardDescription className="text-center" data-testid="portal-login-description">Enter your TIN and password to access your account</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="tin">Tax Identification Number (TIN)</Label>
-            <Input id="tin" placeholder="123456789" />
+            <Input
+              id="tin"
+              name="tin"
+              placeholder="123456789"
+              data-testid="portal-tin-input"
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" />
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              data-testid="portal-password-input"
+            />
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <Button className="w-full" asChild>
+          <Button className="w-full" asChild data-testid="portal-login-button">
             <Link href="/portal">Sign In</Link>
           </Button>
           <div className="text-center text-sm text-muted-foreground">

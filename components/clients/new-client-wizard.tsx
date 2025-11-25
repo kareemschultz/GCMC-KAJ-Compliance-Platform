@@ -205,11 +205,11 @@ export function NewClientWizard({ onClientCreated }: NewClientWizardProps) {
           <Plus className="mr-2 h-4 w-4" /> New Client
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[700px]">
+      <DialogContent className="sm:max-w-[700px]" data-testid="client-wizard-modal">
         <NewClientWizardContext.Provider value={contextValue}>
           <DialogHeader>
-            <DialogTitle>New Client Onboarding</DialogTitle>
-            <DialogDescription>
+            <DialogTitle data-testid="wizard-title">New Client Onboarding</DialogTitle>
+            <DialogDescription data-testid="wizard-description">
               Step {step} of {totalSteps}: {getStepTitle(step)}
             </DialogDescription>
           </DialogHeader>
@@ -232,7 +232,7 @@ export function NewClientWizard({ onClientCreated }: NewClientWizardProps) {
           </div>
 
           <DialogFooter className="flex justify-between sm:justify-between">
-            <Button variant="outline" onClick={handleBack} disabled={step === 1}>
+            <Button variant="outline" onClick={handleBack} disabled={step === 1} data-testid="wizard-back-button">
               <ArrowLeft className="mr-2 h-4 w-4" /> Back
             </Button>
             {step < totalSteps ? (
@@ -240,6 +240,7 @@ export function NewClientWizard({ onClientCreated }: NewClientWizardProps) {
                 onClick={handleNext}
                 disabled={!validateStep(step)}
                 className={!validateStep(step) ? "opacity-50 cursor-not-allowed" : ""}
+                data-testid="wizard-next-button"
               >
                 Next <ArrowRight className="ml-2 h-4 w-4" />
               </Button>

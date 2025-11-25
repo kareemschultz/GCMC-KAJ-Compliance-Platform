@@ -109,6 +109,8 @@ export const Step1_BasicInfo = () => {
           <Label htmlFor="name">Business Name</Label>
           <Input
             id="name"
+            name="name"
+            data-testid="business-name-input"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="ABC Corp Ltd"

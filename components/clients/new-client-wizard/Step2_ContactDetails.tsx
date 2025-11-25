@@ -16,10 +16,12 @@ export const Step2_ContactDetails = () => {
         <Label htmlFor="email">Email Address</Label>
         <Input
           id="email"
+          name="email"
           type="email"
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           placeholder="contact@example.com"
+          data-testid="wizard-email-input"
         />
       </div>
       <div className="flex items-center space-x-2">
@@ -27,6 +29,7 @@ export const Step2_ContactDetails = () => {
           id="localAccount"
           checked={formData.isLocalAccount}
           onCheckedChange={(checked) => setFormData({ ...formData, isLocalAccount: checked as boolean })}
+          data-testid="wizard-local-account-checkbox"
         />
         <div className="grid gap-1.5 leading-none">
           <Label htmlFor="localAccount" className="font-medium">
@@ -42,12 +45,14 @@ export const Step2_ContactDetails = () => {
         <Label htmlFor="phone">Phone Number</Label>
         <Input
           id="phone"
+          name="phone"
           value={formData.phone}
           onChange={(e) => {
             const formatted = formatPhoneNumber(e.target.value);
             setFormData({ ...formData, phone: formatted.formatted });
           }}
           placeholder="+592-123-4567"
+          data-testid="wizard-phone-input"
         />
         <p className="text-xs text-muted-foreground">
           Enter Guyanese phone number (will auto-format)
@@ -57,9 +62,11 @@ export const Step2_ContactDetails = () => {
         <Label htmlFor="address">Address</Label>
         <Input
           id="address"
+          name="address"
           value={formData.address}
           onChange={(e) => setFormData({ ...formData, address: e.target.value })}
           placeholder="Lot 123..."
+          data-testid="wizard-address-input"
         />
       </div>
     </div>
