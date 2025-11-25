@@ -1,69 +1,76 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:14-alpine
     container_name: gcmc-postgres
-    restart: always
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-gcmc_kaj_db}
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres123}
+      POSTGRES_USER: ${DB_USER:-gcmc_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-gcmc_password}
+      POSTGRES_DB: ${DB_NAME:-gcmc_kaj_db}
+    ports:
+      - "${DB_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
-      interval: 30s
-      timeout: 10s
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-gcmc_user} -d ${DB_NAME:-gcmc_kaj_db}"]
+      interval: 10s
+      timeout: 5s
       retries: 5
-    networks:
-      - gcmc-network
-
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: gcmc-compliance-suite
-    restart: always
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
-      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres123}@postgres:5432/${POSTGRES_DB:-gcmc_kaj_db}
-      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-your-secret-key-here}
-      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
-    depends_on:
-      postgres:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    networks:
-      - gcmc-network
 
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: gcmc-pgadmin
-    restart: always
+    restart: unless-stopped
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@gcmc.gy}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin123}
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@gcmc.gy}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin123}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
     ports:
-      - "5050:80"
+      - "${PGADMIN_PORT:-5050}:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
     depends_on:
       - postgres
-    networks:
-      - gcmc-network
 
-networks:
-  gcmc-network:
-    driver: bridge
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=${NODE_ENV:-production}
+    container_name: gcmc-app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      # Database connection for container network
+      DATABASE_URL: postgresql://${DB_USER:-gcmc_user}:${DB_PASSWORD:-gcmc_password}@postgres:5432/${DB_NAME:-gcmc_kaj_db}
+      # NextAuth settings
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      # Application settings
+      NODE_ENV: ${NODE_ENV:-production}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      # Feature flags
+      ENABLE_AUTH: ${ENABLE_AUTH:-true}
+      ENABLE_REAL_DATA: ${ENABLE_REAL_DATA:-true}
+      DISABLE_MOCK_DATA: ${DISABLE_MOCK_DATA:-true}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 volumes:
   postgres_data:
-    driver: local
+    name: gcmc_postgres_data
+  pgadmin_data:
+    name: gcmc_pgadmin_data
+
+networks:
+  default:
+    name: gcmc_network

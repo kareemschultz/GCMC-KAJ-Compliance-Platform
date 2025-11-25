@@ -145,7 +145,7 @@ test.describe('GK Enterprise Suite - Comprehensive End-to-End Testing', () => {
     // Workflow 1: Admin login and dashboard access
     await page.goto('/login');
     await page.fill('input[type="email"]', 'admin@gcmc.gy');
-    await page.fill('input[type="password"]', 'admin123');
+    await page.fill('input[type="password"]', process.env.SEED_ADMIN_PASSWORD || 'admin123');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(3000);
 

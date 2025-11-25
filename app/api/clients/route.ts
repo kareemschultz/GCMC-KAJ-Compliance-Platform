@@ -98,16 +98,16 @@ export async function GET(request: NextRequest) {
         skip,
         take: limit,
         orderBy: { createdAt: "desc" },
-        include: {
-          _count: {
-            select: {
-              properties: true,
-              employees: true,
-              auditCases: true,
-              bankServices: true,
-              expediteJobs: true
-            }
-          }
+        select: {
+          id: true,
+          name: true,
+          type: true,
+          tinNumber: true,
+          nisNumber: true,
+          email: true,
+          phone: true,
+          address: true,
+          createdAt: true,
         }
       }),
       prisma.client.count({ where }),
@@ -141,10 +141,10 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const validatedData = createClientSchema.parse(body)
 
-    // Prepare client data with proper field mapping
+    // Prepare client data with only fields that exist in the schema
     const clientData = {
       name: validatedData.name || (validatedData.type === "INDIVIDUAL"
-        ? `${validatedData.firstName} ${validatedData.surname}`.trim()
+        ? `${validatedData.firstName || ''} ${validatedData.surname || ''}`.trim()
         : ""),
       type: validatedData.type,
       email: validatedData.email,
@@ -152,43 +152,22 @@ export async function POST(request: NextRequest) {
       address: validatedData.address || "",
 
       // Map flexible ID fields to database fields
-      tinNumber: validatedData.tin || validatedData.tinNumber,
-      nisNumber: validatedData.nis || validatedData.nisNumber,
-
-      // Store additional fields as metadata or in extended client profile
-      ...(validatedData.type === "INDIVIDUAL" && {
-        // Individual-specific fields could be stored in a profile table
-        firstName: validatedData.firstName,
-        surname: validatedData.surname,
-        middleName: validatedData.middleName,
-        dateOfBirth: validatedData.dateOfBirth,
-        placeOfBirth: validatedData.placeOfBirth,
-        gender: validatedData.gender,
-        primaryIdType: validatedData.primaryIdType,
-        primaryIdNumber: validatedData.primaryIdNumber,
-        secondaryIdType: validatedData.secondaryIdType,
-        secondaryIdNumber: validatedData.secondaryIdNumber,
-        isLocalContentQualified: validatedData.isLocalContentQualified,
-      }),
-
-      ...(validatedData.type === "COMPANY" && {
-        regNumber: validatedData.regNumber,
-        vat: validatedData.vat,
-      }),
+      tinNumber: validatedData.tin || validatedData.tinNumber || null,
+      nisNumber: validatedData.nis || validatedData.nisNumber || null,
     }
 
     const client = await prisma.client.create({
       data: clientData,
-      include: {
-        _count: {
-          select: {
-            properties: true,
-            employees: true,
-            auditCases: true,
-            bankServices: true,
-            expediteJobs: true
-          }
-        }
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        tinNumber: true,
+        nisNumber: true,
+        email: true,
+        phone: true,
+        address: true,
+        createdAt: true,
       }
     })
 

@@ -1,0 +1,507 @@
+<testsuites id="" name="" tests="15" failures="15" skipped="0" errors="0" time="11.427438">
+<testsuite name="e2e/core-features.spec.ts" timestamp="2025-11-25T18:15:04.331Z" hostname="chromium" tests="3" failures="3" skipped="0" time="0.012" errors="0">
+<testcase name="Core Feature Tests › should run compliance checks for a client" classname="e2e/core-features.spec.ts" time="0.004">
+<failure message="core-features.spec.ts:11:7 should run compliance checks for a client" type="FAILURE">
+<![CDATA[  [chromium] › e2e/core-features.spec.ts:11:7 › Core Feature Tests › should run compliance checks for a client 
+
+    Error: Error reading storage state from ./tests/auth/admin-storage-state.json:
+    ENOENT: no such file or directory, open './tests/auth/admin-storage-state.json'
+
+       at fixtures/auth.fixture.ts:14
+
+      12 | export const test = base.extend<AuthFixtures>({
+      13 |   adminPage: async ({ browser }, use) => {
+    > 14 |     const context = await browser.newContext({
+         |                     ^
+      15 |       storageState: './tests/auth/admin-storage-state.json'
+      16 |     });
+      17 |     const page = await context.newPage();
+        at Object.adminPage (/home/kareem/GK-Enterprise-Suite/tests/fixtures/auth.fixture.ts:14:21)
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-core-features-Core-Fea-e730c-pliance-checks-for-a-client-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-core-features-Core-Fea-e730c-pliance-checks-for-a-client-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-core-features-Core-Fea-e730c-pliance-checks-for-a-client-chromium/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Core Feature Tests › should create an audit log entry after client creation" classname="e2e/core-features.spec.ts" time="0.004">
+<failure message="core-features.spec.ts:30:7 should create an audit log entry after client creation" type="FAILURE">
+<![CDATA[  [chromium] › e2e/core-features.spec.ts:30:7 › Core Feature Tests › should create an audit log entry after client creation 
+
+    Error: Error reading storage state from ./tests/auth/admin-storage-state.json:
+    ENOENT: no such file or directory, open './tests/auth/admin-storage-state.json'
+
+       at fixtures/auth.fixture.ts:14
+
+      12 | export const test = base.extend<AuthFixtures>({
+      13 |   adminPage: async ({ browser }, use) => {
+    > 14 |     const context = await browser.newContext({
+         |                     ^
+      15 |       storageState: './tests/auth/admin-storage-state.json'
+      16 |     });
+      17 |     const page = await context.newPage();
+        at Object.adminPage (/home/kareem/GK-Enterprise-Suite/tests/fixtures/auth.fixture.ts:14:21)
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-core-features-Core-Fea-50607-entry-after-client-creation-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-core-features-Core-Fea-50607-entry-after-client-creation-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-core-features-Core-Fea-50607-entry-after-client-creation-chromium/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Core Feature Tests › should generate a document" classname="e2e/core-features.spec.ts" time="0.004">
+<failure message="core-features.spec.ts:53:7 should generate a document" type="FAILURE">
+<![CDATA[  [chromium] › e2e/core-features.spec.ts:53:7 › Core Feature Tests › should generate a document ────
+
+    Error: Error reading storage state from ./tests/auth/admin-storage-state.json:
+    ENOENT: no such file or directory, open './tests/auth/admin-storage-state.json'
+
+       at fixtures/auth.fixture.ts:14
+
+      12 | export const test = base.extend<AuthFixtures>({
+      13 |   adminPage: async ({ browser }, use) => {
+    > 14 |     const context = await browser.newContext({
+         |                     ^
+      15 |       storageState: './tests/auth/admin-storage-state.json'
+      16 |     });
+      17 |     const page = await context.newPage();
+        at Object.adminPage (/home/kareem/GK-Enterprise-Suite/tests/fixtures/auth.fixture.ts:14:21)
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-core-features-Core-Fea-30b36--should-generate-a-document-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-core-features-Core-Fea-30b36--should-generate-a-document-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-core-features-Core-Fea-30b36--should-generate-a-document-chromium/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="e2e/core-features.spec.ts" timestamp="2025-11-25T18:15:04.331Z" hostname="firefox" tests="3" failures="3" skipped="0" time="0.012" errors="0">
+<testcase name="Core Feature Tests › should run compliance checks for a client" classname="e2e/core-features.spec.ts" time="0.004">
+<failure message="core-features.spec.ts:11:7 should run compliance checks for a client" type="FAILURE">
+<![CDATA[  [firefox] › e2e/core-features.spec.ts:11:7 › Core Feature Tests › should run compliance checks for a client 
+
+    Error: Error reading storage state from ./tests/auth/admin-storage-state.json:
+    ENOENT: no such file or directory, open './tests/auth/admin-storage-state.json'
+
+       at fixtures/auth.fixture.ts:14
+
+      12 | export const test = base.extend<AuthFixtures>({
+      13 |   adminPage: async ({ browser }, use) => {
+    > 14 |     const context = await browser.newContext({
+         |                     ^
+      15 |       storageState: './tests/auth/admin-storage-state.json'
+      16 |     });
+      17 |     const page = await context.newPage();
+        at Object.adminPage (/home/kareem/GK-Enterprise-Suite/tests/fixtures/auth.fixture.ts:14:21)
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-core-features-Core-Fea-e730c-pliance-checks-for-a-client-firefox/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-core-features-Core-Fea-e730c-pliance-checks-for-a-client-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-core-features-Core-Fea-e730c-pliance-checks-for-a-client-firefox/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Core Feature Tests › should create an audit log entry after client creation" classname="e2e/core-features.spec.ts" time="0.004">
+<failure message="core-features.spec.ts:30:7 should create an audit log entry after client creation" type="FAILURE">
+<![CDATA[  [firefox] › e2e/core-features.spec.ts:30:7 › Core Feature Tests › should create an audit log entry after client creation 
+
+    Error: Error reading storage state from ./tests/auth/admin-storage-state.json:
+    ENOENT: no such file or directory, open './tests/auth/admin-storage-state.json'
+
+       at fixtures/auth.fixture.ts:14
+
+      12 | export const test = base.extend<AuthFixtures>({
+      13 |   adminPage: async ({ browser }, use) => {
+    > 14 |     const context = await browser.newContext({
+         |                     ^
+      15 |       storageState: './tests/auth/admin-storage-state.json'
+      16 |     });
+      17 |     const page = await context.newPage();
+        at Object.adminPage (/home/kareem/GK-Enterprise-Suite/tests/fixtures/auth.fixture.ts:14:21)
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-core-features-Core-Fea-50607-entry-after-client-creation-firefox/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-core-features-Core-Fea-50607-entry-after-client-creation-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-core-features-Core-Fea-50607-entry-after-client-creation-firefox/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Core Feature Tests › should generate a document" classname="e2e/core-features.spec.ts" time="0.004">
+<failure message="core-features.spec.ts:53:7 should generate a document" type="FAILURE">
+<![CDATA[  [firefox] › e2e/core-features.spec.ts:53:7 › Core Feature Tests › should generate a document ─────
+
+    Error: Error reading storage state from ./tests/auth/admin-storage-state.json:
+    ENOENT: no such file or directory, open './tests/auth/admin-storage-state.json'
+
+       at fixtures/auth.fixture.ts:14
+
+      12 | export const test = base.extend<AuthFixtures>({
+      13 |   adminPage: async ({ browser }, use) => {
+    > 14 |     const context = await browser.newContext({
+         |                     ^
+      15 |       storageState: './tests/auth/admin-storage-state.json'
+      16 |     });
+      17 |     const page = await context.newPage();
+        at Object.adminPage (/home/kareem/GK-Enterprise-Suite/tests/fixtures/auth.fixture.ts:14:21)
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-core-features-Core-Fea-30b36--should-generate-a-document-firefox/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-core-features-Core-Fea-30b36--should-generate-a-document-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-core-features-Core-Fea-30b36--should-generate-a-document-firefox/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="e2e/core-features.spec.ts" timestamp="2025-11-25T18:15:04.331Z" hostname="webkit" tests="3" failures="3" skipped="0" time="0.01" errors="0">
+<testcase name="Core Feature Tests › should run compliance checks for a client" classname="e2e/core-features.spec.ts" time="0.003">
+<failure message="core-features.spec.ts:11:7 should run compliance checks for a client" type="FAILURE">
+<![CDATA[  [webkit] › e2e/core-features.spec.ts:11:7 › Core Feature Tests › should run compliance checks for a client 
+
+    Error: Error reading storage state from ./tests/auth/admin-storage-state.json:
+    ENOENT: no such file or directory, open './tests/auth/admin-storage-state.json'
+
+       at fixtures/auth.fixture.ts:14
+
+      12 | export const test = base.extend<AuthFixtures>({
+      13 |   adminPage: async ({ browser }, use) => {
+    > 14 |     const context = await browser.newContext({
+         |                     ^
+      15 |       storageState: './tests/auth/admin-storage-state.json'
+      16 |     });
+      17 |     const page = await context.newPage();
+        at Object.adminPage (/home/kareem/GK-Enterprise-Suite/tests/fixtures/auth.fixture.ts:14:21)
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-core-features-Core-Fea-e730c-pliance-checks-for-a-client-webkit/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-core-features-Core-Fea-e730c-pliance-checks-for-a-client-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-core-features-Core-Fea-e730c-pliance-checks-for-a-client-webkit/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Core Feature Tests › should create an audit log entry after client creation" classname="e2e/core-features.spec.ts" time="0.004">
+<failure message="core-features.spec.ts:30:7 should create an audit log entry after client creation" type="FAILURE">
+<![CDATA[  [webkit] › e2e/core-features.spec.ts:30:7 › Core Feature Tests › should create an audit log entry after client creation 
+
+    Error: Error reading storage state from ./tests/auth/admin-storage-state.json:
+    ENOENT: no such file or directory, open './tests/auth/admin-storage-state.json'
+
+       at fixtures/auth.fixture.ts:14
+
+      12 | export const test = base.extend<AuthFixtures>({
+      13 |   adminPage: async ({ browser }, use) => {
+    > 14 |     const context = await browser.newContext({
+         |                     ^
+      15 |       storageState: './tests/auth/admin-storage-state.json'
+      16 |     });
+      17 |     const page = await context.newPage();
+        at Object.adminPage (/home/kareem/GK-Enterprise-Suite/tests/fixtures/auth.fixture.ts:14:21)
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-core-features-Core-Fea-50607-entry-after-client-creation-webkit/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-core-features-Core-Fea-50607-entry-after-client-creation-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-core-features-Core-Fea-50607-entry-after-client-creation-webkit/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Core Feature Tests › should generate a document" classname="e2e/core-features.spec.ts" time="0.003">
+<failure message="core-features.spec.ts:53:7 should generate a document" type="FAILURE">
+<![CDATA[  [webkit] › e2e/core-features.spec.ts:53:7 › Core Feature Tests › should generate a document ──────
+
+    Error: Error reading storage state from ./tests/auth/admin-storage-state.json:
+    ENOENT: no such file or directory, open './tests/auth/admin-storage-state.json'
+
+       at fixtures/auth.fixture.ts:14
+
+      12 | export const test = base.extend<AuthFixtures>({
+      13 |   adminPage: async ({ browser }, use) => {
+    > 14 |     const context = await browser.newContext({
+         |                     ^
+      15 |       storageState: './tests/auth/admin-storage-state.json'
+      16 |     });
+      17 |     const page = await context.newPage();
+        at Object.adminPage (/home/kareem/GK-Enterprise-Suite/tests/fixtures/auth.fixture.ts:14:21)
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-core-features-Core-Fea-30b36--should-generate-a-document-webkit/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-core-features-Core-Fea-30b36--should-generate-a-document-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-core-features-Core-Fea-30b36--should-generate-a-document-webkit/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="e2e/core-features.spec.ts" timestamp="2025-11-25T18:15:04.331Z" hostname="Mobile Chrome" tests="3" failures="3" skipped="0" time="0.013" errors="0">
+<testcase name="Core Feature Tests › should run compliance checks for a client" classname="e2e/core-features.spec.ts" time="0.004">
+<failure message="core-features.spec.ts:11:7 should run compliance checks for a client" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/core-features.spec.ts:11:7 › Core Feature Tests › should run compliance checks for a client 
+
+    Error: Error reading storage state from ./tests/auth/admin-storage-state.json:
+    ENOENT: no such file or directory, open './tests/auth/admin-storage-state.json'
+
+       at fixtures/auth.fixture.ts:14
+
+      12 | export const test = base.extend<AuthFixtures>({
+      13 |   adminPage: async ({ browser }, use) => {
+    > 14 |     const context = await browser.newContext({
+         |                     ^
+      15 |       storageState: './tests/auth/admin-storage-state.json'
+      16 |     });
+      17 |     const page = await context.newPage();
+        at Object.adminPage (/home/kareem/GK-Enterprise-Suite/tests/fixtures/auth.fixture.ts:14:21)
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-core-features-Core-Fea-e730c-pliance-checks-for-a-client-Mobile-Chrome/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-core-features-Core-Fea-e730c-pliance-checks-for-a-client-Mobile-Chrome/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-core-features-Core-Fea-e730c-pliance-checks-for-a-client-Mobile-Chrome/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Core Feature Tests › should create an audit log entry after client creation" classname="e2e/core-features.spec.ts" time="0.005">
+<failure message="core-features.spec.ts:30:7 should create an audit log entry after client creation" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/core-features.spec.ts:30:7 › Core Feature Tests › should create an audit log entry after client creation 
+
+    Error: Error reading storage state from ./tests/auth/admin-storage-state.json:
+    ENOENT: no such file or directory, open './tests/auth/admin-storage-state.json'
+
+       at fixtures/auth.fixture.ts:14
+
+      12 | export const test = base.extend<AuthFixtures>({
+      13 |   adminPage: async ({ browser }, use) => {
+    > 14 |     const context = await browser.newContext({
+         |                     ^
+      15 |       storageState: './tests/auth/admin-storage-state.json'
+      16 |     });
+      17 |     const page = await context.newPage();
+        at Object.adminPage (/home/kareem/GK-Enterprise-Suite/tests/fixtures/auth.fixture.ts:14:21)
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-core-features-Core-Fea-50607-entry-after-client-creation-Mobile-Chrome/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-core-features-Core-Fea-50607-entry-after-client-creation-Mobile-Chrome/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-core-features-Core-Fea-50607-entry-after-client-creation-Mobile-Chrome/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Core Feature Tests › should generate a document" classname="e2e/core-features.spec.ts" time="0.004">
+<failure message="core-features.spec.ts:53:7 should generate a document" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/core-features.spec.ts:53:7 › Core Feature Tests › should generate a document 
+
+    Error: Error reading storage state from ./tests/auth/admin-storage-state.json:
+    ENOENT: no such file or directory, open './tests/auth/admin-storage-state.json'
+
+       at fixtures/auth.fixture.ts:14
+
+      12 | export const test = base.extend<AuthFixtures>({
+      13 |   adminPage: async ({ browser }, use) => {
+    > 14 |     const context = await browser.newContext({
+         |                     ^
+      15 |       storageState: './tests/auth/admin-storage-state.json'
+      16 |     });
+      17 |     const page = await context.newPage();
+        at Object.adminPage (/home/kareem/GK-Enterprise-Suite/tests/fixtures/auth.fixture.ts:14:21)
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-core-features-Core-Fea-30b36--should-generate-a-document-Mobile-Chrome/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-core-features-Core-Fea-30b36--should-generate-a-document-Mobile-Chrome/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-core-features-Core-Fea-30b36--should-generate-a-document-Mobile-Chrome/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="e2e/core-features.spec.ts" timestamp="2025-11-25T18:15:04.331Z" hostname="Mobile Safari" tests="3" failures="3" skipped="0" time="0.01" errors="0">
+<testcase name="Core Feature Tests › should run compliance checks for a client" classname="e2e/core-features.spec.ts" time="0.003">
+<failure message="core-features.spec.ts:11:7 should run compliance checks for a client" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/core-features.spec.ts:11:7 › Core Feature Tests › should run compliance checks for a client 
+
+    Error: Error reading storage state from ./tests/auth/admin-storage-state.json:
+    ENOENT: no such file or directory, open './tests/auth/admin-storage-state.json'
+
+       at fixtures/auth.fixture.ts:14
+
+      12 | export const test = base.extend<AuthFixtures>({
+      13 |   adminPage: async ({ browser }, use) => {
+    > 14 |     const context = await browser.newContext({
+         |                     ^
+      15 |       storageState: './tests/auth/admin-storage-state.json'
+      16 |     });
+      17 |     const page = await context.newPage();
+        at Object.adminPage (/home/kareem/GK-Enterprise-Suite/tests/fixtures/auth.fixture.ts:14:21)
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-core-features-Core-Fea-e730c-pliance-checks-for-a-client-Mobile-Safari/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-core-features-Core-Fea-e730c-pliance-checks-for-a-client-Mobile-Safari/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-core-features-Core-Fea-e730c-pliance-checks-for-a-client-Mobile-Safari/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Core Feature Tests › should create an audit log entry after client creation" classname="e2e/core-features.spec.ts" time="0.003">
+<failure message="core-features.spec.ts:30:7 should create an audit log entry after client creation" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/core-features.spec.ts:30:7 › Core Feature Tests › should create an audit log entry after client creation 
+
+    Error: Error reading storage state from ./tests/auth/admin-storage-state.json:
+    ENOENT: no such file or directory, open './tests/auth/admin-storage-state.json'
+
+       at fixtures/auth.fixture.ts:14
+
+      12 | export const test = base.extend<AuthFixtures>({
+      13 |   adminPage: async ({ browser }, use) => {
+    > 14 |     const context = await browser.newContext({
+         |                     ^
+      15 |       storageState: './tests/auth/admin-storage-state.json'
+      16 |     });
+      17 |     const page = await context.newPage();
+        at Object.adminPage (/home/kareem/GK-Enterprise-Suite/tests/fixtures/auth.fixture.ts:14:21)
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-core-features-Core-Fea-50607-entry-after-client-creation-Mobile-Safari/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-core-features-Core-Fea-50607-entry-after-client-creation-Mobile-Safari/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-core-features-Core-Fea-50607-entry-after-client-creation-Mobile-Safari/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Core Feature Tests › should generate a document" classname="e2e/core-features.spec.ts" time="0.004">
+<failure message="core-features.spec.ts:53:7 should generate a document" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/core-features.spec.ts:53:7 › Core Feature Tests › should generate a document 
+
+    Error: Error reading storage state from ./tests/auth/admin-storage-state.json:
+    ENOENT: no such file or directory, open './tests/auth/admin-storage-state.json'
+
+       at fixtures/auth.fixture.ts:14
+
+      12 | export const test = base.extend<AuthFixtures>({
+      13 |   adminPage: async ({ browser }, use) => {
+    > 14 |     const context = await browser.newContext({
+         |                     ^
+      15 |       storageState: './tests/auth/admin-storage-state.json'
+      16 |     });
+      17 |     const page = await context.newPage();
+        at Object.adminPage (/home/kareem/GK-Enterprise-Suite/tests/fixtures/auth.fixture.ts:14:21)
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-core-features-Core-Fea-30b36--should-generate-a-document-Mobile-Safari/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-core-features-Core-Fea-30b36--should-generate-a-document-Mobile-Safari/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-core-features-Core-Fea-30b36--should-generate-a-document-Mobile-Safari/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

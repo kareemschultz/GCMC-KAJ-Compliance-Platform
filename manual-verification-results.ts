@@ -32,7 +32,14 @@ export class ManualTestRunner {
     try {
       await this.page.goto('/login');
       await this.page.fill('input[type="email"]', 'admin@gcmc.gy');
-      await this.page.fill('input[type="password"]', 'admin123');
+      await this.page.fill('input[type="password"]', process.env.SEED_ADMIN_PASSWORD || 'admin123');
+      await this.page.fill('input[type="password"]', process.env.SEED_GCMC_PASSWORD || 'gcmc123');
+      await this.page.fill('input[type="password"]', process.env.SEED_KAJ_PASSWORD || 'kaj123');
+      await this.page.fill('input[type="password"]', process.env.SEED_CLIENT_PASSWORD || 'client123');
+      await this.page.fill('input[type="password"]', 'wrongpassword');
+      await this.page.fill('input[type="password"]', process.env.SEED_ADMIN_PASSWORD || 'admin123');
+      await this.page.fill('input[type="password"]', process.env.SEED_ADMIN_PASSWORD || 'admin123');
+      await this.page.fill('input[type="password"]', process.env.SEED_CLIENT_PASSWORD || 'client123');
       await this.page.click('button[type="submit"]');
       await this.page.waitForTimeout(3000);
 

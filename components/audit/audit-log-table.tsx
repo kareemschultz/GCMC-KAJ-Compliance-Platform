@@ -9,13 +9,13 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, Filter, Download } from "lucide-react"
 import { format } from "date-fns"
-import { MOCK_AUDIT_LOGS } from "@/lib/mock-audit-data"
 
 export function AuditLogTable() {
   const [searchTerm, setSearchTerm] = useState("")
   const [filterType, setFilterType] = useState("all")
+  const [auditLogs] = useState<any[]>([]) // Empty for now - will be populated with real audit system later
 
-  const filteredLogs = MOCK_AUDIT_LOGS.filter((log) => {
+  const filteredLogs = auditLogs.filter((log) => {
     const matchesSearch =
       log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
       log.entityName.toLowerCase().includes(searchTerm.toLowerCase()) ||

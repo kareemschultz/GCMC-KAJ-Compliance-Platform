@@ -6,11 +6,29 @@ const prisma = new PrismaClient()
 async function main() {
   console.log("Seeding database...")
 
+  // Clean up existing data
+  await prisma.taxReturn.deleteMany({})
+  await prisma.nISSchedule.deleteMany({})
+  await prisma.visaApplication.deleteMany({})
+  await prisma.legalDocument.deleteMany({})
+  await prisma.financialStatement.deleteMany({})
+  await prisma.auditCase.deleteMany({})
+  await prisma.bankService.deleteMany({})
+  await prisma.employee.deleteMany({})
+  await prisma.property.deleteMany({})
+  await prisma.expediteJob.deleteMany({})
+  await prisma.user.deleteMany({})
+  await prisma.client.deleteMany({})
+  await prisma.partner.deleteMany({})
+  await prisma.trainingAttendee.deleteMany({})
+  await prisma.trainingSession.deleteMany({})
+  await prisma.appointment.deleteMany({})
+
   // Hash passwords
-  const adminPassword = await bcrypt.hash("admin123", 12)
-  const gcmcPassword = await bcrypt.hash("gcmc123", 12)
-  const kajPassword = await bcrypt.hash("kaj123", 12)
-  const clientPassword = await bcrypt.hash("client123", 12)
+  const adminPassword = await bcrypt.hash(process.env.SEED_ADMIN_PASSWORD || "admin123", 12)
+  const gcmcPassword = await bcrypt.hash(process.env.SEED_GCMC_PASSWORD || "gcmc123", 12)
+  const kajPassword = await bcrypt.hash(process.env.SEED_KAJ_PASSWORD || "kaj123", 12)
+  const clientPassword = await bcrypt.hash(process.env.SEED_CLIENT_PASSWORD || "client123", 12)
 
   // Create a test user (Super Admin)
   const adminUser = await prisma.user.upsert({

@@ -31,7 +31,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
 
     /* Record video on failure */
-    video: 'retain-on-failure',
+    video: 'on',
   },
 
   /* Configure projects for major browsers */
@@ -72,11 +72,11 @@ export default defineConfig({
     // },
   ],
 
-  /* Run your local dev server before starting the tests */
+  /* Use existing dev server */
   // webServer: {
-  //   command: 'pnpm run dev',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: true, // Always reuse existing server
+  //   command: 'DATABASE_URL=\"postgresql://postgres:postgres123@localhost:5432/gcmc_kaj_dev\" pnpm run dev',
+  //   url: 'http://localhost:3001',
+  //   reuseExistingServer: !process.env.CI, // Always reuse existing server
   //   timeout: 120 * 1000, // 2 minutes
   // },
 

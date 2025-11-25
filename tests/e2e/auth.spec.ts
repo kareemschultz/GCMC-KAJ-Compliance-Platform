@@ -53,7 +53,7 @@ test.describe('Authentication Tests', () => {
 
     // Enter valid admin credentials
     await helpers.fillAndVerify('input[type="email"]', 'admin@gcmc.gy');
-    await helpers.fillAndVerify('input[type="password"]', 'admin123');
+    await helpers.fillAndVerify('input[type="password"]', process.env.SEED_ADMIN_PASSWORD || 'admin123');
 
     // Submit form and wait for redirect
     await Promise.all([
@@ -76,7 +76,7 @@ test.describe('Authentication Tests', () => {
     await helpers.waitForPageLoad();
 
     await helpers.fillAndVerify('input[type="email"]', 'gcmc@gcmc.gy');
-    await helpers.fillAndVerify('input[type="password"]', 'gcmc123');
+    await helpers.fillAndVerify('input[type="password"]', process.env.SEED_GCMC_PASSWORD || 'gcmc123');
 
     await Promise.all([
       page.waitForNavigation({ waitUntil: 'networkidle' }),
@@ -92,7 +92,7 @@ test.describe('Authentication Tests', () => {
     await helpers.waitForPageLoad();
 
     await helpers.fillAndVerify('input[type="email"]', 'kaj@gcmc.gy');
-    await helpers.fillAndVerify('input[type="password"]', 'kaj123');
+    await helpers.fillAndVerify('input[type="password"]', process.env.SEED_KAJ_PASSWORD || 'kaj123');
 
     await Promise.all([
       page.waitForNavigation({ waitUntil: 'networkidle' }),
@@ -108,7 +108,7 @@ test.describe('Authentication Tests', () => {
     await helpers.waitForPageLoad();
 
     await helpers.fillAndVerify('input[type="email"]', 'client@testcorp.gy');
-    await helpers.fillAndVerify('input[type="password"]', 'client123');
+    await helpers.fillAndVerify('input[type="password"]', process.env.SEED_CLIENT_PASSWORD || 'client123');
 
     await Promise.all([
       page.waitForNavigation({ waitUntil: 'networkidle' }),
@@ -125,7 +125,7 @@ test.describe('Authentication Tests', () => {
     await helpers.waitForPageLoad();
 
     await helpers.fillAndVerify('input[type="email"]', 'admin@gcmc.gy');
-    await helpers.fillAndVerify('input[type="password"]', 'admin123');
+    await helpers.fillAndVerify('input[type="password"]', process.env.SEED_ADMIN_PASSWORD || 'admin123');
 
     // Click submit and immediately check for loading state
     await page.click('button[type="submit"]');
@@ -142,7 +142,7 @@ test.describe('Authentication Tests', () => {
 
   test('should handle session persistence', async ({ page }) => {
     // Login first
-    await helpers.login('admin@gcmc.gy', 'admin123');
+    await helpers.login('admin@gcmc.gy', process.env.SEED_ADMIN_PASSWORD || 'admin123');
 
     // Navigate away and back
     await page.goto('/clients');
@@ -174,7 +174,7 @@ test.describe('Authentication Tests', () => {
 
   test('should logout successfully', async ({ page }) => {
     // Login first
-    await helpers.login('admin@gcmc.gy', 'admin123');
+    await helpers.login('admin@gcmc.gy', process.env.SEED_ADMIN_PASSWORD || 'admin123');
 
     // Find and click logout button
     const logoutButton = page.locator('text=Logout, text=Sign Out').first();
@@ -200,7 +200,7 @@ test.describe('Authentication Tests', () => {
     await helpers.waitForPageLoad();
 
     await helpers.fillAndVerify('input[type="email"]', 'admin@gcmc.gy');
-    await helpers.fillAndVerify('input[type="password"]', 'admin123');
+    await helpers.fillAndVerify('input[type="password"]', process.env.SEED_ADMIN_PASSWORD || 'admin123');
 
     await page.click('button[type="submit"]');
 
@@ -216,7 +216,7 @@ test.describe('Authentication Tests', () => {
 
     // Enter invalid email format
     await helpers.fillAndVerify('input[type="email"]', 'invalid-email');
-    await helpers.fillAndVerify('input[type="password"]', 'password123');
+    await helpers.fillAndVerify('input[type="password"]', process.env.SEED_CLIENT_PASSWORD || 'password123');
 
     await page.click('button[type="submit"]');
 

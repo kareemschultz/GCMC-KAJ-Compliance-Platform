@@ -1,17 +1,30 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Calendar, AlertCircle, Download } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { mockProperties } from "@/lib/mock-data"
+import { api } from "@/lib/api"
 import type { Property } from "@/types"
 import { AddPropertyDialog } from "./add-property-dialog"
 
 export function PropertyManager() {
-  const [properties] = useState<Property[]>(mockProperties)
+  const [properties, setProperties] = useState<Property[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    api.property.list()
+      .then(response => {
+        setProperties(response.properties || [])
+      })
+      .catch(err => {
+        console.error("Failed to fetch properties:", err)
+        setProperties([])
+      })
+      .finally(() => setLoading(false))
+  }, [])
 
   const isLeaseExpiringSoon = (endDate: string | null) => {
     if (!endDate) return false

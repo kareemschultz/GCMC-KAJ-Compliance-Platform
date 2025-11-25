@@ -7,7 +7,7 @@ test.describe('Client Wizard Step 3 - Comprehensive Verification', () => {
 
     // Login with admin credentials
     await page.fill('[name="email"]', 'admin@gcmc.gy')
-    await page.fill('[name="password"]', 'admin123')
+    await page.fill('[name="password"]', process.env.SEED_ADMIN_PASSWORD || 'admin123')
     await page.click('button[type="submit"]')
 
     // Wait for redirect and navigation to clients page

@@ -16,11 +16,27 @@ import {
 } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { useClient } from "@/components/client-context"
-import { mockClients } from "@/lib/mock-data"
+import { api } from "@/lib/api"
+import type { Client } from "@/types"
 
 export function ClientSwitcher() {
   const { clientId, setClientId, selectedClient } = useClient()
   const [open, setOpen] = React.useState(false)
+  const [clients, setClients] = React.useState<Client[]>([])
+  const [loading, setLoading] = React.useState(false)
+
+  React.useEffect(() => {
+    setLoading(true)
+    api.clients.list()
+      .then(response => {
+        setClients(response.clients || [])
+      })
+      .catch(err => {
+        console.error("Failed to fetch clients:", err)
+        setClients([])
+      })
+      .finally(() => setLoading(false))
+  }, [])
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -67,7 +83,7 @@ export function ClientSwitcher() {
             </CommandGroup>
             <CommandSeparator />
             <CommandGroup heading="Clients">
-              {mockClients.map((client) => (
+              {clients.map((client) => (
                 <CommandItem
                   key={client.id}
                   onSelect={() => {

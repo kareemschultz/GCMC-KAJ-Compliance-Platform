@@ -7,10 +7,10 @@ async function main() {
   console.log("Seeding database...")
 
   // Hash passwords
-  const adminPassword = await bcrypt.hash("admin123", 12)
-  const gcmcPassword = await bcrypt.hash("gcmc123", 12)
-  const kajPassword = await bcrypt.hash("kaj123", 12)
-  const clientPassword = await bcrypt.hash("client123", 12)
+  const adminPassword = await bcrypt.hash(process.env.SEED_ADMIN_PASSWORD || "admin123", 12)
+  const gcmcPassword = await bcrypt.hash(process.env.SEED_GCMC_PASSWORD || "gcmc123", 12)
+  const kajPassword = await bcrypt.hash(process.env.SEED_KAJ_PASSWORD || "kaj123", 12)
+  const clientPassword = await bcrypt.hash(process.env.SEED_CLIENT_PASSWORD || "client123", 12)
 
   // Create a test user (Super Admin)
   const adminUser = await prisma.user.upsert({

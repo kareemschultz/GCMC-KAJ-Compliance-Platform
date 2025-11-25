@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  web:
+    depends_on:
+      - filebeat
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.11.3
+    container_name: filebeat
+    user: root
+    volumes:
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - logstash
+    networks:
+      - gcmc-network
+networks:
+  gcmc-network:
+    driver: bridge

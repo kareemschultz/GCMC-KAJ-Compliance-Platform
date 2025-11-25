@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Package, MapPin, Clock, Check, Truck, Building } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { mockExpediteJobs } from "@/lib/mock-data"
+import { api } from "@/lib/api"
 import type { ExpediteJob } from "@/types"
 import { cn } from "@/lib/utils"
 import { AddExpediteJobDialog } from "./add-expedite-job-dialog"
@@ -51,7 +51,20 @@ const statusConfig = {
 const statusOrder = ["PICKED_UP", "AT_AGENCY", "PROCESSING", "READY_FOR_COLLECTION", "OUT_FOR_DELIVERY", "COMPLETED"]
 
 export function ExpediteTracker() {
-  const [jobs] = useState<ExpediteJob[]>(mockExpediteJobs)
+  const [jobs, setJobs] = useState<ExpediteJob[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    api.expediting.list()
+      .then(response => {
+        setJobs(response.jobs || [])
+      })
+      .catch(err => {
+        console.error("Failed to fetch expedite jobs:", err)
+        setJobs([])
+      })
+      .finally(() => setLoading(false))
+  }, [])
 
   const getStatusIndex = (status: ExpediteJob["status"]) => {
     return statusOrder.indexOf(status)

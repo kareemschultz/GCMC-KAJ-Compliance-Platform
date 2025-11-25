@@ -93,7 +93,7 @@ class ComprehensiveTestRunner {
     // Test 1: Login page accessibility
     await this.runTest('Login page loads correctly', async () => {
       await this.page.goto('/login');
-      await expect(this.page).toHaveTitle(/Login/i);
+      await expect(this.page).toHaveTitle(/GK Enterprise Suite/i);
       await expect(this.page.locator('input[type="email"]')).toBeVisible();
       await expect(this.page.locator('input[type="password"]')).toBeVisible();
       await expect(this.page.locator('button[type="submit"]')).toBeVisible();
@@ -103,7 +103,7 @@ class ComprehensiveTestRunner {
     await this.runTest('Admin login with valid credentials', async () => {
       await this.page.goto('/login');
       await this.page.fill('input[type="email"]', 'admin@gcmc.gy');
-      await this.page.fill('input[type="password"]', 'admin123');
+      await this.page.fill('input[type="password"]', process.env.SEED_ADMIN_PASSWORD || 'admin123');
       await this.page.click('button[type="submit"]');
 
       // Wait for redirect and check dashboard
@@ -119,7 +119,7 @@ class ComprehensiveTestRunner {
     await this.runTest('GCMC staff login with valid credentials', async () => {
       await this.page.goto('/login');
       await this.page.fill('input[type="email"]', 'gcmc@gcmc.gy');
-      await this.page.fill('input[type="password"]', 'gcmc123');
+      await this.page.fill('input[type="password"]', process.env.SEED_GCMC_PASSWORD || 'gcmc123');
       await this.page.click('button[type="submit"]');
       await this.page.waitForTimeout(3000);
     });
@@ -128,7 +128,7 @@ class ComprehensiveTestRunner {
     await this.runTest('KAJ staff login with valid credentials', async () => {
       await this.page.goto('/login');
       await this.page.fill('input[type="email"]', 'kaj@gcmc.gy');
-      await this.page.fill('input[type="password"]', 'kaj123');
+      await this.page.fill('input[type="password"]', process.env.SEED_KAJ_PASSWORD || 'kaj123');
       await this.page.click('button[type="submit"]');
       await this.page.waitForTimeout(3000);
     });
@@ -137,7 +137,7 @@ class ComprehensiveTestRunner {
     await this.runTest('Client login redirects to portal', async () => {
       await this.page.goto('/login');
       await this.page.fill('input[type="email"]', 'client@abccorp.gy');
-      await this.page.fill('input[type="password"]', 'client123');
+      await this.page.fill('input[type="password"]', process.env.SEED_CLIENT_PASSWORD || 'client123');
       await this.page.click('button[type="submit"]');
       await this.page.waitForTimeout(3000);
       // Should redirect to portal
@@ -162,7 +162,7 @@ class ComprehensiveTestRunner {
     // Ensure we're logged in as admin
     await this.page.goto('/login');
     await this.page.fill('input[type="email"]', 'admin@gcmc.gy');
-    await this.page.fill('input[type="password"]', 'admin123');
+    await this.page.fill('input[type="password"]', process.env.SEED_ADMIN_PASSWORD || 'admin123');
     await this.page.click('button[type="submit"]');
     await this.page.waitForTimeout(3000);
 
@@ -174,10 +174,20 @@ class ComprehensiveTestRunner {
     });
 
     await this.runTest('Client creation wizard loads', async () => {
-      await this.page.goto('/clients/new');
-      await this.page.waitForSelector('body', { timeout: 10000 });
-      // Check if form elements are present
-      const formExists = await this.page.locator('form, input, select').count() > 0;
+      // Navigate to clients page and open modal
+      await this.page.goto('/clients');
+      await this.page.waitForLoadState('networkidle', { timeout: 5000 });
+
+      // Click "Add New Client" button to open wizard modal
+      const addClientButton = this.page.locator('[data-testid="new-client-button"]');
+      await expect(addClientButton).toBeVisible({ timeout: 5000 });
+      await addClientButton.click();
+
+      // Wait for modal dialog to appear
+      await this.page.waitForSelector('[role="dialog"]', { state: 'visible', timeout: 3000 });
+
+      // Check if form elements are present in the modal
+      const formExists = await this.page.locator('[role="dialog"] form, [role="dialog"] input, [role="dialog"] select').count() > 0;
       expect(formExists).toBeTruthy();
     });
 
@@ -307,7 +317,7 @@ class ComprehensiveTestRunner {
 
     await this.runTest('Financial dashboard charts render', async () => {
       await this.page.goto('/dashboard');
-      await this.page.waitForTimeout(5000);
+      await this.page.waitForLoadState('networkidle', { timeout: 3000 });
 
       // Check for chart elements
       const chartsExist = await this.page.locator('canvas, .chart, [data-testid="chart"], svg').count() > 0;
@@ -377,7 +387,7 @@ class ComprehensiveTestRunner {
     // Login as client
     await this.page.goto('/login');
     await this.page.fill('input[type="email"]', 'client@abccorp.gy');
-    await this.page.fill('input[type="password"]', 'client123');
+    await this.page.fill('input[type="password"]', process.env.SEED_CLIENT_PASSWORD || 'client123');
     await this.page.click('button[type="submit"]');
     await this.page.waitForTimeout(3000);
 
