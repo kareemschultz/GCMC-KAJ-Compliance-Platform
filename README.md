@@ -89,26 +89,54 @@ The platform is designed around two core business pillars, unified by a global *
     pnpm install
     \`\`\`
 
-3.  **Setup Database**
+3.  **Setup Environment Variables**
 
     Copy the example environment file and configure your database:
-    \`\`\`bash
+    ```bash
     cp .env.example .env
-    # Edit .env and add your DATABASE_URL and other required variables
-    \`\`\`
+    ```
 
-    Push the schema and seed data:
-    \`\`\`bash
+    **Important**: Update the `.env` file with proper values:
+    - Generate a secure `NEXTAUTH_SECRET`: `openssl rand -base64 32`
+    - Change `NODE_ENV=development` for development mode
+    - The default database configuration should work with the Docker setup
+
+4.  **Setup Database**
+
+    **Option A: Using Docker (Recommended)**
+    ```bash
+    # Start PostgreSQL database using Docker
+    pnpm run db:up
+    ```
+
+    **Option B: Using Local PostgreSQL**
+    - Install PostgreSQL locally
+    - Update DATABASE_URL in .env with your local connection string
+
+    **Initialize Database Schema and Data:**
+    ```bash
+    # Push schema to database
     pnpm run db:push
+
+    # Seed with sample data
     pnpm run db:seed
-    \`\`\`
+    ```
 
-4.  **Run the development server**
-    \`\`\`bash
+    **Note**: If you encounter port conflicts (5432 already in use):
+    ```bash
+    # Check what's using port 5432
+    lsof -i :5432
+
+    # Stop conflicting PostgreSQL containers
+    docker stop <container_name>
+    ```
+
+5.  **Run the development server**
+    ```bash
     pnpm run dev
-    \`\`\`
+    ```
 
-5.  **Access the Application**
+6.  **Access the Application**
     *   **Admin Dashboard**: [http://localhost:3000](http://localhost:3000)
     *   **Client Portal**: [http://localhost:3000/portal](http://localhost:3000/portal)
     *   **Booking Page**: [http://localhost:3000/book](http://localhost:3000/book)
@@ -122,6 +150,30 @@ The platform is designed around two core business pillars, unified by a global *
 | KAJ Staff | kaj@gcmc.gy | kaj123 | Tax, Accounting, Payroll |
 | Client | client@abccorp.gy | client123 | Portal access only |
 
+## 🛠️ Troubleshooting
+
+### Common Issues and Solutions
+
+#### 1. Port Conflicts
+- **Port 3000 in use**: Kill the process using `lsof -i :3000` then `kill -9 <PID>`
+- **Port 5432 in use**: Stop conflicting PostgreSQL with `docker stop <container_name>`
+
+#### 2. Prisma Issues
+- **Cannot find module '.prisma/client'**: Run `pnpm run db:generate`
+- **Database connection failed**: Ensure PostgreSQL is running and DATABASE_URL is correct
+
+#### 3. Environment Configuration
+- **NextAuth configuration error**: Ensure NEXTAUTH_SECRET is set in .env
+- **Server configuration error**: Check that all required environment variables are set
+
+#### 4. Database Issues
+- **Migration failed**: Try `pnpm run db:push` to sync schema
+- **Seed failed**: Ensure database is empty or reset with `pnpm run db:reset`
+
+#### 5. Development Server Issues
+- **Build errors**: Try deleting `.next` folder and restart: `rm -rf .next && pnpm run dev`
+- **Module not found**: Run `pnpm install` to ensure all dependencies are installed
+
 ### 🐳 Docker Setup (Recommended for Production)
 
 **Quick Start with Docker Compose:**
@@ -131,18 +183,18 @@ The platform is designed around two core business pillars, unified by a global *
     - Git for cloning the repository
 
 2.  **Deploy with Docker Compose**
-    \`\`\`bash
+    ```bash
     # Clone the repository
     git clone https://github.com/kareemschultz/GCMC-KAJ-Compliance-Platform.git
     cd GCMC-KAJ-Compliance-Platform
 
     # Copy production environment template
-    cp .env.production .env.production
+    cp .env.production.example .env.production
     # Edit .env.production with your production values if needed
 
     # Start all services (PostgreSQL + Application + PgAdmin)
     docker-compose up -d
-    \`\`\`
+    ```
 
 3.  **Access the Application**
     - **Main Application**: [http://localhost:3000](http://localhost:3000)
@@ -150,7 +202,7 @@ The platform is designed around two core business pillars, unified by a global *
     - **Health Check**: [http://localhost:3000/api/health](http://localhost:3000/api/health)
 
 4.  **Verify Deployment**
-    \`\`\`bash
+    ```bash
     # Check container status
     docker ps
 
@@ -159,12 +211,12 @@ The platform is designed around two core business pillars, unified by a global *
 
     # Test health endpoint
     curl http://localhost:3000/api/health
-    \`\`\`
+    ```
 
 5.  **Stop Services**
-    \`\`\`bash
+    ```bash
     docker-compose down
-    \`\`\`
+    ```
 
 #### **What Gets Deployed**
 - **gcmc-compliance-suite**: Main application container (Next.js 16 + TypeScript)
